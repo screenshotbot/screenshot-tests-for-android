@@ -18,7 +18,7 @@ buildscript {
   apply from: rootProject.file('versions.gradle')
   repositories {
     mavenLocal()
-    jcenter()
+    mavenCentral()
     google()
   }
 
@@ -32,7 +32,7 @@ buildscript {
 allprojects {
   repositories {
     mavenLocal()
-    jcenter()
+    mavenCentral()
     google()
   }
 }
@@ -47,7 +47,7 @@ android {
   compileSdkVersion versions.compileSdk
   defaultConfig {
     applicationId "com.facebook.testing.screenshot.example"
-    minSdkVersion 15
+    minSdkVersion 21
     targetSdkVersion versions.targetSdk
     versionCode 1
     versionName "1.0"

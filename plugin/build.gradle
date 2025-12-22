@@ -19,7 +19,6 @@ buildscript {
     mavenCentral()
     google()
     mavenLocal()
-    jcenter()
   }
   dependencies {
     classpath plugs.kotlin

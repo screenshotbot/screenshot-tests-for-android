@@ -17,12 +17,12 @@
 ext {
   final screenshotTestVersion = VERSION_NAME
   final dexmakerVersion = "1.4"
-  final lithoVersion = "0.40.0"
+  final lithoVersion = "0.44.0"
 
   versions = [
       kotlin    : '1.6.10',
       targetSdk : 28,
-      compileSdk: 28,
+      compileSdk: 33,
       minSdk    : 14,
   ]
 
@@ -30,7 +30,7 @@ ext {
       agp        : "com.android.tools.build:gradle:7.1.0",
       screenshot : "com.facebook.testing.screenshot:plugin:$screenshotTestVersion",
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
-      versions   : 'com.github.ben-manes:gradle-versions-plugin:0.20.0',
+      versions   : 'com.github.ben-manes:gradle-versions-plugin:0.11.1',
       publish    : 'com.vanniktech:gradle-maven-publish-plugin:0.18.0',
       dokka      : 'org.jetbrains.dokka:dokka-gradle-plugin:1.6.10'
   ]
@@ -52,6 +52,8 @@ ext {
       soLoader            : "com.facebook.soloader:soloader:0.10.4",
 
       jsr305              : "com.google.code.findbugs:jsr305:3.0.2",
+      guava               : "com.google.guava:guava:31.1-android",
+      inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
 
       screenshotTestCommon: "com.facebook.testing.screenshot:layout-hierarchy-common:$screenshotTestVersion",
       screenshotTestLitho : "com.facebook.testing.screenshot:layout-hierarchy-litho:$screenshotTestVersion",
