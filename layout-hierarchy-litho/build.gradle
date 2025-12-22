@@ -27,7 +27,7 @@ android {
   }
 
   defaultConfig {
-    minSdkVersion 15
+    minSdkVersion 21
     targetSdkVersion versions.targetSdk
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
@@ -46,6 +46,8 @@ tasks.whenTaskAdded {
 }
 
 dependencies {
+  compileOnly deps.inferAnnotations
+
   implementation project(':core')
   implementation deps.lithoCore
   implementation deps.lithoWidget
