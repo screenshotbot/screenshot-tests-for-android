@@ -46,6 +46,8 @@ tasks.whenTaskAdded {
 }
 
 dependencies {
+  compileOnly deps.inferAnnotations
+
   implementation project(':core')
 
   androidTestImplementation deps.espresso
