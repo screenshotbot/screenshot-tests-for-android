@@ -30,6 +30,7 @@ android {
     minSdkVersion versions.minSdk
     targetSdkVersion versions.targetSdk
     testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
+    multiDexEnabled true
   }
 
   lintOptions {
@@ -66,4 +67,6 @@ dependencies {
   androidTestImplementation deps.mockito
   androidTestImplementation deps.dexmakerMockito
   androidTestImplementation deps.hamcrest
+  androidTestImplementation deps.assertjCore
+  androidTestImplementation deps.supportMultidex
 }
