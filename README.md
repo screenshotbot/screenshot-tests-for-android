@@ -18,6 +18,10 @@ see how the view renders in a real Android environment, without having to
 build the whole app. You can also render the view in multiple configurations
 at one go.
 
+This library was initially published by Arnold Noronha at Facebook,
+maintained and build upon by Hilal Alsibai at Facebook, and is
+currently maintained by Arnold Noronha at Screenshotbot.
+
 ## Documentation
 
 Take a look at the documentation at http://facebook.github.io/screenshot-tests-for-android/#getting-started
@@ -98,13 +102,6 @@ To record, simply change `verify` to `record`.
 ## Contributing
 
 Please see the [contributing](.github/CONTRIBUTING.md) file.
-
-## Authors
-
-screenshot-tests-for-android was originally written by Arnold Noronha (arnold@tdrhq.com)
-You can reach him at @tdrhq on GitHub.
-
-It is currently maintained by Hilal Alsibai (@xiphirx)
 
 ## License
 
