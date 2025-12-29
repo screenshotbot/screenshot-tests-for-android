@@ -1,10 +1,12 @@
 
+ADB = $(ANDROID_SDK)/platform-tools/adb
+
 .PHONY:
 	true
 
 android-28-impl: .PHONY
-	adb shell settings put global hidden_api_policy_p_apps 1
-	adb shell settings put global hidden_api_policy_pre_p_apps 1
+	$(ADB) shell settings put global hidden_api_policy_p_apps 1
+	$(ADB) shell settings put global hidden_api_policy_pre_p_apps 1
 	./gradlew :core:connectedDebugAndroidTest
 
 android-28: .PHONY
