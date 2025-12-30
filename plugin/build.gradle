@@ -59,11 +59,13 @@ task generateBuildConfig {
 dependencies {
   implementation deps.kotlinStdlib
   compileOnly plugs.agp
-  
+
   testImplementation deps.junit
   testImplementation plugs.agp
   testImplementation deps.mockito
   testImplementation deps.hamcrest
+  testImplementation gradleTestKit()
+  testRuntimeOnly plugs.agp
 }
 
 group = 'com.facebook.testing.screenshot'
