@@ -27,8 +27,11 @@ android-30: .PHONY
 android-31: .PHONY
 	~/eaase/eaase run --verbose --api-level 31 -- $(MAKE) android-impl
 
+android-32: .PHONY
+	~/eaase/eaase run --verbose --api-level 32 -- $(MAKE) android-impl
+
 
 install-eaase: .PHONY
 	curl https://eaase.dev/installer.sh | sh
 
-ci: | install-eaase android-28 android-29 android-30 
+ci: | install-eaase android-28 android-29 android-30  android-31 android-32
