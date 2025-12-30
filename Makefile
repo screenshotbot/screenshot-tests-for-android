@@ -5,13 +5,25 @@ ADB = $(ANDROID_SDK)/platform-tools/adb
 .PHONY:
 	true
 
-android-28-impl: .PHONY
+settings: .PHONY
 	$(ADB) shell settings put global hidden_api_policy_p_apps 1
 	$(ADB) shell settings put global hidden_api_policy_pre_p_apps 1
+	$(ADB) shell settings put global hidden_api_policy  1
+
+android-28-impl: .PHONY
+	$(MAKE) settings
 	./gradlew :core:connectedDebugAndroidTest
 
 android-28: .PHONY
 	~/eaase/eaase run --verbose --api-level 28 -- $(MAKE) android-28-impl
+
+android-29-impl: .PHONY
+	$(MAKE) settings
+	./gradlew :core:connectedDebugAndroidTest
+
+android-29: .PHONY
+	~/eaase/eaase run --verbose --api-level 29 -- $(MAKE) android-28-impl
+
 
 install-eaase: .PHONY
 	curl https://eaase.dev/installer.sh | sh
