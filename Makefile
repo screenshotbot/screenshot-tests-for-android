@@ -2,6 +2,8 @@
 ANDROID_SDK = $(or $(ANDROID_HOME),$(ANDROID_SDK_ROOT),$(ANDROID_SDK))
 ADB = $(ANDROID_SDK)/platform-tools/adb
 
+EAASE=~/eaase/eaase run --verbose
+
 .PHONY:
 	true
 
@@ -15,27 +17,27 @@ android-impl: .PHONY
 	./gradlew connectedDebugAndroidTest
 
 android-28: .PHONY
-	~/eaase/eaase run --verbose --api-level 28 -- $(MAKE) android-impl
+	$(EAASE) --api-level 28 -- $(MAKE) android-impl
 
 android-29: .PHONY
-	~/eaase/eaase run --verbose --api-level 29 -- $(MAKE) android-impl
+	$(EAASE)  --api-level 29 -- $(MAKE) android-impl
 
 
 android-30: .PHONY
-	~/eaase/eaase run --verbose --api-level 30 -- $(MAKE) android-impl
+	$(EAASE) --api-level 30 -- $(MAKE) android-impl
 
 android-31: .PHONY
-	~/eaase/eaase run --verbose --api-level 31 -- $(MAKE) android-impl
+	$(EAASE) --api-level 31 -- $(MAKE) android-impl
 
 android-32: .PHONY
-	~/eaase/eaase run --verbose --api-level 32 -- $(MAKE) android-impl
+	$(EAASE) --api-level 32 -- $(MAKE) android-impl
 
 android-33: .PHONY
-	~/eaase/eaase run --verbose --api-level 33 -- $(MAKE) android-impl
+	$(EAASE) --api-level 33 -- $(MAKE) android-impl
 
 android-34: .PHONY
 	# broken!
-	~/eaase/eaase run --verbose --api-level 34 -- $(MAKE) android-impl
+	$(EAASE) --api-level 34 -- $(MAKE) android-impl
 
 
 install-eaase: .PHONY
