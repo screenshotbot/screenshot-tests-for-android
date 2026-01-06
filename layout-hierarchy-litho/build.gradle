@@ -15,12 +15,12 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: "com.vanniktech.maven.publish"
 
 group = 'com.facebook.testing.screenshot'
 
 android {
   compileSdkVersion versions.compileSdk
+  namespace 'com.facebook.testing.screenshot.layouthierarchy.litho'
 
   packagingOptions {
     exclude 'LICENSE.txt'
@@ -31,10 +31,6 @@ android {
     targetSdkVersion versions.targetSdk
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
-}
-
-afterEvaluate {
-  generateReleaseBuildConfig.enabled = false
 }
 
 tasks.whenTaskAdded {
