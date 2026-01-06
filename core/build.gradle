@@ -15,11 +15,11 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: "com.vanniktech.maven.publish"
 
 group = 'com.facebook.testing.screenshot'
 
 android {
+  namespace 'com.facebook.testing.screenshot'
   compileSdkVersion versions.compileSdk
 
   packagingOptions {
@@ -37,10 +37,8 @@ android {
     abortOnError false
     disable 'InvalidPackage'
   }
-}
 
-afterEvaluate {
-  generateReleaseBuildConfig.enabled = false
+    
 }
 
 tasks.whenTaskAdded {
