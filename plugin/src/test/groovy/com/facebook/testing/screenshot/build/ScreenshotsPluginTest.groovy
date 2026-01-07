@@ -78,7 +78,7 @@ class ScreenshotsPluginTest {
       }
 
       apply plugin: 'com.android.application'
-      apply plugin: com.facebook.testing.screenshot.build.ScreenshotsPlugin
+      apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
 
       repositories {
         mavenCentral()
@@ -108,7 +108,7 @@ class ScreenshotsPluginTest {
         .withGradleVersion('7.5')
         .build()
 
-    assertTrue(result.output.contains('com.facebook.testing.screenshot:core'))
+    assertTrue(result.output.contains('io.screenshotbot.screenshot-tests-for-android:core'))
   }
 
   @Test
@@ -125,7 +125,7 @@ class ScreenshotsPluginTest {
         .withGradleVersion('7.5')
         .build()
 
-    assertFalse(result.output.contains('com.facebook.testing.screenshot:core'))
+    assertFalse(result.output.contains('io.screenshotbot.screenshot-tests-for-android:core'))
   }
 
   @Test
