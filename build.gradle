@@ -63,7 +63,6 @@ task cleanAll(dependsOn: [
     ':core:clean',
     ':plugin:clean',
     ':layout-hierarchy-common:clean',
-    ':layout-hierarchy-litho:clean',
 ])
 
 task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest') {
