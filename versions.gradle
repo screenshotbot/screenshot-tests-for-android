@@ -55,8 +55,6 @@ ext {
       guava               : "com.google.guava:guava:31.1-android",
       inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
 
-      screenshotTestCommon: "com.facebook.testing.screenshot:layout-hierarchy-common:$screenshotTestVersion",
-
       dexmaker            : "com.crittercism.dexmaker:dexmaker:$dexmakerVersion",
       dexmakerDx          : "com.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion",
       dexmakerMockito     : "com.crittercism.dexmaker:dexmaker-mockito:$dexmakerVersion",
