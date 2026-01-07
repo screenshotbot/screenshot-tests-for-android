@@ -42,11 +42,6 @@ ext {
 
       kotlinStdlib        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
 
-      lithoCore           : "com.facebook.litho:litho-core:$lithoVersion",
-      lithoWidget         : "com.facebook.litho:litho-widget:$lithoVersion",
-      lithoAnnotations    : "com.facebook.litho:litho-annotations:$lithoVersion",
-      lithoProcessor      : "com.facebook.litho:litho-processor:$lithoVersion",
-
       gson                : "com.google.code.gson:gson:2.8.6",
 
       soLoader            : "com.facebook.soloader:soloader:0.10.4",
