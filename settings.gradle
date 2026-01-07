@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include 'core', 'plugin', 'layout-hierarchy-common' //, 'sample'
+include 'core', 'plugin' //, 'sample'

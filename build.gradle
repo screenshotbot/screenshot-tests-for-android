@@ -62,7 +62,6 @@ gradle.addListener(new TaskExecutionListener() {
 task cleanAll(dependsOn: [
     ':core:clean',
     ':plugin:clean',
-    ':layout-hierarchy-common:clean',
 ])
 
 task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest') {

@@ -51,8 +51,6 @@ If you plan to contribute, this is the code is broken up into a few modules:
 * The `plugin` module adds Gradle tasks to make it easier to work
   with screenshot tests.
 
-* The `layout-hierarchy-common` module adds extra common `View` information to your reports' layout hierarchy viewer
-
 * The `layout-hierarchy-litho` module adds extra Litho component information to your reports' layout hierarchy viewer
 
 
