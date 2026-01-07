@@ -108,11 +108,11 @@ mavenPublishing {
   }
 }
 
-// Configure signing to be optional for local builds
+// Configure GPG signing
 afterEvaluate {
-  signing {
-    // Make signing required only when publishing to Central Portal
-    required = gradle.taskGraph.hasTask("publishAllPublicationsToCentralPortal") ||
-               gradle.taskGraph.hasTask("publishMavenPublicationToCentralPortalRepository")
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    signing {
+      useGpgCmd()
+    }
   }
 }
