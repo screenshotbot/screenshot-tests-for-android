@@ -15,8 +15,9 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.vanniktech.maven.publish'
 
-group = 'com.facebook.testing.screenshot'
+group = GROUP
 
 android {
   namespace 'com.facebook.testing.screenshot'
@@ -67,4 +68,51 @@ dependencies {
   androidTestImplementation deps.hamcrest
   androidTestImplementation deps.assertjCore
   androidTestImplementation deps.supportMultidex
+}
+
+// Maven Central publishing configuration
+mavenPublishing {
+  publishToMavenCentral("CENTRAL_PORTAL")
+  signAllPublications()
+
+  coordinates(GROUP, POM_ARTIFACT_ID, VERSION_NAME)
+
+  // Configure to publish debug variant for test libraries
+  configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("debug", true, true))
+
+  pom {
+    name = POM_NAME
+    description = POM_DESCRIPTION
+    url = POM_URL
+
+    licenses {
+      license {
+        name = POM_LICENCE_NAME
+        url = POM_LICENCE_URL
+        distribution = POM_LICENCE_DIST
+      }
+    }
+
+    developers {
+      developer {
+        id = POM_DEVELOPER_ID
+        name = POM_DEVELOPER_NAME
+      }
+    }
+
+    scm {
+      connection = POM_SCM_CONNECTION
+      developerConnection = POM_SCM_DEV_CONNECTION
+      url = POM_SCM_URL
+    }
+  }
+}
+
+// Configure GPG signing
+afterEvaluate {
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    signing {
+      useGpgCmd()
+    }
+  }
 }
