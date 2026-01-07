@@ -50,7 +50,7 @@ open class ScreenshotsPluginExtension {
 class ScreenshotsPlugin : Plugin<Project> {
   companion object {
     const val GROUP = "Screenshot Test"
-    const val DEPENDENCY_GROUP = "com.facebook.testing.screenshot"
+    const val DEPENDENCY_GROUP = "io.screenshotbot.screenshot-tests-for-android"
     const val DEPENDENCY_CORE = "core"
   }
 
