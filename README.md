@@ -20,7 +20,7 @@ at one go.
 
 This library was initially published by Arnold Noronha at Facebook,
 maintained and build upon by Hilal Alsibai at Facebook, and is
-currently maintained by Arnold Noronha at Screenshotbot.
+currently maintained by Arnold Noronha at [Screenshotbot](https://screenshotbot.io).
 
 ## Documentation
 
@@ -33,7 +33,7 @@ screenshot-tests-for-android is known to work with MacOS or Linux.
 The host tooling probably doesn't work on Windows, but can be made to
 work with a little effort. We'll happily accept pull requests!
 
-You need python-2.7 for the gradle plugin to work, and we also
+You need python2 or python3 for the gradle plugin to work, and we also
 recommending installing the python-pillow library which is required
 for recording and verifying screenshots.
 
@@ -50,8 +50,6 @@ If you plan to contribute, this is the code is broken up into a few modules:
 
 * The `plugin` module adds Gradle tasks to make it easier to work
   with screenshot tests.
-
-* The `layout-hierarchy-litho` module adds extra Litho component information to your reports' layout hierarchy viewer
 
 
 In addition you'll find python code inside `plugin/src/py`. This code
