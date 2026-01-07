@@ -73,11 +73,6 @@ dependencies {
   implementation deps.supportAppCompat
   implementation deps.supportDesign
 
-  implementation deps.lithoCore
-  implementation deps.lithoWidget
-  implementation deps.lithoAnnotations
-  kapt deps.lithoProcessor
-
   implementation deps.soLoader
 
   androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:0.16.0"
