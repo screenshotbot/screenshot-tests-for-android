@@ -15,10 +15,9 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
+apply plugin: 'com.vanniktech.maven.publish'
 
-group = 'com.facebook.testing.screenshot'
+group = GROUP
 
 android {
   namespace 'com.facebook.testing.screenshot'
@@ -72,70 +71,48 @@ dependencies {
 }
 
 // Maven Central publishing configuration
-afterEvaluate {
-  publishing {
-    publications {
-      debug(MavenPublication) {
-        // Publish debug variant for test libraries
-        groupId = GROUP
-        artifactId = POM_ARTIFACT_ID
-        version = VERSION_NAME
+mavenPublishing {
+  publishToMavenCentral("CENTRAL_PORTAL")
+  signAllPublications()
 
-        artifact bundleDebugAar
+  coordinates(GROUP, POM_ARTIFACT_ID, VERSION_NAME)
 
-        // Optionally include sources jar
-        // artifact androidSourcesJar
+  // Configure to publish debug variant for test libraries
+  configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("debug", true, true))
 
-        pom {
-          name = POM_NAME
-          description = POM_DESCRIPTION
-          url = POM_URL
-          packaging = POM_PACKAGING
+  pom {
+    name = POM_NAME
+    description = POM_DESCRIPTION
+    url = POM_URL
 
-          licenses {
-            license {
-              name = POM_LICENCE_NAME
-              url = POM_LICENCE_URL
-              distribution = POM_LICENCE_DIST
-            }
-          }
-
-          developers {
-            developer {
-              id = POM_DEVELOPER_ID
-              name = POM_DEVELOPER_NAME
-            }
-          }
-
-          scm {
-            connection = POM_SCM_CONNECTION
-            developerConnection = POM_SCM_DEV_CONNECTION
-            url = POM_SCM_URL
-          }
-        }
+    licenses {
+      license {
+        name = POM_LICENCE_NAME
+        url = POM_LICENCE_URL
+        distribution = POM_LICENCE_DIST
       }
     }
 
-    repositories {
-      maven {
-        name = "CentralPortal"
-        url = uri("https://central.sonatype.com/api/v1/publisher/upload")
-        credentials {
-          username = findProperty("mavenCentralUsername") ?: ""
-          password = findProperty("mavenCentralPassword") ?: ""
-        }
+    developers {
+      developer {
+        id = POM_DEVELOPER_ID
+        name = POM_DEVELOPER_NAME
       }
+    }
+
+    scm {
+      connection = POM_SCM_CONNECTION
+      developerConnection = POM_SCM_DEV_CONNECTION
+      url = POM_SCM_URL
     }
   }
+}
 
-  // Only sign if signing credentials are configured
-  if (project.hasProperty('signing.gnupg.keyName') || project.hasProperty('signing.keyId')) {
-    signing {
-      // Use GPG agent if configured (modern approach)
-      if (project.hasProperty('signing.gnupg.keyName')) {
-        useGpgCmd()
-      }
-      sign publishing.publications.debug
-    }
+// Configure signing to be optional for local builds
+afterEvaluate {
+  signing {
+    // Make signing required only when publishing to Central Portal
+    required = gradle.taskGraph.hasTask("publishAllPublicationsToCentralPortal") ||
+               gradle.taskGraph.hasTask("publishMavenPublicationToCentralPortalRepository")
   }
 }
