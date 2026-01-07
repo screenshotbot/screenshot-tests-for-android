@@ -20,7 +20,7 @@ ext {
   final lithoVersion = "0.44.0"
 
   versions = [
-      kotlin    : '1.6.10',
+      kotlin    : '1.9.23',
       targetSdk : 28,
       compileSdk: 33,
       minSdk    : 14,
@@ -32,7 +32,7 @@ ext {
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
       versions   : 'com.github.ben-manes:gradle-versions-plugin:0.11.1',
       publish    : 'com.vanniktech:gradle-maven-publish-plugin:0.18.0',
-      dokka      : 'org.jetbrains.dokka:dokka-gradle-plugin:1.6.10'
+      dokka      : 'org.jetbrains.dokka:dokka-gradle-plugin:1.9.20'
   ]
 
   deps = [
