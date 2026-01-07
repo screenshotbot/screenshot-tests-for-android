@@ -22,15 +22,18 @@ buildscript {
   }
   dependencies {
     classpath plugs.kotlin
-    classpath plugs.publish
     classpath plugs.dokka
   }
 }
 
+plugins {
+  id 'com.gradle.plugin-publish' version '1.1.0'
+}
+
 apply plugin: 'groovy'
 apply plugin: 'kotlin'
-apply plugin: "java-gradle-plugin"
-apply plugin: 'com.vanniktech.maven.publish'
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'maven-publish'
 
 final GENERATED_PACKAGE_NAME = "com.facebook.testing.screenshot.generated"
 final GENERATED_BUILD_DIR =
@@ -68,7 +71,8 @@ dependencies {
   testRuntimeOnly plugs.agp
 }
 
-group = 'com.facebook.testing.screenshot'
+group = GROUP
+version = VERSION_NAME
 
 compileKotlin {
   dependsOn generateBuildConfig
@@ -106,4 +110,81 @@ task py3Tests(type: Exec) {
   commandLine 'python3', '-m', 'unittest', 'discover'
 }
 
+// Gradle Plugin Portal configuration
+gradlePlugin {
+  website = POM_URL
+  vcsUrl = POM_SCM_URL
+  plugins {
+    screenshotTestsPlugin {
+      id = 'io.screenshotbot.screenshot-tests-for-android'
+      displayName = POM_NAME
+      description = POM_DESCRIPTION
+      implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
+      tags = ['screenshot-testing', 'android', 'testing']
+    }
+  }
+}
 
+// Configure POM for Maven Central
+afterEvaluate {
+  publishing {
+    publications {
+      named("screenshotTestsPluginPluginMarkerMaven") {
+        pom {
+          name = POM_NAME
+          description = POM_DESCRIPTION
+          url = POM_URL
+
+          licenses {
+            license {
+              name = POM_LICENCE_NAME
+              url = POM_LICENCE_URL
+              distribution = POM_LICENCE_DIST
+            }
+          }
+
+          developers {
+            developer {
+              id = POM_DEVELOPER_ID
+              name = POM_DEVELOPER_NAME
+            }
+          }
+
+          scm {
+            connection = POM_SCM_CONNECTION
+            developerConnection = POM_SCM_DEV_CONNECTION
+            url = POM_SCM_URL
+          }
+        }
+      }
+      named("pluginMaven") {
+        pom {
+          name = POM_NAME
+          description = POM_DESCRIPTION
+          url = POM_URL
+
+          licenses {
+            license {
+              name = POM_LICENCE_NAME
+              url = POM_LICENCE_URL
+              distribution = POM_LICENCE_DIST
+            }
+          }
+
+          developers {
+            developer {
+              id = POM_DEVELOPER_ID
+              name = POM_DEVELOPER_NAME
+            }
+          }
+
+          scm {
+            connection = POM_SCM_CONNECTION
+            developerConnection = POM_SCM_DEV_CONNECTION
+            url = POM_SCM_URL
+          }
+        }
+      }
+    }
+  }
+}
