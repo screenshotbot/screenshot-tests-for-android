@@ -56,7 +56,6 @@ ext {
       inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
 
       screenshotTestCommon: "com.facebook.testing.screenshot:layout-hierarchy-common:$screenshotTestVersion",
-      screenshotTestLitho : "com.facebook.testing.screenshot:layout-hierarchy-litho:$screenshotTestVersion",
 
       dexmaker            : "com.crittercism.dexmaker:dexmaker:$dexmakerVersion",
       dexmakerDx          : "com.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion",
