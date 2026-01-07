@@ -28,7 +28,7 @@ ext {
 
   plugs = [
       agp        : "com.android.tools.build:gradle:8.0.2",
-      screenshot : "com.facebook.testing.screenshot:plugin:$screenshotTestVersion",
+      screenshot : "io.screenshotbot.screenshot-tests-for-android:plugin:$screenshotTestVersion",
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
       versions   : 'com.github.ben-manes:gradle-versions-plugin:0.11.1',
       publish    : 'com.vanniktech:gradle-maven-publish-plugin:0.30.0',
