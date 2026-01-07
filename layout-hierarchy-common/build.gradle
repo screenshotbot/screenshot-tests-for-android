@@ -15,11 +15,11 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: "com.vanniktech.maven.publish"
 
 group = 'com.facebook.testing.screenshot'
 
 android {
+  namespace 'com.facebook.testing.screenshot.layouthierarchy.common'  
   compileSdkVersion versions.compileSdk
 
   packagingOptions {
@@ -29,12 +29,8 @@ android {
   defaultConfig {
     minSdkVersion versions.minSdk
     targetSdkVersion versions.targetSdk
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
-}
-
-afterEvaluate {
-  generateReleaseBuildConfig.enabled = false
 }
 
 tasks.whenTaskAdded {
