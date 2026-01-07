@@ -1,3 +1,10 @@
+0.16.0 (---)
+------
+- Initial release managed by Screenshotbot (Modern Interpreters Inc.)
+- Modernized many dependencies
+- Delete Litho support
+- Removed the layout-hierarchy-common module, it is now part of :core
+
 0.15.0 (Feb 2 2022)
 ------
 - Python 3 support
