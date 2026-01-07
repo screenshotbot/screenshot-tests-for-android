@@ -116,7 +116,7 @@ gradlePlugin {
   vcsUrl = POM_SCM_URL
   plugins {
     screenshotTestsPlugin {
-      id = 'com.facebook.testing.screenshot'
+      id = 'io.screenshotbot.screenshot-tests-for-android'
       displayName = POM_NAME
       description = POM_DESCRIPTION
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
