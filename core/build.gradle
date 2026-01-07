@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 group = 'com.facebook.testing.screenshot'
 
@@ -67,4 +69,69 @@ dependencies {
   androidTestImplementation deps.hamcrest
   androidTestImplementation deps.assertjCore
   androidTestImplementation deps.supportMultidex
+}
+
+// Maven Central publishing configuration
+afterEvaluate {
+  publishing {
+    publications {
+      debug(MavenPublication) {
+        // Publish debug variant for test libraries
+        groupId = GROUP
+        artifactId = POM_ARTIFACT_ID
+        version = VERSION_NAME
+
+        artifact bundleDebugAar
+
+        // Optionally include sources jar
+        // artifact androidSourcesJar
+
+        pom {
+          name = POM_NAME
+          description = POM_DESCRIPTION
+          url = POM_URL
+          packaging = POM_PACKAGING
+
+          licenses {
+            license {
+              name = POM_LICENCE_NAME
+              url = POM_LICENCE_URL
+              distribution = POM_LICENCE_DIST
+            }
+          }
+
+          developers {
+            developer {
+              id = POM_DEVELOPER_ID
+              name = POM_DEVELOPER_NAME
+            }
+          }
+
+          scm {
+            connection = POM_SCM_CONNECTION
+            developerConnection = POM_SCM_DEV_CONNECTION
+            url = POM_SCM_URL
+          }
+        }
+      }
+    }
+
+    repositories {
+      maven {
+        name = "CentralPortal"
+        url = uri("https://central.sonatype.com/api/v1/publisher/upload")
+        credentials {
+          username = findProperty("mavenCentralUsername") ?: ""
+          password = findProperty("mavenCentralPassword") ?: ""
+        }
+      }
+    }
+  }
+
+  // Only sign if signing credentials are configured
+  if (project.hasProperty('signing.keyId')) {
+    signing {
+      sign publishing.publications.debug
+    }
+  }
 }
