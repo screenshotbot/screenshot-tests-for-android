@@ -67,47 +67,11 @@ def sort_screenshots(screenshots):
     return sorted(screenshots, key=sort_key)
 
 
-def show_old_result(
-    test_name,
-    html,
-    new_screenshot,
-    test_img_api,
-    old_imgs_data,
-):
-    try:
-        old_screenshot_url = get_old_screenshot_url(
-            test_name, test_img_api, old_imgs_data
-        )
-        html.write('<div class="img-block">Current')
-        html.write('<div class="img-wrapper">')
-        html.write('<img src="%s"></img>' % old_screenshot_url)
-        html.write("</div>")
-        html.write("</div>")
-    except Exception:
-        # Do nothing
-        pass
-
-
-def get_old_screenshot_url(test_name, test_img_api, old_imgs_data):
-    old_imgs_data["test"] = test_name
-    encoded_data = urllib.urlencode(old_imgs_data)
-    url = test_img_api + encoded_data
-    response = json.loads(urllib.urlopen(url).read().decode())
-    if "error" in response:
-        raise Exception
-    return response["url"]
-
-
 def generate_html(
     output_dir,
-    test_img_api=None,
-    old_imgs_data=None,
 ):
     # Take in:
     # output_dir a directory with imgs and data outputted by the just-run test,
-    # test_img_api a url that takes in the name of the test and a dict w/ data,
-    #   and returns a url to an image from a previous run of the test,
-    # old_imgs_data a dict that will be used in the test_img_api url.
     # Creates the html for showing a before and after comparison of the images.
     with open(join(output_dir, "metadata.json")) as m:
         screenshots = json.load(m)
@@ -183,15 +147,6 @@ def generate_html(
                     ax_hierarchy = None
 
                 html.write('<div class="flex-wrapper">')
-                comparing = test_img_api is not None and old_imgs_data is not None
-                if comparing:
-                    show_old_result(
-                        canonical_name,
-                        html,
-                        screenshot,
-                        test_img_api,
-                        old_imgs_data,
-                    )
                 write_image(
                     hierarchy,
                     output_dir,
@@ -512,8 +467,6 @@ def pull_screenshots(
     verify=None,
     test_run_id=None,
     opt_generate_png=None,
-    test_img_api=None,
-    old_imgs_data=None,
     failure_dir=None,
 ):
     if not perform_pull and temp_dir is None:
@@ -542,7 +495,7 @@ def pull_screenshots(
 
     _validate_metadata(temp_dir)
 
-    path_to_html = generate_html(temp_dir, test_img_api, old_imgs_data)
+    path_to_html = generate_html(temp_dir)
     device_name = device_name_calculator.name() if device_name_calculator else None
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
