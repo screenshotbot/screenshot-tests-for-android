@@ -55,6 +55,7 @@ integration-test-impl:
 	cd ~/workspace && true
 	cd ~/workspace && ./gradlew :plugin:publishToMavenLocal 
 	cd ~/workspace && ./gradlew :core:publishToMavenLocal
+	cd ~/worksspace && ./gradlew :sample:recordDebugAndroidScreenshotTests
 
 integration-tests:
 		docker run  --rm -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
