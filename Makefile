@@ -53,6 +53,8 @@ ci:
 integration-test-impl:
 	git clone /workspace-original ~/workspace
 	cd ~/workspace && true
+	cd ~/workspace && ./gradlew -x signMavenPublication :plugin:publishToMavenLocal 
+	cd ~/workspace && ./gradlew -x signMavenPublication :core:publishToMavenLocal
 
 integration-test:
-	docker run  -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
+	docker run  --rm -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
