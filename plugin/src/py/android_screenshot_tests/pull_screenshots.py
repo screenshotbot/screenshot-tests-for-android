@@ -283,23 +283,6 @@ def write_image(hierarchy, dir, html, screenshot, parent_id):
     html.write("</div></div></div>")
 
 
-def test_for_wkhtmltoimage():
-    if subprocess.call(["which", "wkhtmltoimage"]) != 0:
-        raise RuntimeError(
-            """Could not find wkhtmltoimage in your path, we need this for generating pngs
-Download an appropriate version from:
-    http://wkhtmltopdf.org/downloads.html"""
-        )
-
-
-def generate_png(path_to_html, path_to_png):
-    test_for_wkhtmltoimage()
-    subprocess.check_call(
-        ["wkhtmltoimage", "--enable-local-file-access", path_to_html, path_to_png],
-        stdout=sys.stdout,
-    )
-
-
 def copy_assets(destination):
     """Copy static assets required for rendering the HTML"""
     _copy_asset("default.css", destination)
