@@ -47,7 +47,7 @@ install-eaase: .PHONY
 expensive-tests: | install-eaase android-28 android-29 android-30  android-31 android-32 
 
 ci:
-	./gradlew test
+	./gradlew :core:test :plugin:test
 	$(MAKE) expensive-tests
 
 integration-test-impl:

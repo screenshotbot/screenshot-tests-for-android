@@ -28,7 +28,7 @@ ext {
 
   plugs = [
       agp        : "com.android.tools.build:gradle:8.0.2",
-      screenshot : "com.facebook.testing.screenshot:plugin:$screenshotTestVersion",
+      screenshot : "io.screenshotbot.screenshot-tests-for-android:plugin:$screenshotTestVersion",
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
       versions   : 'com.github.ben-manes:gradle-versions-plugin:0.11.1',
       publish    : 'com.vanniktech:gradle-maven-publish-plugin:0.30.0',
@@ -41,11 +41,6 @@ ext {
       supportMultidex     : "androidx.multidex:multidex:2.0.1",
 
       kotlinStdlib        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
-
-      lithoCore           : "com.facebook.litho:litho-core:$lithoVersion",
-      lithoWidget         : "com.facebook.litho:litho-widget:$lithoVersion",
-      lithoAnnotations    : "com.facebook.litho:litho-annotations:$lithoVersion",
-      lithoProcessor      : "com.facebook.litho:litho-processor:$lithoVersion",
 
       gson                : "com.google.code.gson:gson:2.8.6",
 

@@ -39,11 +39,12 @@ allprojects {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.facebook.testing.screenshot'
+apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
 
 android {
+  namespace 'com.facebook.testing.screenshot.sample'
+
   compileSdkVersion versions.compileSdk
   defaultConfig {
     applicationId "com.facebook.testing.screenshot.example"
@@ -54,8 +55,15 @@ android {
     testInstrumentationRunner "com.facebook.testing.screenshot.sample.ScreenshotTestRunner"
     testInstrumentationRunnerArguments clearPackageData: 'true'
   }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
   testOptions {
-    execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    // execution 'ANDROIDX_TEST_ORCHESTRATOR'
   }
 }
 
@@ -65,15 +73,10 @@ dependencies {
   implementation deps.supportAppCompat
   implementation deps.supportDesign
 
-  implementation deps.lithoCore
-  implementation deps.lithoWidget
-  implementation deps.lithoAnnotations
-  kapt deps.lithoProcessor
-
   implementation deps.soLoader
 
-  androidTestImplementation deps.screenshotTestCommon
-  androidTestImplementation deps.screenshotTestLitho
+  androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:0.16.0"
+
   androidTestImplementation deps.junit
   androidTestImplementation deps.testRunner
   androidTestUtil deps.orchestrator
