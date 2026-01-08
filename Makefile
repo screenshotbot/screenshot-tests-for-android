@@ -44,7 +44,7 @@ android-34: .PHONY
 install-eaase: .PHONY
 	curl https://eaase.dev/installer.sh | sh
 
-expensive-tests: | install-eaase android-28 android-29 android-30  android-31 android-32
+expensive-tests: | install-eaase python-tests android-28 android-29 android-30  android-31 android-32
 
 python-tests-impl: .PHONY
 	cd plugin/src/py && python3 -m unittest discover -s . -p "test_*.py"
@@ -54,7 +54,6 @@ python-tests: .PHONY
 
 ci:
 	./gradlew :core:test :plugin:test
-	$(MAKE) python-tests
 	$(MAKE) expensive-tests
 
 integration-test-impl: install-eaase
