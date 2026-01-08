@@ -59,4 +59,4 @@ integration-test-impl: install-eaase
 	cd ~/workspace && $(EAASE) --api-level 30 -- bash -c "make settings && ./gradlew :sample:recordDebugAndroidScreenshotTests"
 
 integration-tests:
-		docker run  --rm -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
+		docker run  --rm -e EAASE_API_TOKEN=$$EAASE_API_TOKEN -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
