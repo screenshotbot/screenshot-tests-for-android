@@ -14,7 +14,7 @@ settings: .PHONY
 
 android-impl: .PHONY
 	$(MAKE) settings
-	./gradlew connectedDebugAndroidTest
+	./gradlew :core:connectedDebugAndroidTest
 
 android-28: .PHONY
 	$(EAASE) --api-level 28 -- $(MAKE) android-impl
