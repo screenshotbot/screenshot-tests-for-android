@@ -154,16 +154,6 @@ class TestPullScreenshots(unittest.TestCase):
         if self.tmpdir:
             shutil.rmtree(self.tmpdir)
 
-    # def test_integration(self):
-    #     self.scripts.append("which", returncode=0)
-    #     self.scripts.append("wkhtmltoimage", script="""#!/bin/sh\ntouch $2""")
-
-    #     with self.scripts:
-    #         pull_screenshots.main(["./a.out",
-    #                                TESTING_PACKAGE,
-    #                                "--generate-png=%s" % self.output_file])
-    #         self.assertTrue(os.path.exists(self.output_file))
-
     def test_index_html_created(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
         pull_screenshots.pull_screenshots(
