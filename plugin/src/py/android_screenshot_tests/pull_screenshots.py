@@ -153,7 +153,6 @@ def generate_html(
                     html,
                     screenshot,
                     screenshot_num,
-                    comparing,
                 )
                 html.write('<div class="command-wrapper">')
                 write_commands(html)
@@ -263,10 +262,8 @@ def get_view_hierarchy(dir, screenshot):
         return json.loads(dump.read())
 
 
-def write_image(hierarchy, dir, html, screenshot, parent_id, comparing):
+def write_image(hierarchy, dir, html, screenshot, parent_id):
     html.write('<div class="img-block">')
-    if comparing:
-        html.write("New Output")
     html.write('<div class="img-wrapper">')
     html.write("<table>")
     for y in range(int(screenshot["tileHeight"])):
