@@ -50,7 +50,7 @@ DEFAULT_VIEW_CLASS = "android.view.View"
 
 def usage():
     print(
-        "usage: ./scripts/screenshot_tests/pull_screenshots com.facebook.apk.name.tests [--generate-png]",
+        "usage: ./scripts/screenshot_tests/pull_screenshots com.facebook.apk.name.tests",
         file=sys.stderr,
     )
     return
@@ -463,7 +463,6 @@ def pull_screenshots(
     record=None,
     verify=None,
     test_run_id=None,
-    opt_generate_png=None,
     failure_dir=None,
 ):
     if not perform_pull and temp_dir is None:
@@ -512,16 +511,12 @@ def pull_screenshots(
         else:
             recorder.record()
 
-    if opt_generate_png:
-        generate_png(path_to_html, opt_generate_png)
-        shutil.rmtree(temp_dir)
-    else:
-        print("\n\n")
-        _summary(temp_dir)
-        print("Open the following url in a browser to view the results: ")
-        full_path = "file://" + path_to_html
-        print("  %s" % full_path)
-        print("\n\n")
+    print("\n\n")
+    _summary(temp_dir)
+    print("Open the following url in a browser to view the results: ")
+    full_path = "file://" + path_to_html
+    print("  %s" % full_path)
+    print("\n\n")
 
 def setup_paths():
     android_home = common.get_android_sdk()
@@ -535,7 +530,6 @@ def main(argv):
             argv[1:],
             "eds:",
             [
-                "generate-png=",
                 "filter-name-regex=",
                 "apk",
                 "record=",
@@ -599,7 +593,6 @@ def main(argv):
             perform_pull=should_perform_pull,
             temp_dir=opts.get("--temp-dir"),
             filter_name_regex=opts.get("--filter-name-regex"),
-            opt_generate_png=opts.get("--generate-png"),
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
