@@ -52,6 +52,7 @@ ci:
 
 integration-test-impl: install-eaase
 	git clone /workspace-original ~/workspace
+	sudo apt-get install python3 python3-pillow
 	cd ~/workspace && true
 	cd ~/workspace && ./gradlew :plugin:publishToMavenLocal 
 	cd ~/workspace && ./gradlew :core:publishToMavenLocal
