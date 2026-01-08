@@ -50,12 +50,13 @@ ci:
 	./gradlew :core:test :plugin:test
 	$(MAKE) expensive-tests
 
-integration-test-impl:
+integration-test-impl: install-eaase
 	git clone /workspace-original ~/workspace
 	cd ~/workspace && true
 	cd ~/workspace && ./gradlew :plugin:publishToMavenLocal 
 	cd ~/workspace && ./gradlew :core:publishToMavenLocal
-	cd ~/worksspace && ./gradlew :sample:recordDebugAndroidScreenshotTests
+	echo Running the sample tests now
+	cd ~/workspace && $(EAASE) --api-level 30 -- bash -c "make settings && ./gradlew :sample:recordDebugAndroidScreenshotTests"
 
 integration-tests:
 		docker run  --rm -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
