@@ -72,8 +72,12 @@ dependencies {
 
 // Maven Central publishing configuration
 mavenPublishing {
-  publishToMavenCentral("CENTRAL_PORTAL")
-  signAllPublications()
+  // Only configure Maven Central publishing and signing for release builds
+  // For local builds (CI, development), skip this to avoid signing requirements
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    publishToMavenCentral("CENTRAL_PORTAL")
+    signAllPublications()
+  }
 
   coordinates(GROUP, POM_ARTIFACT_ID, VERSION_NAME)
 

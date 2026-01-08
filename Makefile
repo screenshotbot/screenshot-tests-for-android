@@ -49,3 +49,12 @@ expensive-tests: | install-eaase android-28 android-29 android-30  android-31 an
 ci:
 	./gradlew test
 	$(MAKE) expensive-tests
+
+integration-test-impl:
+	git clone /workspace-original ~/workspace
+	cd ~/workspace && true
+	cd ~/workspace && ./gradlew :plugin:publishToMavenLocal 
+	cd ~/workspace && ./gradlew :core:publishToMavenLocal
+
+integration-tests:
+		docker run  --rm -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
