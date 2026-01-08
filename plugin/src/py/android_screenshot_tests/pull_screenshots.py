@@ -562,7 +562,6 @@ def pull_screenshots(
     old_imgs_data=None,
     failure_dir=None,
     diff=False,
-    open_html=False,
 ):
     if not perform_pull and temp_dir is None:
         raise RuntimeError(
@@ -620,12 +619,6 @@ def pull_screenshots(
         full_path = "file://" + path_to_html
         print("  %s" % full_path)
         print("\n\n")
-        if open_html:
-            if platform.system() == "Darwin":  # macOS
-                subprocess.call(("open", full_path))
-            elif platform.system() == "Windows":  # Windows
-                os.startfile(full_path)
-
 
 def setup_paths():
     android_home = common.get_android_sdk()
@@ -710,7 +703,6 @@ def main(argv):
             adb_puller=SimplePuller(puller_args),
             device_name_calculator=device_calculator,
             failure_dir=opts.get("--failure-dir"),
-            open_html=opts.get("--open-html"),
             bundle_results=bundle_results,
         )
 
