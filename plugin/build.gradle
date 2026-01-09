@@ -61,6 +61,7 @@ task generateBuildConfig {
 
 dependencies {
   implementation deps.kotlinStdlib
+  implementation deps.commonsCompress
   compileOnly plugs.agp
 
   testImplementation deps.junit
