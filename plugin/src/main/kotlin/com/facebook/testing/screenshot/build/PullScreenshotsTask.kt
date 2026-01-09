@@ -95,8 +95,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
           mutableListOf(
                   "-m",
                   "android_screenshot_tests.pull_screenshots",
-                  "--apk-package",
-                  variant.applicationId,
                   "--test-run-id",
                   testRunId,
                   "--temp-dir",
