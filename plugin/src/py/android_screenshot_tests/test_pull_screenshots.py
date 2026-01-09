@@ -105,6 +105,11 @@ class AdbPuller:
             else:
                 raise
 
+def pull_all(package, dir, test_run_id, adb_puller):
+    device_dir = pull_screenshots.pull_metadata(package, dir, adb_puller=adb_puller)
+    pull_screenshots.pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
+
+
 
 class TestAdbHelpers(unittest.TestCase):
     def setUp(self):
@@ -122,7 +127,7 @@ class TestAdbHelpers(unittest.TestCase):
         adb_instance.pull = MagicMock()
         adb_instance.pull.side_effect = Exception("should not be called")
 
-        pull_screenshots.pull_all(
+        pull_all(
             "com.facebook.testing.tests",
             self.tmpdir,
             test_run_id="unittest",
@@ -180,7 +185,7 @@ class TestPullScreenshots(unittest.TestCase):
 
     def test_generate_html_returns_a_valid_file(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
-        pull_screenshots.pull_all(
+        pull_all(
             TESTING_PACKAGE, self.tmpdir, "unittest", adb_puller=AdbPuller()
         )
         html = pull_screenshots.generate_html(self.tmpdir)
