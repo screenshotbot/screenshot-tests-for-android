@@ -189,16 +189,6 @@ class TestPullScreenshots(unittest.TestCase):
     def test_adb_puller_sanity(self):
         self.assertTrue(AdbPuller().remote_file_exists("/sdcard"))
 
-    # def test_integration_with_filter(self):
-    #     self.scripts.append("which", returncode=0)
-    #     self.scripts.append("wkhtmltoimage", script="#!/bin/sh\ntouch $2")
-    #     with self.scripts:
-    #         pull_screenshots.main(["process-name",
-    #                                TESTING_PACKAGE,
-    #                                "--filter-name-regex=.*ScreenshotFixture.*",
-    #                                "--generate-png=%s" % self.output_file])
-    #         self.assertTrue(os.path.exists(self.output_file))
-
     def test_copy_file_zip_aware_real_file(self):
         self.tmpdir = tempfile.mkdtemp()
 
