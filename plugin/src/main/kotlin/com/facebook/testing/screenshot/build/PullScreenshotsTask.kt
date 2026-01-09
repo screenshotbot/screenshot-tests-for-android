@@ -31,8 +31,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
         File(project.buildDir, "screenshots" + variant.name.capitalize())
   }
 
-  private lateinit var apkPath: File
-
   @Input protected var verify = false
 
   @Input protected var record = false
@@ -55,7 +53,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
         variant.packageApplicationProvider.orNull
             ?: throw IllegalArgumentException("Can't find package application provider")
 
-    apkPath = File(packageTask.outputDirectory.asFile.get(), output.outputFileName)
     bundleResults = extension.bundleResults
     testRunId = extension.testRunId
   }
