@@ -546,9 +546,6 @@ def main(argv):
         adb_puller = SimplePuller(puller_args)
         temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
 
-        if not os.path.exists(temp_dir):
-            os.makedirs(temp_dir)
-        
         device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
                       if should_perform_pull
                       else None)
