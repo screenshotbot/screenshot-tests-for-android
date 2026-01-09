@@ -535,6 +535,7 @@ def main(argv):
     bundle_results = "--bundle-results" in opts
 
     multiple_devices = opts.get("--multiple-devices")
+    calculated_device_name = opts.get("--calculated-device-name")
 
     base_puller_args = []
     if "-e" in opts:
