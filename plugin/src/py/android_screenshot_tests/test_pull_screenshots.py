@@ -105,6 +105,8 @@ class AdbPuller:
             else:
                 raise
 
+OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
+            
 def create_empty_metadata_file(dir):
     with open(join(dir, "metadata.json"), "w") as out:
         out.write("{}")
