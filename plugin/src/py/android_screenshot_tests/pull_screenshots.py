@@ -501,6 +501,7 @@ def main(argv):
                 "calculated-device-name=",
                 "test-run-id=",
                 "bundle-results",
+                "device-dir=",
             ],
         )
     except getopt.GetoptError:
