@@ -116,6 +116,70 @@ class PullTest {
     }
   }
 
+  @Test
+  fun testPullImagesOverwritesExistingFiles() {
+    val project = ProjectBuilder.builder().build()
+    val puller = SimplePuller(project, getAdb())
+
+    // Set up test directory structure on device
+    val deviceDir = "/sdcard/test_screenshots_overwrite"
+    val testRunId = "test_run_456"
+    val remoteTestDir = "$deviceDir/$testRunId"
+
+    try {
+      // Create a local directory with existing files containing old content
+      val localDir = File(tmpDir, "screenshots_with_existing")
+      localDir.mkdirs()
+
+      // Define test files with their old and new content
+      data class ImageFile(val name: String, val oldContent: String, val newContent: String)
+      val imageFiles = listOf(
+        ImageFile("img_0_0.png", "old_content_0", "new_content_0"),
+        ImageFile("img_0_1.png", "old_content_1", "new_content_1"),
+        ImageFile("img_1_0.png", "old_content_2", "new_content_2")
+      )
+
+      // Write old content to local files
+      for (imageFile in imageFiles) {
+        val localFile = File(localDir, imageFile.name)
+        localFile.writeText(imageFile.oldContent)
+      }
+
+      // Verify old content exists
+      for (imageFile in imageFiles) {
+        val localFile = File(localDir, imageFile.name)
+        assertEquals("Old content should exist", imageFile.oldContent, localFile.readText())
+      }
+
+      // Create directory structure on device with new content
+      execAdb(listOf("shell", "mkdir", "-p", remoteTestDir))
+
+      for (imageFile in imageFiles) {
+        execAdb(listOf("shell", "echo ${imageFile.newContent} > $remoteTestDir/${imageFile.name}"))
+      }
+
+      // Call pullImages - this should overwrite the existing files
+      pullImages(localDir, deviceDir, testRunId, puller)
+
+      // Verify all files were overwritten with new content
+      for (imageFile in imageFiles) {
+        val localFile = File(localDir, imageFile.name)
+        assertTrue("File should still exist: ${localFile.absolutePath}", localFile.exists())
+
+        val actualContent = localFile.readText().trim()
+        assertEquals(
+          "Content should be overwritten with new content for ${imageFile.name}",
+          imageFile.newContent,
+          actualContent
+        )
+      }
+
+    } finally {
+      // Cleanup device
+      execAdb(listOf("shell", "rm", "-rf", deviceDir))
+    }
+  }
+
   private fun getAdb(): String {
     val androidSdk = System.getenv("ANDROID_SDK") ?: System.getenv("ANDROID_HOME")
       ?: throw RuntimeException("ANDROID_SDK or ANDROID_HOME needs to be set")
