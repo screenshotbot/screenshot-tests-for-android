@@ -71,12 +71,12 @@ open class PullScreenshotsTask : ScreenshotTask() {
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
     val tempDir = outputDir.absolutePath
+    File(tempDir).mkdirs()
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
 
-      File(tempDir).mkdirs()
       val puller = SimplePuller.create(project)
 
       // Pull metadata from device if we're performing a pull
