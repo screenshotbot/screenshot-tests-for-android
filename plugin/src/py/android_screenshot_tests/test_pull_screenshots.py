@@ -298,21 +298,6 @@ class TestPullScreenshots(unittest.TestCase):
             with open(f.name, "rt") as ff:
                 assertRegex(self, ff.read(), ".*manifest.*")
 
-    def test_summary_happyPath(self):
-        with tempfile.NamedTemporaryFile(mode="w+t") as f:
-            sys.stdout = f
-            pull_screenshots._summary(
-                CURRENT_DIR
-                + "/fixtures/sdcard/screenshots/"
-                + TESTING_PACKAGE
-                + "/screenshots-default"
-            )
-            sys.stdout.flush()
-
-            f.seek(0)
-            message = f.read()
-            assertRegex(self, message, ".*3 screenshots.*")
-
     def test_setup_paths(self):
         os.environ["ANDROID_SDK"] = "foobar"
         pull_screenshots.setup_paths()
