@@ -98,7 +98,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
       val deviceDir =
           if (!isVerifyOnly) {
               val puller = SimplePuller.create(project)
-              pullMetadata(variant.applicationId, tempDir, puller)
+              pullMetadata(variant.applicationId, File(tempDir), puller)
           } else {
               "" // Empty string when not pulling
           }
