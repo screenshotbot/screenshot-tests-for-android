@@ -85,14 +85,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
-    // Pull metadata from device if we're performing a pull
-    val deviceDir =
-        if (!isVerifyOnly) {
-          val puller = SimplePuller.create(project)
-          pullMetadata(variant.applicationId, outputDir, puller)
-        } else {
-          "" // Empty string when not pulling
-        }
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
@@ -101,6 +93,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
       val tempDir = outputDir.absolutePath
 
       File(tempDir).mkdirs()
+
+      // Pull metadata from device if we're performing a pull
+      val deviceDir =
+          if (!isVerifyOnly) {
+              val puller = SimplePuller.create(project)
+              pullMetadata(variant.applicationId, tempDir, puller)
+          } else {
+              "" // Empty string when not pulling
+          }
 
       execSpec.args =
           mutableListOf(
