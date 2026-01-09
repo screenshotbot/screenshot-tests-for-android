@@ -380,11 +380,6 @@ def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
         shutil.rmtree(bundle_name_local_file)
 
 
-def pull_all(package, dir, test_run_id, adb_puller):
-    device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
-
-
 def pull_filtered(
     package,
     dir,
