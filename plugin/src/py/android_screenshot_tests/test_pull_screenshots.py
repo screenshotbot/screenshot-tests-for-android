@@ -161,21 +161,31 @@ class TestPullScreenshots(unittest.TestCase):
 
     def test_index_html_created(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
+        adb_puller = AdbPuller()
+        device_dir = pull_screenshots.pull_metadata(
+            TESTING_PACKAGE, self.tmpdir, adb_puller
+        )
         pull_screenshots.pull_screenshots(
             TESTING_PACKAGE,
-            adb_puller=AdbPuller(),
+            adb_puller=adb_puller,
             temp_dir=self.tmpdir,
             test_run_id="unittest",
+            device_dir=device_dir,
         )
         self.assertTrue(os.path.exists(self.tmpdir + "/index.html"))
 
     def test_image_is_linked(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
+        adb_puller = AdbPuller()
+        device_dir = pull_screenshots.pull_metadata(
+            TESTING_PACKAGE, self.tmpdir, adb_puller
+        )
         pull_screenshots.pull_screenshots(
             TESTING_PACKAGE,
-            adb_puller=AdbPuller(),
+            adb_puller=adb_puller,
             temp_dir=self.tmpdir,
             test_run_id="unittest",
+            device_dir=device_dir,
         )
         with open(self.tmpdir + "/index.html", "r") as f:
             contents = f.read()
@@ -251,6 +261,7 @@ class TestPullScreenshots(unittest.TestCase):
             perform_pull=False,
             temp_dir=source,
             test_run_id="unittest",
+            device_dir="",
             verify=dest,
         )
 
@@ -267,6 +278,7 @@ class TestPullScreenshots(unittest.TestCase):
             perform_pull=False,
             temp_dir=source,
             test_run_id="unittest",
+            device_dir="",
             record=dest,
         )
 
