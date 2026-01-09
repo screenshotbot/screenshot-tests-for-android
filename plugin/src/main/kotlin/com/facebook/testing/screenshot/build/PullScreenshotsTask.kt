@@ -142,11 +142,12 @@ open class PullScreenshotsTask : ScreenshotTask() {
     }
     val count = metadataJson.size()
 
+    logger.lifecycle("\n")
+    
     logger.lifecycle("Found $count screenshots")
-
     val indexHtml = File(tempDir, "index.html").absolutePath
     val fullPath = "file://$indexHtml"
-
+    logger.lifecycle("\n")
     logger.lifecycle("Open the following url in a browser to view the results: ")
     logger.lifecycle("  $fullPath")
     logger.lifecycle("\n")
