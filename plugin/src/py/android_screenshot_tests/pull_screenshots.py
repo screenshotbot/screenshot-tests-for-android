@@ -414,7 +414,6 @@ def pull_screenshots(
     calculated_device_name="",
     perform_pull=True,
     bundle_results=False,
-    temp_dir=None,
     record=None,
     verify=None,
     test_run_id=None,
@@ -431,7 +430,8 @@ def pull_screenshots(
     if not perform_pull and device_dir is None:
         raise RuntimeError("""You must supply device_dir if --no-pull is present""")
 
-    temp_dir = temp_dir or tempfile.mkdtemp(prefix="screenshots")
+    if not temp_dir:
+        raise RuntimeError("temp_dir must be provided")
 
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
@@ -542,8 +542,8 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
-        adb_puller=SimplePuller(puller_args)
-        temp_dir=opts.get("--temp-dir")
+        adb_puller = SimplePuller(puller_args)
+        temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
         device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
                       if should_perform_pull
                       else None)
