@@ -111,18 +111,22 @@ class Recorder:
     def verify(self):
         self._output = tempfile.mkdtemp()
         self._record()
-        self.verify_helper()
+        self.verify_helper(
+            screenshots=self._get_metadata_json(),
+            output=self._output,
+            realoutput=self._realoutput,
+            failure_output=self._failure_output)
 
-    def verify_helper(self):
-        screenshots = self._get_metadata_json()
+
+    def verify_helper(self, screenshots, output, realoutput, failure_output):
         failures = []
         for screenshot in screenshots:
             name = screenshot["name"] + ".png"
-            actual = join(self._output, name)
-            expected = join(self._realoutput, name)
+            actual = join(output, name)
+            expected = join(realoutput, name)
             if self._failure_output:
                 diff_name = screenshot["name"] + "_diff.png"
-                diff = join(self._failure_output, diff_name)
+                diff = join(failure_output, diff_name)
 
                 if not self._is_image_same(expected, actual, diff):
                     expected_name = screenshot["name"] + "_expected.png"
