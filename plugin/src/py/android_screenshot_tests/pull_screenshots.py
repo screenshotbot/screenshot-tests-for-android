@@ -546,10 +546,8 @@ def main(argv):
     for puller_args in puller_args_list:
         adb_puller = SimplePuller(puller_args)
         temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
+        device_dir = opts.get("--device-dir")
 
-        device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
-                      if should_perform_pull
-                      else None)
         pull_screenshots(
             process,
             perform_pull=should_perform_pull,
