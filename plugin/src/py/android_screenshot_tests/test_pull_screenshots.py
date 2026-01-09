@@ -221,6 +221,12 @@ class TestPullScreenshots(unittest.TestCase):
         device_dir = pull_metadata(
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
+        pull_screenshots.pull_images(
+            self.tmpdir,
+            adb_puller=adb_puller,
+            test_run_id="unittest",
+            device_dir=device_dir,
+        )
         pull_screenshots.pull_screenshots(
             TESTING_PACKAGE,
             adb_puller=adb_puller,
