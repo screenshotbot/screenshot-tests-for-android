@@ -335,14 +335,13 @@ def android_path_join(a, *args):
     return android_path_join(android_path_join(a, args[0]), *args[1:])
 
 
-def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
+def pull_images(dir, device_dir, test_run_id, adb_puller):
     if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
         bundle_name_local_file = join(dir, os.path.basename(test_run_id))
 
         # Optimization to pull down all the screenshots in a single pull.
         # If this file exists, we assume all of the screenshots are inside it.
-        pulling_function = adb_puller.pull_folder if bundle_results else adb_puller.pull
-        pulling_function(
+        adb_puller.pull_folder(
             android_path_join(device_dir, test_run_id), bundle_name_local_file
         )
 
@@ -368,7 +367,6 @@ def _summary(dir):
 
 def pull_screenshots(
     calculated_device_name="",
-    bundle_results=False,
     temp_dir=None,
     record=None,
     verify=None,
@@ -447,7 +445,6 @@ def main(argv):
     opts = dict(opt_list)
 
     should_perform_pull = "--no-pull" not in opts
-    bundle_results = "--bundle-results" in opts
 
     multiple_devices = opts.get("--multiple-devices")
     calculated_device_name = opts.get("--calculated-device-name")
@@ -485,7 +482,6 @@ def main(argv):
                 device_dir,
                 test_run_id,
                 adb_puller=adb_puller,
-                bundle_results=bundle_results,
             )
 
         pull_screenshots(
@@ -494,7 +490,6 @@ def main(argv):
             verify=opts.get("--verify"),
             calculated_device_name=calculated_device_name,
             failure_dir=opts.get("--failure-dir"),
-            bundle_results=bundle_results,
         )
 
 

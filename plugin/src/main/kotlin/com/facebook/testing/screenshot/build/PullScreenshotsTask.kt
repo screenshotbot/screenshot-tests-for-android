@@ -36,8 +36,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
   @Input protected var record = false
 
-  @Input protected var bundleResults = false
-
   @Input protected lateinit var testRunId: String
 
   init {
@@ -54,7 +52,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
         variant.packageApplicationProvider.orNull
             ?: throw IllegalArgumentException("Can't find package application provider")
 
-    bundleResults = extension.bundleResults
     testRunId = extension.testRunId
   }
 
@@ -129,10 +126,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
                 if (isVerifyOnly) {
                   add("--no-pull")
-                }
-
-                if (bundleResults) {
-                  add("--bundle-results")
                 }
               }
 

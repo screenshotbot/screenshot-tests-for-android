@@ -1,5 +1,6 @@
 0.17.0-SNAPSHOT (---)
 ------
+- Removed bundleResult plugin parameter
 
 0.16.0 (---)
 ------
