@@ -111,7 +111,9 @@ class Recorder:
     def verify(self):
         self._output = tempfile.mkdtemp()
         self._record()
+        self.verify_helper()
 
+    def verify_helper(self):
         screenshots = self._get_metadata_json()
         failures = []
         for screenshot in screenshots:
