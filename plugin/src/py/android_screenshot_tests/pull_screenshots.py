@@ -313,28 +313,6 @@ def _copy_via_zip(src_zip, zip_path, dest):
         _copy_via_zip(head, tail if not zip_path else (tail + "/" + zip_path), dest)
 
 
-def _android_path_join_two(a, b):
-    if b.startswith("/"):
-        return b
-
-    if not a.endswith("/"):
-        a += "/"
-
-    return a + b
-
-
-def android_path_join(a, *args):
-    """Similar to os.path.join(), but might differ in behavior on Windows"""
-
-    if args == []:
-        return a
-
-    if len(args) == 1:
-        return _android_path_join_two(a, args[0])
-
-    return android_path_join(android_path_join(a, args[0]), *args[1:])
-
-
 def _summary(dir):
     with open(join(dir, "metadata.json")) as f:
         metadataJson = json.load(f)
