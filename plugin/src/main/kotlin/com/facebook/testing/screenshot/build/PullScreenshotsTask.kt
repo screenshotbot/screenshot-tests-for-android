@@ -22,6 +22,7 @@ import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import java.io.FileWriter
 
 open class PullScreenshotsTask : ScreenshotTask() {
   companion object {
@@ -29,6 +30,18 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     fun getReportDir(project: Project, variant: TestVariant): File =
         File(project.buildDir, "screenshots" + variant.name.capitalize())
+
+    /**
+     * Joins Android device paths using forward slashes.
+     *
+     * @param a The base path
+     * @param args Additional path components
+     * @return The joined path
+     */
+    fun androidPathJoin(a: String, vararg args: String): String {
+      if (args.isEmpty()) return a
+      return args.fold(a) { acc, path -> "$acc/$path" }
+    }
   }
 
   @Input protected var verify = false
@@ -72,6 +85,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
+
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
@@ -79,6 +93,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
       val tempDir = outputDir.absolutePath
 
       File(tempDir).mkdirs()
+
+      // Pull metadata from device if we're performing a pull
+      val deviceDir =
+          if (!isVerifyOnly) {
+              val puller = SimplePuller.create(project)
+              pullMetadata(variant.applicationId, File(tempDir), puller)
+          } else {
+              "" // Empty string when not pulling
+          }
 
       execSpec.args =
           mutableListOf(
@@ -92,6 +115,10 @@ open class PullScreenshotsTask : ScreenshotTask() {
                   tempDir,
               )
               .apply {
+                // Add device-dir parameter
+                add("--device-dir")
+                add(deviceDir)
+
                 if (verify) {
                   add("--verify")
                 } else if (record) {
@@ -125,5 +152,54 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
       println(execSpec.args)
     }
+  }
+
+  /**
+   * Pulls metadata file from the device and returns the device directory path.
+   *
+   * This mirrors the Python pull_metadata function but is implemented in Kotlin
+   * to move more logic out of Python and into the Gradle plugin.
+   *
+   * @param packageName The package name of the test app
+   * @param outputDir The local directory to pull metadata to
+   * @param puller The SimplePuller instance to use for pulling files
+   * @return The device directory path where screenshots are located
+   */
+  private fun pullMetadata(packageName: String, outputDir: File, puller: SimplePuller): String {
+    val oldRootScreenshotDir = "/data/data/"
+    val externalDataDir = puller.getExternalDataDir()
+
+    val rootScreenshotDir = Companion.androidPathJoin(externalDataDir, "screenshots")
+    val metadataFile =
+        Companion.androidPathJoin(rootScreenshotDir, packageName, "screenshots-default/metadata.json")
+    val oldMetadataFile =
+        Companion.androidPathJoin(oldRootScreenshotDir, packageName, "app_screenshots-default/metadata.json")
+
+    val localMetadataFile = File(outputDir, "metadata.json")
+
+    return when {
+      puller.remoteFileExists(metadataFile) -> {
+        puller.pull(metadataFile, localMetadataFile.absolutePath)
+        metadataFile.replace("metadata.json", "")
+      }
+      puller.remoteFileExists(oldMetadataFile) -> {
+        puller.pull(oldMetadataFile, localMetadataFile.absolutePath)
+        oldMetadataFile.replace("metadata.json", "")
+      }
+      else -> {
+        createEmptyMetadataFile(localMetadataFile)
+        ""
+      }
+    }
+  }
+
+  /**
+   * Creates an empty metadata.json file.
+   *
+   * @param file The file to create
+   */
+  private fun createEmptyMetadataFile(file: File) {
+    file.parentFile?.mkdirs()
+    FileWriter(file).use { writer -> writer.write("{}") }
   }
 }

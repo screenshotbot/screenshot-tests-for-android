@@ -105,8 +105,49 @@ class AdbPuller:
             else:
                 raise
 
+OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
+            
+def create_empty_metadata_file(dir):
+    with open(join(dir, "metadata.json"), "w") as out:
+        out.write("{}")
+
+def pull_metadata(package, dir, adb_puller):
+    """Returns the directory where the metadata file is located,
+    essentially the root of the screenshot directory.
+
+    This code used to be in Python, but moved to java, so now we have
+    this temporarily in the test to keep everything passing. If you
+    make any changes here, please keep in sync with pullMetadata in
+    Kotlin.
+
+    """
+
+    root_screenshot_dir = pull_screenshots.android_path_join(
+        adb_puller.get_external_data_dir(), "screenshots"
+    )
+    metadata_file = pull_screenshots.android_path_join(
+        root_screenshot_dir, package, "screenshots-default/metadata.json"
+    )
+
+    old_metadata_file = pull_screenshots.android_path_join(
+        OLD_ROOT_SCREENSHOT_DIR, package, "app_screenshots-default/metadata.json"
+    )
+
+    if adb_puller.remote_file_exists(metadata_file):
+        adb_puller.pull(metadata_file, join(dir, "metadata.json"))
+    elif adb_puller.remote_file_exists(old_metadata_file):
+        adb_puller.pull(old_metadata_file, join(dir, "metadata.json"))
+        metadata_file = old_metadata_file
+    else:
+        create_empty_metadata_file(dir)
+
+    return metadata_file.replace("metadata.json", "")
+
+
+            
+
 def pull_all(package, dir, test_run_id, adb_puller):
-    device_dir = pull_screenshots.pull_metadata(package, dir, adb_puller=adb_puller)
+    device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
     pull_screenshots.pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
 
 
@@ -162,7 +203,7 @@ class TestPullScreenshots(unittest.TestCase):
     def test_index_html_created(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
         adb_puller = AdbPuller()
-        device_dir = pull_screenshots.pull_metadata(
+        device_dir = pull_metadata(
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
         pull_screenshots.pull_screenshots(
@@ -177,7 +218,7 @@ class TestPullScreenshots(unittest.TestCase):
     def test_image_is_linked(self):
         self.tmpdir = tempfile.mkdtemp(prefix="screenshots")
         adb_puller = AdbPuller()
-        device_dir = pull_screenshots.pull_metadata(
+        device_dir = pull_metadata(
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
         pull_screenshots.pull_screenshots(
