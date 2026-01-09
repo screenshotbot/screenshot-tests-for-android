@@ -436,7 +436,6 @@ def main(argv):
             argv[1:],
             "eds:",
             [
-                "apk-package=",
                 "record=",
                 "verify=",
                 "failure-dir=",
