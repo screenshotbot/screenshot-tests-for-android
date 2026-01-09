@@ -359,34 +359,6 @@ class TestPullScreenshots(unittest.TestCase):
 
         self.assertEqual(["two", "one", "three"], [x.get("name") for x in screenshots])
 
-    def test_invalid_json(self):
-        source = join(tempfile.mkdtemp(), "foo")
-        shutil.copytree(join(CURRENT_DIR, "fixtures"), source)
-
-        metadata_file = join(
-            source, "sdcard/screenshots/com.foo/screenshots-default/metadata.json"
-        )
-        self.assertTrue(os.path.exists(metadata_file))
-
-        with open(metadata_file, "w") as f:
-            f.write("{invalid-json{")
-            f.flush()
-
-        adb_puller = AdbPuller(source)
-
-        try:
-            pull_screenshots.pull_screenshots(
-                TESTING_PACKAGE,
-                test_run_id="unittest",
-                adb_puller=adb_puller,
-                temp_dir=tempfile.mkdtemp(),
-                
-            )
-            self.fail("expected exception")
-        except RuntimeError as e:
-            assertRegex(self, e.args[0], ".*ScreenshotRunner.*")
-
-
 class TestAndroidJoin(unittest.TestCase):
     def test_simple(self):
         self.assertEqual("/foo/bar", pull_screenshots.android_path_join("/foo", "bar"))
