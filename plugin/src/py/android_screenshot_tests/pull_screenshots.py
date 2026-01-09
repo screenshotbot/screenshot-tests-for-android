@@ -418,7 +418,7 @@ def pull_screenshots(
     record=None,
     verify=None,
     test_run_id=None,
-    device_dir=None
+    device_dir=None,
     failure_dir=None,
 ):
     if not perform_pull and temp_dir is None:
@@ -542,8 +542,8 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
-        device_dir = (if should_perform_pull
-                        pull_metadata(process, temp_dir, adb_puller=adb_puller)
+        device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
+                      if should_perform_pull
                       else None)
         pull_screenshots(
             process,
