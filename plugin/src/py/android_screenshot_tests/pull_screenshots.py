@@ -334,6 +334,20 @@ def pull_screenshots(
     copy_assets(temp_dir)
 
     path_to_html = generate_html(temp_dir)
+
+    perform_record_or_verify(record=record,
+                             verify=verify,
+                             failure_dir=failure_dir,
+                             temp_dir=temp_dir,
+                             calculated_device_name=calculated_device_name,
+                             path_to_html=path_to_html)
+
+def perform_record_or_verify(record,
+                             verify,
+                             failure_dir,
+                             temp_dir,
+                             calculated_device_name,
+                             path_to_html):    
     device_name = calculated_device_name
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
