@@ -336,11 +336,6 @@ def android_path_join(a, *args):
     return android_path_join(android_path_join(a, args[0]), *args[1:])
 
 
-def create_empty_metadata_file(dir):
-    with open(join(dir, "metadata.json"), "w") as out:
-        out.write("{}")
-
-
 def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
     if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
         bundle_name_local_file = join(dir, os.path.basename(test_run_id))
