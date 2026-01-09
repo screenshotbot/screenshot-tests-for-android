@@ -98,7 +98,7 @@ class AdbPuller:
 
     def _copy(self, src, dst):
         try:
-            shutil.copytree(src, dst)
+            shutil.copytree(src, dst, dirs_exist_ok=True)
         except OSError as exc:
             if exc.errno == errno.ENOTDIR:
                 shutil.copy(src, dst)
