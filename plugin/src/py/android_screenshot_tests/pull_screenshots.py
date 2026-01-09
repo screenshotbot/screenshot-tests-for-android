@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from os.path import abspath, join
 
-from . import aapt, common 
+from . import common 
 from .device_name_calculator import DeviceNameCalculator
 from .no_op_device_name_calculator import NoOpDeviceNameCalculator
 from .simple_puller import SimplePuller
