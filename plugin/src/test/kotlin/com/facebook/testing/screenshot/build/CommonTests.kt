@@ -19,45 +19,45 @@ package com.facebook.testing.screenshot.build
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class PullScreenshotsTaskTest {
+class CommonTests {
 
   @Test
   fun testAndroidPathJoinWithNoArgs() {
-    val result = PullScreenshotsTask.androidPathJoin("/base")
+    val result = androidPathJoin("/base")
     assertEquals("/base", result)
   }
 
   @Test
   fun testAndroidPathJoinWithSingleArg() {
-    val result = PullScreenshotsTask.androidPathJoin("/base", "path")
+    val result = androidPathJoin("/base", "path")
     assertEquals("/base/path", result)
   }
 
   @Test
   fun testAndroidPathJoinWithMultipleArgs() {
-    val result = PullScreenshotsTask.androidPathJoin("/base", "path", "to", "file")
+    val result = androidPathJoin("/base", "path", "to", "file")
     assertEquals("/base/path/to/file", result)
   }
 
   @Test
   fun testAndroidPathJoinWithEmptyBase() {
-    val result = PullScreenshotsTask.androidPathJoin("", "path", "to", "file")
+    val result = androidPathJoin("", "path", "to", "file")
     assertEquals("/path/to/file", result)
   }
 
   @Test
   fun testAndroidPathJoinPreservesTrailingSlash() {
-    val result = PullScreenshotsTask.androidPathJoin("/base/", "path")
+    val result = androidPathJoin("/base/", "path")
     assertEquals("/base//path", result)
   }
 
   @Test
   fun testAndroidPathJoinWithComplexPath() {
-    val result = PullScreenshotsTask.androidPathJoin(
-        "/data/data",
-        "com.example.app",
-        "app_screenshots-default",
-        "metadata.json"
+    val result = androidPathJoin(
+      "/data/data",
+      "com.example.app",
+      "app_screenshots-default",
+      "metadata.json"
     )
     assertEquals("/data/data/com.example.app/app_screenshots-default/metadata.json", result)
   }
