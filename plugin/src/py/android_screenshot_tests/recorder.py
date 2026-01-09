@@ -29,6 +29,24 @@ from . import common
 class VerifyError(Exception):
     pass
 
+def _is_image_same(file1, file2, failure_file):
+    with Image.open(file1) as im1, Image.open(file2) as im2:
+        diff_image = ImageChops.difference(im1.convert("RGB"), im2.convert("RGB"))
+        try:
+            diff = diff_image.getbbox()
+            if diff is None and im1.size == im2.size:
+                return True
+            else:
+                if failure_file:
+                    diff_list = list(diff) if diff else []
+                    draw = ImageDraw.Draw(im2)
+                    draw.rectangle(diff_list, outline=(255, 0, 0))
+                    im2.save(failure_file)
+                return False
+        finally:
+            diff_image.close()
+
+
 
 class Recorder:
     def __init__(self, input, output, failure_output):
@@ -87,23 +105,6 @@ class Recorder:
             shutil.rmtree(self._output)
         os.makedirs(self._output)
 
-    def _is_image_same(self, file1, file2, failure_file):
-        with Image.open(file1) as im1, Image.open(file2) as im2:
-            diff_image = ImageChops.difference(im1.convert("RGB"), im2.convert("RGB"))
-            try:
-                diff = diff_image.getbbox()
-                if diff is None and im1.size == im2.size:
-                    return True
-                else:
-                    if failure_file:
-                        diff_list = list(diff) if diff else []
-                        draw = ImageDraw.Draw(im2)
-                        draw.rectangle(diff_list, outline=(255, 0, 0))
-                        im2.save(failure_file)
-                    return False
-            finally:
-                diff_image.close()
-
     def record(self):
         self._clean()
         self._record()
@@ -128,7 +129,7 @@ class Recorder:
                 diff_name = screenshot["name"] + "_diff.png"
                 diff = join(failure_output, diff_name)
 
-                if not self._is_image_same(expected, actual, diff):
+                if not _is_image_same(expected, actual, diff):
                     expected_name = screenshot["name"] + "_expected.png"
                     actual_name = screenshot["name"] + "_actual.png"
 
@@ -137,7 +138,7 @@ class Recorder:
 
                     failures.append((expected, actual))
             else:
-                if not self._is_image_same(expected, actual, None):
+                if not _is_image_same(expected, actual, None):
                     raise VerifyError("Image %s is not same as %s" % (expected, actual))
 
         if failures:
