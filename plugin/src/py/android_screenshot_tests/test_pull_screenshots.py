@@ -105,8 +105,16 @@ class AdbPuller:
             else:
                 raise
 
+def pull_images(dir, device_dir, test_run_id, adb_puller):
+    if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
+        # Optimization to pull down all the screenshots in a single pull.
+        # If this file exists, we assume all of the screenshots are inside it.
+        adb_puller.pull_folder(
+            android_path_join(device_dir, test_run_id), dir
+        )
+
 OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
-            
+
 def create_empty_metadata_file(dir):
     with open(join(dir, "metadata.json"), "w") as out:
         out.write("{}")
