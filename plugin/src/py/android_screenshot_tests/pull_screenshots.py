@@ -339,15 +339,19 @@ def pull_screenshots(
                              verify=verify,
                              failure_dir=failure_dir,
                              temp_dir=temp_dir,
-                             calculated_device_name=calculated_device_name,
-                             path_to_html=path_to_html)
+                             calculated_device_name=calculated_device_name)
+
+    print("Open the following url in a browser to view the results: ")
+    full_path = "file://" + path_to_html
+    print("  %s" % full_path)
+    print("\n\n")
+
 
 def perform_record_or_verify(record,
                              verify,
                              failure_dir,
                              temp_dir,
-                             calculated_device_name,
-                             path_to_html):    
+                             calculated_device_name):    
     device_name = calculated_device_name
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
@@ -369,10 +373,6 @@ def perform_record_or_verify(record,
 
     print("\n\n")
     _summary(temp_dir)
-    print("Open the following url in a browser to view the results: ")
-    full_path = "file://" + path_to_html
-    print("  %s" % full_path)
-    print("\n\n")
 
 def setup_paths():
     android_home = common.get_android_sdk()
