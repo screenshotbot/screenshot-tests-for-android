@@ -74,3 +74,23 @@ fun validateMetadata(localMetadataFile: File) {
     )
   }
 }
+
+/**
+ * Pulls screenshot images from the device.
+ *
+ * This mirrors the Python pull_images function but is implemented in Kotlin
+ * to move more logic out of Python and into the Gradle plugin.
+ *
+ * @param dir The local directory to pull images to
+ * @param deviceDir The device directory where screenshots are located
+ * @param testRunId The test run ID subdirectory
+ * @param puller The SimplePuller instance to use for pulling files
+ */
+fun pullImages(dir: File, deviceDir: String, testRunId: String, puller: SimplePuller) {
+  val remotePath = androidPathJoin(deviceDir, testRunId)
+  if (puller.remoteFileExists(remotePath)) {
+    // Optimization to pull down all the screenshots in a single pull.
+    // If this file exists, we assume all of the screenshots are inside it.
+    puller.pullFolder(remotePath, dir.absolutePath)
+  }
+}
