@@ -112,39 +112,39 @@ class Recorder:
     def verify(self):
         self._output = tempfile.mkdtemp()
         self._record()
-        self.verify_helper(
+        verify_helper(
             screenshots=self._get_metadata_json(),
             output=self._output,
             realoutput=self._realoutput,
             failure_output=self._failure_output)
 
 
-    def verify_helper(self, screenshots, output, realoutput, failure_output):
-        failures = []
-        for screenshot in screenshots:
-            name = screenshot["name"] + ".png"
-            actual = join(output, name)
-            expected = join(realoutput, name)
-            if self._failure_output:
-                diff_name = screenshot["name"] + "_diff.png"
-                diff = join(failure_output, diff_name)
+def verify_helper(screenshots, output, realoutput, failure_output):
+    failures = []
+    for screenshot in screenshots:
+        name = screenshot["name"] + ".png"
+        actual = join(output, name)
+        expected = join(realoutput, name)
+        if failure_output:
+            diff_name = screenshot["name"] + "_diff.png"
+            diff = join(failure_output, diff_name)
 
-                if not _is_image_same(expected, actual, diff):
-                    expected_name = screenshot["name"] + "_expected.png"
-                    actual_name = screenshot["name"] + "_actual.png"
+            if not _is_image_same(expected, actual, diff):
+                expected_name = screenshot["name"] + "_expected.png"
+                actual_name = screenshot["name"] + "_actual.png"
 
-                    shutil.copy(actual, join(failure_output, actual_name))
-                    shutil.copy(expected, join(failure_output, expected_name))
+                shutil.copy(actual, join(failure_output, actual_name))
+                shutil.copy(expected, join(failure_output, expected_name))
 
-                    failures.append((expected, actual))
-            else:
-                if not _is_image_same(expected, actual, None):
-                    raise VerifyError("Image %s is not same as %s" % (expected, actual))
+                failures.append((expected, actual))
+        else:
+            if not _is_image_same(expected, actual, None):
+                raise VerifyError("Image %s is not same as %s" % (expected, actual))
 
-        if failures:
-            reason = ""
-            for expected, actual in failures:
-                reason = reason + "\nImage %s is not same as %s" % (expected, actual)
-            raise VerifyError(reason)
+    if failures:
+        reason = ""
+        for expected, actual in failures:
+            reason = reason + "\nImage %s is not same as %s" % (expected, actual)
+        raise VerifyError(reason)
 
-        shutil.rmtree(output)
+    shutil.rmtree(output)
