@@ -395,14 +395,6 @@ def pull_screenshots(
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
-    if perform_pull is True:
-        pull_images(
-            temp_dir,
-            device_dir,
-            test_run_id,
-            adb_puller=adb_puller,
-            bundle_results=bundle_results,
-        )
 
     copy_assets(temp_dir)
 
@@ -503,12 +495,22 @@ def main(argv):
         adb_puller = SimplePuller(puller_args)
         temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
         device_dir = opts.get("--device-dir")
+        test_run_id = opts.get("--test-run-id")
+
+        if should_perform_pull is True:
+            pull_images(
+                temp_dir,
+                device_dir,
+                test_run_id,
+                adb_puller=adb_puller,
+                bundle_results=bundle_results,
+            )
 
         pull_screenshots(
             process,
             perform_pull=should_perform_pull,
             temp_dir=temp_dir,
-            test_run_id=opts.get("--test-run-id"),
+            test_run_id=test_run_id,
             record=opts.get("--record"),
             verify=opts.get("--verify"),
             adb_puller=adb_puller,
