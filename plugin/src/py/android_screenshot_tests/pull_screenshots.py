@@ -367,27 +367,13 @@ def _summary(dir):
 
 
 def pull_screenshots(
-    adb_puller,
     calculated_device_name="",
-    perform_pull=True,
     bundle_results=False,
     temp_dir=None,
     record=None,
     verify=None,
-    test_run_id=None,
-    device_dir=None,
     failure_dir=None,
 ):
-    if not perform_pull and temp_dir is None:
-        raise RuntimeError(
-            """You must supply a directory for temp_dir if --no-pull is present"""
-        )
-    if not perform_pull and test_run_id is None:
-        raise RuntimeError("""You must supply a test run id if --no-pull is present""")
-
-    if not perform_pull and device_dir is None:
-        raise RuntimeError("""You must supply device_dir if --no-pull is present""")
-
     if not temp_dir:
         raise RuntimeError("temp_dir must be provided")
 
@@ -503,14 +489,10 @@ def main(argv):
             )
 
         pull_screenshots(
-            perform_pull=should_perform_pull,
             temp_dir=temp_dir,
-            test_run_id=test_run_id,
             record=opts.get("--record"),
             verify=opts.get("--verify"),
-            adb_puller=adb_puller,
             calculated_device_name=calculated_device_name,
-            device_dir=device_dir,
             failure_dir=opts.get("--failure-dir"),
             bundle_results=bundle_results,
         )
