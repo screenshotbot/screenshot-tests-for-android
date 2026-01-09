@@ -335,7 +335,11 @@ class TestPullScreenshots(unittest.TestCase):
 
         try:
             pull_screenshots.pull_screenshots(
-                TESTING_PACKAGE, test_run_id="unittest", adb_puller=adb_puller
+                TESTING_PACKAGE,
+                test_run_id="unittest",
+                adb_puller=adb_puller,
+                temp_dir=tempfile.mkdtemp(),
+                
             )
             self.fail("expected exception")
         except RuntimeError as e:
