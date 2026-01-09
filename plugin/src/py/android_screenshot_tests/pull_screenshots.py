@@ -366,17 +366,6 @@ def _summary(dir):
     print("Found %d screenshots" % count)
 
 
-def _validate_metadata(dir):
-    try:
-        with open(join(dir, "metadata.json"), "r") as f:
-            json.loads(f.read())
-    except Exception as e:
-        raise RuntimeError(
-            "Unable to parse metadata file, this commonly happens if you did not call ScreenshotRunner.onDestroy() from your instrumentation",
-            e,
-        )
-
-
 def pull_screenshots(
     process,
     adb_puller,
@@ -407,7 +396,6 @@ def pull_screenshots(
         os.makedirs(temp_dir)
 
     if perform_pull is True:
-        _validate_metadata(temp_dir)
         pull_images(
             temp_dir,
             device_dir,
@@ -417,7 +405,6 @@ def pull_screenshots(
         )
 
     copy_assets(temp_dir)
-    _validate_metadata(temp_dir)
 
     path_to_html = generate_html(temp_dir)
     device_name = calculated_device_name
