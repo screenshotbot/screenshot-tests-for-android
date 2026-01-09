@@ -367,7 +367,6 @@ def _summary(dir):
 
 
 def pull_screenshots(
-    process,
     adb_puller,
     calculated_device_name="",
     perform_pull=True,
@@ -462,8 +461,6 @@ def main(argv):
 
     opts = dict(opt_list)
 
-    process = opts.get("--apk-package")
-
     should_perform_pull = "--no-pull" not in opts
     bundle_results = "--bundle-results" in opts
 
@@ -507,7 +504,6 @@ def main(argv):
             )
 
         pull_screenshots(
-            process,
             perform_pull=should_perform_pull,
             temp_dir=temp_dir,
             test_run_id=test_run_id,

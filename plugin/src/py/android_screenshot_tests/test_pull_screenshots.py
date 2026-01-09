@@ -207,7 +207,6 @@ class TestPullScreenshots(unittest.TestCase):
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
         pull_screenshots.pull_screenshots(
-            TESTING_PACKAGE,
             adb_puller=adb_puller,
             temp_dir=self.tmpdir,
             test_run_id="unittest",
@@ -228,7 +227,6 @@ class TestPullScreenshots(unittest.TestCase):
             device_dir=device_dir,
         )
         pull_screenshots.pull_screenshots(
-            TESTING_PACKAGE,
             adb_puller=adb_puller,
             temp_dir=self.tmpdir,
             test_run_id="unittest",
@@ -303,7 +301,6 @@ class TestPullScreenshots(unittest.TestCase):
         LocalFileHelper().setup(dest, "unittest")
 
         pull_screenshots.pull_screenshots(
-            TESTING_PACKAGE,
             adb_puller=None,
             perform_pull=False,
             temp_dir=source,
@@ -320,7 +317,6 @@ class TestPullScreenshots(unittest.TestCase):
         LocalFileHelper().setup(dest, "unittest")
 
         pull_screenshots.pull_screenshots(
-            TESTING_PACKAGE,
             adb_puller=None,
             perform_pull=False,
             temp_dir=source,
@@ -332,7 +328,6 @@ class TestPullScreenshots(unittest.TestCase):
     def test_no_pull_argument_must_have_temp_dir(self):
         try:
             pull_screenshots.pull_screenshots(
-                TESTING_PACKAGE,
                 adb_puller=None,
                 perform_pull=False,
                 temp_dir=None,
