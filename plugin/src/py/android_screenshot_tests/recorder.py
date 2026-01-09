@@ -133,8 +133,8 @@ class Recorder:
                     expected_name = screenshot["name"] + "_expected.png"
                     actual_name = screenshot["name"] + "_actual.png"
 
-                    shutil.copy(actual, join(self._failure_output, actual_name))
-                    shutil.copy(expected, join(self._failure_output, expected_name))
+                    shutil.copy(actual, join(failure_output, actual_name))
+                    shutil.copy(expected, join(failure_output, expected_name))
 
                     failures.append((expected, actual))
             else:
