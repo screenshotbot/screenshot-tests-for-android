@@ -380,24 +380,6 @@ def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
         shutil.rmtree(bundle_name_local_file)
 
 
-def pull_filtered(
-    package,
-    dir,
-    adb_puller,
-    test_run_id,
-    bundle_results=False,
-):
-    device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    _validate_metadata(dir)
-    pull_images(
-        dir,
-        device_dir,
-        test_run_id,
-        adb_puller=adb_puller,
-        bundle_results=bundle_results,
-    )
-
-
 def move_all_files_to_different_directory(source_dir, target_dir):
     file_names = os.listdir(source_dir)
     for file_name in file_names:
@@ -448,17 +430,18 @@ def pull_screenshots(
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
-    copy_assets(temp_dir)
-
     if perform_pull is True:
-        pull_filtered(
-            process,
+        device_dir = pull_metadata(process, temp_dir, adb_puller=adb_puller)
+        _validate_metadata(temp_dir)
+        pull_images(
+            temp_dir,
+            device_dir,
+            test_run_id,
             adb_puller=adb_puller,
-            dir=temp_dir,
-            test_run_id=test_run_id,
             bundle_results=bundle_results,
         )
 
+    copy_assets(temp_dir)
     _validate_metadata(temp_dir)
 
     path_to_html = generate_html(temp_dir)
