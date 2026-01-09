@@ -76,6 +76,10 @@ open class PullScreenshotsTask : ScreenshotTask() {
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
 
+      val tempDir = outputDir.absolutePath
+
+      File(tempDir).mkdirs()
+
       execSpec.args =
           mutableListOf(
                   "-m",
@@ -85,7 +89,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
                   "--test-run-id",
                   testRunId,
                   "--temp-dir",
-                  outputDir.absolutePath,
+                  tempDir,
               )
               .apply {
                 if (verify) {

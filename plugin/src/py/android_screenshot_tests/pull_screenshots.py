@@ -337,6 +337,8 @@ def android_path_join(a, *args):
 
 
 def pull_metadata(package, dir, adb_puller):
+    "Returns the directory where the metadata file is located, essentially the root of the screenshot directory"
+
     root_screenshot_dir = android_path_join(
         adb_puller.get_external_data_dir(), "screenshots"
     )
@@ -416,6 +418,7 @@ def pull_screenshots(
     record=None,
     verify=None,
     test_run_id=None,
+    device_dir=None,
     failure_dir=None,
 ):
     if not perform_pull and temp_dir is None:
@@ -425,13 +428,16 @@ def pull_screenshots(
     if not perform_pull and test_run_id is None:
         raise RuntimeError("""You must supply a test run id if --no-pull is present""")
 
-    temp_dir = temp_dir or tempfile.mkdtemp(prefix="screenshots")
+    if not perform_pull and device_dir is None:
+        raise RuntimeError("""You must supply device_dir if --no-pull is present""")
+
+    if not temp_dir:
+        raise RuntimeError("temp_dir must be provided")
 
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
     if perform_pull is True:
-        device_dir = pull_metadata(process, temp_dir, adb_puller=adb_puller)
         _validate_metadata(temp_dir)
         pull_images(
             temp_dir,
@@ -537,15 +543,22 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
+        adb_puller = SimplePuller(puller_args)
+        temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
+
+        device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
+                      if should_perform_pull
+                      else None)
         pull_screenshots(
             process,
             perform_pull=should_perform_pull,
-            temp_dir=opts.get("--temp-dir"),
+            temp_dir=temp_dir,
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
-            adb_puller=SimplePuller(puller_args),
+            adb_puller=adb_puller,
             calculated_device_name=calculated_device_name,
+            device_dir=device_dir,
             failure_dir=opts.get("--failure-dir"),
             bundle_results=bundle_results,
         )
