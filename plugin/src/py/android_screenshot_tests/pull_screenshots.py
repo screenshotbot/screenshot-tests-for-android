@@ -355,10 +355,6 @@ def pull_screenshots(
 
     print("\n\n")
     _summary(temp_dir)
-    print("Open the following url in a browser to view the results: ")
-    full_path = "file://" + path_to_html
-    print("  %s" % full_path)
-    print("\n\n")
 
 def setup_paths():
     android_home = common.get_android_sdk()
