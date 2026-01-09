@@ -147,4 +147,4 @@ class Recorder:
                 reason = reason + "\nImage %s is not same as %s" % (expected, actual)
             raise VerifyError(reason)
 
-        shutil.rmtree(self._output)
+        shutil.rmtree(output)
