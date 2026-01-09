@@ -414,6 +414,7 @@ def pull_screenshots(
     calculated_device_name="",
     perform_pull=True,
     bundle_results=False,
+    temp_dir=None,
     record=None,
     verify=None,
     test_run_id=None,
