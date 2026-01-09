@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from os.path import abspath, join
 
-from . import aapt, common
+from . import aapt, common, 
 from .device_name_calculator import DeviceNameCalculator
 from .no_op_device_name_calculator import NoOpDeviceNameCalculator
 from .simple_puller import SimplePuller
@@ -507,7 +507,7 @@ def main(argv):
             argv[1:],
             "eds:",
             [
-                "apk",
+                "apk-package=",
                 "record=",
                 "verify=",
                 "failure-dir=",
@@ -526,13 +526,9 @@ def main(argv):
         usage()
         return 2
 
-    process = rest_args[0]  # something like com.facebook.places.tests
-
     opts = dict(opt_list)
 
-    if "--apk" in opts:
-        # treat process as an apk instead
-        process = aapt.get_package(process)
+    process = opts.get("--apk-package")
 
     should_perform_pull = "--no-pull" not in opts
     bundle_results = "--bundle-results" in opts
