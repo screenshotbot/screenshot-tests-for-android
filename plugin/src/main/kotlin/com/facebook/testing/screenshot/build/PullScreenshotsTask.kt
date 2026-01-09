@@ -70,12 +70,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
+    val tempDir = outputDir.absolutePath
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
-
-      val tempDir = outputDir.absolutePath
 
       File(tempDir).mkdirs()
       val puller = SimplePuller.create(project)
