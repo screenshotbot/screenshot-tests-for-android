@@ -81,15 +81,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
             "" // Empty string when not pulling
         }
 
+    if (!isVerifyOnly) {
+        pullImages(File(tempDir), deviceDir, testRunId, puller)
+    }
+
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
 
-
-      if (!isVerifyOnly) {
-        pullImages(File(tempDir), deviceDir, testRunId, puller)
-      }
 
       execSpec.args =
           mutableListOf(
