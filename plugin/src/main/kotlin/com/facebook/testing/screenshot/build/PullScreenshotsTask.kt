@@ -18,11 +18,11 @@ package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
+import com.google.gson.JsonParser
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import org.json.JSONArray
 
 open class PullScreenshotsTask : ScreenshotTask() {
   companion object {
@@ -137,8 +137,10 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
   private fun printLinkToHtml(tempDir: String) {
     val metadataFile = File(tempDir, "metadata.json")
-    val metadataJson = JSONArray(metadataFile.readText())
-    val count = metadataJson.length()
+    val metadataJson = metadataFile.bufferedReader().use { reader ->
+      JsonParser.parseReader(reader).asJsonArray
+    }
+    val count = metadataJson.size()
 
     logger.lifecycle("Found $count screenshots")
 
