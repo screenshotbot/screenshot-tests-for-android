@@ -35,7 +35,7 @@ class SimplePullerTest {
   @Before
   fun setUp() {
     val project = ProjectBuilder.builder().build()
-    puller = SimplePuller(project)
+    puller = SimplePuller(project, getAdb())
 
     // Get device serial
     serial = getDeviceSerial(project)
@@ -70,7 +70,7 @@ class SimplePullerTest {
   @Test
   fun testPullWithFilter() {
     val project = ProjectBuilder.builder().build()
-    val filteredPuller = SimplePuller(project, listOf("-s", serial))
+    val filteredPuller = SimplePuller(project, getAdb(), listOf("-s", serial))
 
     val file = File(tmpDir, "foo")
     filteredPuller.pull("/sdcard/blah", file.absolutePath)
@@ -132,10 +132,17 @@ class SimplePullerTest {
     }
   }
 
+  private fun getAdb(): String {
+    val androidSdk = System.getenv("ANDROID_SDK") ?: System.getenv("ANDROID_HOME")
+        ?: throw RuntimeException("ANDROID_SDK or ANDROID_HOME needs to be set")
+
+    return File(androidSdk, "platform-tools/adb").absolutePath
+  }
+
   private fun getDeviceSerial(project: org.gradle.api.Project): String {
     val output = ByteArrayOutputStream()
     project.exec { execSpec ->
-      execSpec.executable = "adb"
+      execSpec.executable = getAdb()
       execSpec.args = listOf("get-serialno")
       execSpec.standardOutput = output
     }
@@ -145,7 +152,7 @@ class SimplePullerTest {
   private fun execAdb(args: List<String>) {
     val project = ProjectBuilder.builder().build()
     project.exec { execSpec ->
-      execSpec.executable = "adb"
+      execSpec.executable = getAdb()
       execSpec.args = args
     }
   }

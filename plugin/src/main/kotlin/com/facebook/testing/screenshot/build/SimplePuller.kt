@@ -16,6 +16,7 @@
 
 package com.facebook.testing.screenshot.build
 
+import com.android.build.api.variant.AndroidComponentsExtension
 import java.io.ByteArrayOutputStream
 import java.io.File
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
@@ -29,6 +30,7 @@ import org.gradle.api.Project
  */
 class SimplePuller(
     private val project: Project,
+    private val adbExecutable: String,
     private val adbArgs: List<String> = emptyList()
 ) {
 
@@ -137,7 +139,7 @@ class SimplePuller(
     val error = ByteArrayOutputStream()
 
     project.exec { execSpec ->
-      execSpec.executable = "adb"
+      execSpec.executable = adbExecutable
       execSpec.args = mutableListOf<String>().apply {
         addAll(adbArgs)
         addAll(command)
@@ -153,6 +155,19 @@ class SimplePuller(
   companion object {
     private fun getTarName(src: String): String {
       return "$src.tar.gz"
+    }
+
+    /**
+     * Creates a SimplePuller instance using the adb executable from the Android SDK.
+     *
+     * @param project The Gradle project
+     * @param adbArgs Optional arguments to pass to adb (e.g., ["-s", "deviceSerial"])
+     * @return A SimplePuller instance configured with the correct adb path
+     */
+    fun create(project: Project, adbArgs: List<String> = emptyList()): SimplePuller {
+      val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
+      val adbPath = androidComponents.sdkComponents.adb.get().asFile.absolutePath
+      return SimplePuller(project, adbPath, adbArgs)
     }
   }
 }
