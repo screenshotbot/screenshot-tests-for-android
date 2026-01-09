@@ -26,8 +26,6 @@ import zipfile
 from os.path import abspath, join
 
 from . import common 
-from .device_name_calculator import DeviceNameCalculator
-from .no_op_device_name_calculator import NoOpDeviceNameCalculator
 from .simple_puller import SimplePuller
 
 try:
@@ -434,7 +432,7 @@ def _validate_metadata(dir):
 def pull_screenshots(
     process,
     adb_puller,
-    device_name_calculator=None,
+    calculated_device_name="",
     perform_pull=True,
     bundle_results=False,
     temp_dir=None,
@@ -469,7 +467,7 @@ def pull_screenshots(
     _validate_metadata(temp_dir)
 
     path_to_html = generate_html(temp_dir)
-    device_name = device_name_calculator.name() if device_name_calculator else None
+    device_name = calculated_device_name
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
 
@@ -513,7 +511,10 @@ def main(argv):
                 "failure-dir=",
                 "temp-dir=",
                 "no-pull",
-                "multiple-devices=",
+                # The directory where screenshots will be saved if
+                # we're working with multiple devices. Set to "" if
+                # not in multiple-devices mode.
+                "calculated-device-name=",
                 "test-run-id=",
                 "bundle-results",
             ],
@@ -534,9 +535,7 @@ def main(argv):
     bundle_results = "--bundle-results" in opts
 
     multiple_devices = opts.get("--multiple-devices")
-    device_calculator = (
-        DeviceNameCalculator() if multiple_devices else NoOpDeviceNameCalculator()
-    )
+    calculated_device_name = opts.get("--calculated-device-name")
 
     base_puller_args = []
     if "-e" in opts:
@@ -568,7 +567,7 @@ def main(argv):
             record=opts.get("--record"),
             verify=opts.get("--verify"),
             adb_puller=SimplePuller(puller_args),
-            device_name_calculator=device_calculator,
+            calculated_device_name=calculated_device_name,
             failure_dir=opts.get("--failure-dir"),
             bundle_results=bundle_results,
         )
