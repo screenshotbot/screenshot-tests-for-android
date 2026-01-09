@@ -120,6 +120,11 @@ class Recorder:
 
 
 def verify_helper(screenshots, output, expected_output, failure_output):
+    """
+    screenshots is is the parsed json from metadata.json
+    output, expected_output are the directories with the screenshots
+    failure_output is where we copy the failure screenshots to.
+    """
     failures = []
     for screenshot in screenshots:
         name = screenshot["name"] + ".png"
