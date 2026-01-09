@@ -207,10 +207,7 @@ class TestPullScreenshots(unittest.TestCase):
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
         pull_screenshots.pull_screenshots(
-            adb_puller=adb_puller,
             temp_dir=self.tmpdir,
-            test_run_id="unittest",
-            device_dir=device_dir,
         )
         self.assertTrue(os.path.exists(self.tmpdir + "/index.html"))
 
@@ -222,15 +219,12 @@ class TestPullScreenshots(unittest.TestCase):
         )
         pull_screenshots.pull_images(
             self.tmpdir,
-            adb_puller=adb_puller,
-            test_run_id="unittest",
             device_dir=device_dir,
+            test_run_id="unittest",
+            adb_puller=adb_puller,
         )
         pull_screenshots.pull_screenshots(
-            adb_puller=adb_puller,
             temp_dir=self.tmpdir,
-            test_run_id="unittest",
-            device_dir=device_dir,
         )
         with open(self.tmpdir + "/index.html", "r") as f:
             contents = f.read()
@@ -301,11 +295,7 @@ class TestPullScreenshots(unittest.TestCase):
         LocalFileHelper().setup(dest, "unittest")
 
         pull_screenshots.pull_screenshots(
-            adb_puller=None,
-            perform_pull=False,
             temp_dir=source,
-            test_run_id="unittest",
-            device_dir="",
             verify=dest,
         )
 
@@ -317,25 +307,9 @@ class TestPullScreenshots(unittest.TestCase):
         LocalFileHelper().setup(dest, "unittest")
 
         pull_screenshots.pull_screenshots(
-            adb_puller=None,
-            perform_pull=False,
             temp_dir=source,
-            test_run_id="unittest",
-            device_dir="",
             record=dest,
         )
-
-    def test_no_pull_argument_must_have_temp_dir(self):
-        try:
-            pull_screenshots.pull_screenshots(
-                adb_puller=None,
-                perform_pull=False,
-                temp_dir=None,
-                verify=tempfile.mkdtemp(),
-            )
-            self.fail("expected exception")
-        except RuntimeError as e:
-            assertRegex(self, e.args[0], "You must supply a directory for temp_dir")
 
     def test_screenshots_with_same_group_ordered_together(self):
         loaded_json = json.loads(
