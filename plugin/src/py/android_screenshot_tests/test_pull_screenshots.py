@@ -40,6 +40,29 @@ FIXTURE_DIR = "%s/fixtures/sdcard/screenshots/%s/screenshots-default" % (
     TESTING_PACKAGE,
 )
 
+def _android_path_join_two(a, b):
+    if b.startswith("/"):
+        return b
+
+    if not a.endswith("/"):
+        a += "/"
+
+    return a + b
+
+
+def android_path_join(a, *args):
+    """Similar to os.path.join(), but might differ in behavior on Windows"""
+
+    if args == []:
+        return a
+
+    if len(args) == 1:
+        return _android_path_join_two(a, args[0])
+
+    return android_path_join(android_path_join(a, args[0]), *args[1:])
+
+
+
 
 class LocalFileHelper:
     def setup(self, dir, test_run_id):
@@ -105,8 +128,16 @@ class AdbPuller:
             else:
                 raise
 
+def pull_images(dir, device_dir, test_run_id, adb_puller):
+    if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
+        # Optimization to pull down all the screenshots in a single pull.
+        # If this file exists, we assume all of the screenshots are inside it.
+        adb_puller.pull_folder(
+            android_path_join(device_dir, test_run_id), dir
+        )
+
 OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
-            
+
 def create_empty_metadata_file(dir):
     with open(join(dir, "metadata.json"), "w") as out:
         out.write("{}")
@@ -122,14 +153,14 @@ def pull_metadata(package, dir, adb_puller):
 
     """
 
-    root_screenshot_dir = pull_screenshots.android_path_join(
+    root_screenshot_dir = android_path_join(
         adb_puller.get_external_data_dir(), "screenshots"
     )
-    metadata_file = pull_screenshots.android_path_join(
+    metadata_file = android_path_join(
         root_screenshot_dir, package, "screenshots-default/metadata.json"
     )
 
-    old_metadata_file = pull_screenshots.android_path_join(
+    old_metadata_file = android_path_join(
         OLD_ROOT_SCREENSHOT_DIR, package, "app_screenshots-default/metadata.json"
     )
 
@@ -148,7 +179,7 @@ def pull_metadata(package, dir, adb_puller):
 
 def pull_all(package, dir, test_run_id, adb_puller):
     device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    pull_screenshots.pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
+    pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
 
 
 
@@ -217,7 +248,7 @@ class TestPullScreenshots(unittest.TestCase):
         device_dir = pull_metadata(
             TESTING_PACKAGE, self.tmpdir, adb_puller
         )
-        pull_screenshots.pull_images(
+        pull_images(
             self.tmpdir,
             device_dir=device_dir,
             test_run_id="unittest",
@@ -336,16 +367,16 @@ class TestPullScreenshots(unittest.TestCase):
 
 class TestAndroidJoin(unittest.TestCase):
     def test_simple(self):
-        self.assertEqual("/foo/bar", pull_screenshots.android_path_join("/foo", "bar"))
-        self.assertEqual("/foo/bar", pull_screenshots.android_path_join("/foo/", "bar"))
+        self.assertEqual("/foo/bar", android_path_join("/foo", "bar"))
+        self.assertEqual("/foo/bar", android_path_join("/foo/", "bar"))
 
     def test_multiple(self):
         self.assertEqual(
-            "/foo/bar/car", pull_screenshots.android_path_join("/foo", "bar/", "car")
+            "/foo/bar/car", android_path_join("/foo", "bar/", "car")
         )
 
     def test_root(self):
-        self.assertEqual("/bar", pull_screenshots.android_path_join("/foo", "/bar"))
+        self.assertEqual("/bar", android_path_join("/foo", "/bar"))
 
 
 if __name__ == "__main__":

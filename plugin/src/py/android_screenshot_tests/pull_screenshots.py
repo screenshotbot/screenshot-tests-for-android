@@ -313,37 +313,6 @@ def _copy_via_zip(src_zip, zip_path, dest):
         _copy_via_zip(head, tail if not zip_path else (tail + "/" + zip_path), dest)
 
 
-def _android_path_join_two(a, b):
-    if b.startswith("/"):
-        return b
-
-    if not a.endswith("/"):
-        a += "/"
-
-    return a + b
-
-
-def android_path_join(a, *args):
-    """Similar to os.path.join(), but might differ in behavior on Windows"""
-
-    if args == []:
-        return a
-
-    if len(args) == 1:
-        return _android_path_join_two(a, args[0])
-
-    return android_path_join(android_path_join(a, args[0]), *args[1:])
-
-
-def pull_images(dir, device_dir, test_run_id, adb_puller):
-    if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
-        # Optimization to pull down all the screenshots in a single pull.
-        # If this file exists, we assume all of the screenshots are inside it.
-        adb_puller.pull_folder(
-            android_path_join(device_dir, test_run_id), dir
-        )
-
-
 def _summary(dir):
     with open(join(dir, "metadata.json")) as f:
         metadataJson = json.load(f)
@@ -410,7 +379,6 @@ def main(argv):
                 "verify=",
                 "failure-dir=",
                 "temp-dir=",
-                "no-pull",
                 # The directory where screenshots will be saved if
                 # we're working with multiple devices. Set to "" if
                 # not in multiple-devices mode.
@@ -429,8 +397,6 @@ def main(argv):
         return 2
 
     opts = dict(opt_list)
-
-    should_perform_pull = "--no-pull" not in opts
 
     multiple_devices = opts.get("--multiple-devices")
     calculated_device_name = opts.get("--calculated-device-name")
@@ -461,14 +427,6 @@ def main(argv):
         temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
         device_dir = opts.get("--device-dir")
         test_run_id = opts.get("--test-run-id")
-
-        if should_perform_pull is True:
-            pull_images(
-                temp_dir,
-                device_dir,
-                test_run_id,
-                adb_puller=adb_puller,
-            )
 
         pull_screenshots(
             temp_dir=temp_dir,

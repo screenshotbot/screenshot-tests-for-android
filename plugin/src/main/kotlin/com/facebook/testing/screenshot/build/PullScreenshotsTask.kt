@@ -78,15 +78,19 @@ open class PullScreenshotsTask : ScreenshotTask() {
       val tempDir = outputDir.absolutePath
 
       File(tempDir).mkdirs()
+      val puller = SimplePuller.create(project)
 
       // Pull metadata from device if we're performing a pull
       val deviceDir =
           if (!isVerifyOnly) {
-              val puller = SimplePuller.create(project)
               pullMetadata(variant.applicationId, File(tempDir), puller)
           } else {
               "" // Empty string when not pulling
           }
+
+      if (!isVerifyOnly) {
+        pullImages(File(tempDir), deviceDir, testRunId, puller)
+      }
 
       execSpec.args =
           mutableListOf(
@@ -122,10 +126,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
                   val executor = GradleAdbExecutor(project)
                   val calculator = DeviceNameCalculator(executor)
                   add(calculator.name())
-                }
-
-                if (isVerifyOnly) {
-                  add("--no-pull")
                 }
               }
 
