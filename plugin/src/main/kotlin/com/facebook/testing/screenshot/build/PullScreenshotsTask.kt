@@ -70,27 +70,26 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
+    val tempDir = outputDir.absolutePath
+    File(tempDir).mkdirs()
+    val puller = SimplePuller.create(project)
+    // Pull metadata from device if we're performing a pull
+    val deviceDir =
+        if (!isVerifyOnly) {
+            pullMetadata(variant.applicationId, File(tempDir), puller)
+        } else {
+            "" // Empty string when not pulling
+        }
+
+    if (!isVerifyOnly) {
+        pullImages(File(tempDir), deviceDir, testRunId, puller)
+    }
+
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
       execSpec.environment("PYTHONPATH", jarFile)
 
-      val tempDir = outputDir.absolutePath
-
-      File(tempDir).mkdirs()
-      val puller = SimplePuller.create(project)
-
-      // Pull metadata from device if we're performing a pull
-      val deviceDir =
-          if (!isVerifyOnly) {
-              pullMetadata(variant.applicationId, File(tempDir), puller)
-          } else {
-              "" // Empty string when not pulling
-          }
-
-      if (!isVerifyOnly) {
-        pullImages(File(tempDir), deviceDir, testRunId, puller)
-      }
 
       execSpec.args =
           mutableListOf(
