@@ -384,7 +384,6 @@ def main(argv):
                 # not in multiple-devices mode.
                 "calculated-device-name=",
                 "test-run-id=",
-                "bundle-results",
                 "device-dir=",
             ],
         )
