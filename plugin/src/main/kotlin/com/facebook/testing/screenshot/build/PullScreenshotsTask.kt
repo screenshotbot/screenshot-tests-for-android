@@ -22,6 +22,7 @@ import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.json.JSONArray
 
 open class PullScreenshotsTask : ScreenshotTask() {
   companion object {
@@ -135,10 +136,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
   }
 
   private fun printLinkToHtml(tempDir: String) {
+    val metadataFile = File(tempDir, "metadata.json")
+    val metadataJson = JSONArray(metadataFile.readText())
+    val count = metadataJson.length()
+
+    logger.lifecycle("Found $count screenshots")
+
     val indexHtml = File(tempDir, "index.html").absolutePath
     val fullPath = "file://$indexHtml"
 
-    logger.lifecycle("\n")
     logger.lifecycle("Open the following url in a browser to view the results: ")
     logger.lifecycle("  $fullPath")
     logger.lifecycle("\n")
