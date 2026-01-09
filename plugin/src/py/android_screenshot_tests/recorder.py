@@ -115,16 +115,16 @@ class Recorder:
         verify_helper(
             screenshots=self._get_metadata_json(),
             output=self._output,
-            realoutput=self._realoutput,
+            expected_output=self._realoutput,
             failure_output=self._failure_output)
 
 
-def verify_helper(screenshots, output, realoutput, failure_output):
+def verify_helper(screenshots, output, expected_output, failure_output):
     failures = []
     for screenshot in screenshots:
         name = screenshot["name"] + ".png"
         actual = join(output, name)
-        expected = join(realoutput, name)
+        expected = join(expected_output, name)
         if failure_output:
             diff_name = screenshot["name"] + "_diff.png"
             diff = join(failure_output, diff_name)
