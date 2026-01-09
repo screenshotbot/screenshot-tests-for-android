@@ -16,17 +16,14 @@
 import codecs
 import getopt
 import json
-import os, platform, subprocess
+import os
 import shutil
 import sys
 import tempfile
-import urllib
-import xml.etree.ElementTree as ET
 import zipfile
 from os.path import abspath, join
 
 from . import common 
-from .simple_puller import SimplePuller
 
 try:
     from Queue import Queue
@@ -397,7 +394,6 @@ def main(argv):
 
     opts = dict(opt_list)
 
-    multiple_devices = opts.get("--multiple-devices")
     calculated_device_name = opts.get("--calculated-device-name")
 
     base_puller_args = []
@@ -422,10 +418,7 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
-        adb_puller = SimplePuller(puller_args)
         temp_dir = opts.get("--temp-dir") or tempfile.mkdtemp(prefix="screenshots")
-        device_dir = opts.get("--device-dir")
-        test_run_id = opts.get("--test-run-id")
 
         pull_screenshots(
             temp_dir=temp_dir,
