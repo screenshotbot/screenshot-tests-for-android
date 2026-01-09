@@ -542,6 +542,7 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
+        adb_puller=SimplePuller(puller_args)
         temp_dir=opts.get("--temp-dir")
         device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
                       if should_perform_pull
@@ -553,7 +554,7 @@ def main(argv):
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
-            adb_puller=SimplePuller(puller_args),
+            adb_puller=adb_puller,
             calculated_device_name=calculated_device_name,
             device_dir=device_dir,
             failure_dir=opts.get("--failure-dir"),
