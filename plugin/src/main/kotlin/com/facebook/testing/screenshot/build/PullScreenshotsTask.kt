@@ -104,8 +104,10 @@ open class PullScreenshotsTask : ScreenshotTask() {
                 }
 
                 if (extension.multipleDevices) {
-                  add("--multiple-devices")
-                  add("${extension.multipleDevices}")
+                  add("--calculated-device-name")
+                  val executor = GradleAdbExecutor(project)
+                  val calculator = DeviceNameCalculator(executor)
+                  add(calculator.name())
                 }
 
                 if (isVerifyOnly) {
