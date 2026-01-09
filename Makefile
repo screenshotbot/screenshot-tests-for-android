@@ -53,7 +53,8 @@ python-tests: .PHONY
 	$(EAASE) --api-level 30 -- $(MAKE) python-tests-impl
 
 ci:
-	./gradlew :core:test :plugin:test
+	./gradlew :core:test
+	$(EAASE) --api-level 30 -- ./gradlew :plugin:test
 	$(MAKE) expensive-tests
 
 integration-test-impl: install-eaase
