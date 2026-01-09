@@ -34,7 +34,6 @@ except ImportError:
     from queue import Queue
 
 
-OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
 KEY_VIEW_HIERARCHY = "viewHierarchy"
 KEY_AX_HIERARCHY = "axHierarchy"
 KEY_CLASS = "class"
