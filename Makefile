@@ -14,7 +14,6 @@ settings: .PHONY
 
 android-impl: .PHONY
 	$(MAKE) settings
-	./gradlew :plugin:test
 	./gradlew :core:connectedDebugAndroidTest
 
 android-28: .PHONY
@@ -55,6 +54,7 @@ python-tests: .PHONY
 
 ci:
 	./gradlew :core:test
+	$(EAASE) --api-leve 30 -- ./gradlew :plugin:test
 	$(MAKE) expensive-tests
 
 integration-test-impl: install-eaase
