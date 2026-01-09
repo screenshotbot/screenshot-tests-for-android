@@ -30,6 +30,18 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     fun getReportDir(project: Project, variant: TestVariant): File =
         File(project.buildDir, "screenshots" + variant.name.capitalize())
+
+    /**
+     * Joins Android device paths using forward slashes.
+     *
+     * @param a The base path
+     * @param args Additional path components
+     * @return The joined path
+     */
+    fun androidPathJoin(a: String, vararg args: String): String {
+      if (args.isEmpty()) return a
+      return args.fold(a) { acc, path -> "$acc/$path" }
+    }
   }
 
   @Input protected var verify = false
@@ -156,11 +168,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
     val oldRootScreenshotDir = "/data/data/"
     val externalDataDir = puller.getExternalDataDir()
 
-    val rootScreenshotDir = androidPathJoin(externalDataDir, "screenshots")
+    val rootScreenshotDir = Companion.androidPathJoin(externalDataDir, "screenshots")
     val metadataFile =
-        androidPathJoin(rootScreenshotDir, packageName, "screenshots-default/metadata.json")
+        Companion.androidPathJoin(rootScreenshotDir, packageName, "screenshots-default/metadata.json")
     val oldMetadataFile =
-        androidPathJoin(oldRootScreenshotDir, packageName, "app_screenshots-default/metadata.json")
+        Companion.androidPathJoin(oldRootScreenshotDir, packageName, "app_screenshots-default/metadata.json")
 
     val localMetadataFile = File(outputDir, "metadata.json")
 
@@ -188,17 +200,5 @@ open class PullScreenshotsTask : ScreenshotTask() {
   private fun createEmptyMetadataFile(file: File) {
     file.parentFile?.mkdirs()
     FileWriter(file).use { writer -> writer.write("{}") }
-  }
-
-  /**
-   * Joins Android device paths using forward slashes.
-   *
-   * @param a The base path
-   * @param args Additional path components
-   * @return The joined path
-   */
-  private fun androidPathJoin(a: String, vararg args: String): String {
-    if (args.isEmpty()) return a
-    return args.fold(a) { acc, path -> "$acc/$path" }
   }
 }
