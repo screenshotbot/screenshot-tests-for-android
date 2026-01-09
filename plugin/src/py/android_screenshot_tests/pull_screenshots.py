@@ -310,13 +310,6 @@ def _copy_via_zip(src_zip, zip_path, dest):
         _copy_via_zip(head, tail if not zip_path else (tail + "/" + zip_path), dest)
 
 
-def _summary(dir):
-    with open(join(dir, "metadata.json")) as f:
-        metadataJson = json.load(f)
-    count = len(metadataJson)
-    print("Found %d screenshots" % count)
-
-
 def pull_screenshots(
     calculated_device_name="",
     temp_dir=None,
@@ -352,9 +345,6 @@ def pull_screenshots(
             recorder.verify()
         else:
             recorder.record()
-
-    print("\n\n")
-    _summary(temp_dir)
 
 def setup_paths():
     android_home = common.get_android_sdk()
