@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from os.path import abspath, join
 
-from . import aapt, common, metadata
+from . import aapt, common
 from .device_name_calculator import DeviceNameCalculator
 from .no_op_device_name_calculator import NoOpDeviceNameCalculator
 from .simple_puller import SimplePuller
@@ -392,14 +392,10 @@ def pull_filtered(
     dir,
     adb_puller,
     test_run_id,
-    filter_name_regex=None,
     bundle_results=False,
 ):
     device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
     _validate_metadata(dir)
-    metadata.filter_screenshots(
-        join(dir, "metadata.json"), name_regex=filter_name_regex
-    )
     pull_images(
         dir,
         device_dir,
@@ -442,7 +438,6 @@ def pull_screenshots(
     perform_pull=True,
     bundle_results=False,
     temp_dir=None,
-    filter_name_regex=None,
     record=None,
     verify=None,
     test_run_id=None,
@@ -468,7 +463,6 @@ def pull_screenshots(
             adb_puller=adb_puller,
             dir=temp_dir,
             test_run_id=test_run_id,
-            filter_name_regex=filter_name_regex,
             bundle_results=bundle_results,
         )
 
@@ -513,7 +507,6 @@ def main(argv):
             argv[1:],
             "eds:",
             [
-                "filter-name-regex=",
                 "apk",
                 "record=",
                 "verify=",
@@ -575,7 +568,6 @@ def main(argv):
             process,
             perform_pull=should_perform_pull,
             temp_dir=opts.get("--temp-dir"),
-            filter_name_regex=opts.get("--filter-name-regex"),
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
