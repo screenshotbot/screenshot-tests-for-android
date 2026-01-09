@@ -542,13 +542,14 @@ def main(argv):
         puller_args_list = [base_puller_args]
 
     for puller_args in puller_args_list:
+        temp_dir=opts.get("--temp-dir")
         device_dir = (pull_metadata(process, temp_dir, adb_puller=adb_puller)
                       if should_perform_pull
                       else None)
         pull_screenshots(
             process,
             perform_pull=should_perform_pull,
-            temp_dir=opts.get("--temp-dir"),
+            temp_dir=temp_dir,
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
