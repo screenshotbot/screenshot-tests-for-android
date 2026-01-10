@@ -316,6 +316,7 @@ def pull_screenshots(
     record=None,
     verify=None,
     failure_dir=None,
+    verify_tmp_dir=None,
 ):
     if not temp_dir:
         raise RuntimeError("temp_dir must be provided")
@@ -323,6 +324,8 @@ def pull_screenshots(
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
+    if verify and not verify_tmp_dir:
+        raise RuntimeError("We need a verify_tmp_dir when when verify is provided")
 
     copy_assets(temp_dir)
 
