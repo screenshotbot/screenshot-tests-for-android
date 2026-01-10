@@ -46,6 +46,10 @@ def _is_image_same(file1, file2, failure_file):
         finally:
             diff_image.close()
 
+def _get_image_size(file_name):
+    with Image.open(file_name) as im:
+        return im.size
+
 
 
 class Recorder:
@@ -55,12 +59,8 @@ class Recorder:
         self._realoutput = output
         self._failure_output = failure_output
 
-    def _get_image_size(self, file_name):
-        with Image.open(file_name) as im:
-            return im.size
-
     def _copy(self, name, w, h):
-        tilewidth, tileheight = self._get_image_size(
+        tilewidth, tileheight = _get_image_size(
             join(self._input, common.get_image_file_name(name, 0, 0))
         )
 
@@ -68,13 +68,13 @@ class Recorder:
 
         for i in range(w):
             input_file = common.get_image_file_name(name, i, 0)
-            canvaswidth += self._get_image_size(join(self._input, input_file))[0]
+            canvaswidth += _get_image_size(join(self._input, input_file))[0]
 
         canvasheight = 0
 
         for j in range(h):
             input_file = common.get_image_file_name(name, 0, j)
-            canvasheight += self._get_image_size(join(self._input, input_file))[1]
+            canvasheight += _get_image_size(join(self._input, input_file))[1]
 
         im = Image.new("RGBA", (canvaswidth, canvasheight))
 
