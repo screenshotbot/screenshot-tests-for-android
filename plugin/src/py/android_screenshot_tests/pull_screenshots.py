@@ -371,6 +371,7 @@ def main(argv):
                 "calculated-device-name=",
                 "test-run-id=",
                 "device-dir=",
+                "verify-tmp-dir=",
             ],
         )
     except getopt.GetoptError:
@@ -415,6 +416,7 @@ def main(argv):
             verify=opts.get("--verify"),
             calculated_device_name=calculated_device_name,
             failure_dir=opts.get("--failure-dir"),
+            verify_tmp_dir=opts.get("--verify-tmp-dir"),
         )
 
 
