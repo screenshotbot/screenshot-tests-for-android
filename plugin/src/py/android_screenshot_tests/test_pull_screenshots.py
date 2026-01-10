@@ -313,6 +313,7 @@ class TestPullScreenshots(unittest.TestCase):
         pull_screenshots.pull_screenshots(
             temp_dir=source,
             verify=dest,
+            verify_tmp_dir=tempfile.mkdtemp()
         )
 
     def test_no_pull_argument_does_not_use_adb_on_record(self):

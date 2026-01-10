@@ -316,6 +316,7 @@ def pull_screenshots(
     record=None,
     verify=None,
     failure_dir=None,
+    verify_tmp_dir=None,
 ):
     if not temp_dir:
         raise RuntimeError("temp_dir must be provided")
@@ -323,6 +324,8 @@ def pull_screenshots(
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
+    if verify and not verify_tmp_dir:
+        raise RuntimeError("We need a verify_tmp_dir when when verify is provided")
 
     copy_assets(temp_dir)
 
@@ -368,6 +371,7 @@ def main(argv):
                 "calculated-device-name=",
                 "test-run-id=",
                 "device-dir=",
+                "verify-tmp-dir=",
             ],
         )
     except getopt.GetoptError:
@@ -412,6 +416,7 @@ def main(argv):
             verify=opts.get("--verify"),
             calculated_device_name=calculated_device_name,
             failure_dir=opts.get("--failure-dir"),
+            verify_tmp_dir=opts.get("--verify-tmp-dir"),
         )
 
 
