@@ -51,6 +51,40 @@ def _get_image_size(file_name):
         return im.size
 
 
+def _copy(name, w, h, input, output):
+    """
+    Copy the screenshot `name` from input dir to output dir.
+
+    w and h are the width and height of the number of tiles
+    """
+    tilewidth, tileheight = _get_image_size(
+        join(input, common.get_image_file_name(name, 0, 0))
+    )
+
+    canvaswidth = 0
+
+    for i in range(w):
+        input_file = common.get_image_file_name(name, i, 0)
+        canvaswidth += _get_image_size(join(input, input_file))[0]
+
+    canvasheight = 0
+
+    for j in range(h):
+        input_file = common.get_image_file_name(name, 0, j)
+        canvasheight += _get_image_size(join(input, input_file))[1]
+
+    im = Image.new("RGBA", (canvaswidth, canvasheight))
+
+    for i in range(w):
+        for j in range(h):
+            input_file = common.get_image_file_name(name, i, j)
+            with Image.open(join(input, input_file)) as input_image:
+                im.paste(input_image, (i * tilewidth, j * tileheight))
+
+    im.save(join(output, name + ".png"))
+    im.close()
+
+    
 
 class Recorder:
     def __init__(self, input, output, failure_output):
@@ -59,34 +93,6 @@ class Recorder:
         self._realoutput = output
         self._failure_output = failure_output
 
-    def _copy(self, name, w, h):
-        tilewidth, tileheight = _get_image_size(
-            join(self._input, common.get_image_file_name(name, 0, 0))
-        )
-
-        canvaswidth = 0
-
-        for i in range(w):
-            input_file = common.get_image_file_name(name, i, 0)
-            canvaswidth += _get_image_size(join(self._input, input_file))[0]
-
-        canvasheight = 0
-
-        for j in range(h):
-            input_file = common.get_image_file_name(name, 0, j)
-            canvasheight += _get_image_size(join(self._input, input_file))[1]
-
-        im = Image.new("RGBA", (canvaswidth, canvasheight))
-
-        for i in range(w):
-            for j in range(h):
-                input_file = common.get_image_file_name(name, i, j)
-                with Image.open(join(self._input, input_file)) as input_image:
-                    im.paste(input_image, (i * tilewidth, j * tileheight))
-
-        im.save(join(self._output, name + ".png"))
-        im.close()
-
     def _get_metadata_json(self):
         with open(join(self._input, "metadata.json"), "r") as f:
             return json.load(f)
@@ -94,10 +100,12 @@ class Recorder:
     def _record(self):
         metadata = self._get_metadata_json()
         for screenshot in metadata:
-            self._copy(
+            _copy(
                 screenshot["name"],
                 int(screenshot["tileWidth"]),
                 int(screenshot["tileHeight"]),
+                self._input,
+                self._output
             )
 
     def _clean(self):
