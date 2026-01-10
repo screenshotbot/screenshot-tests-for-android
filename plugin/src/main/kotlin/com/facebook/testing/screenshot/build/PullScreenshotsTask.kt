@@ -71,8 +71,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
-    val tempDir = outputDir.absolutePath
+    val tempDir = File(outputDir, "report").absolutePath
+    val verifyTempDir = File(outputDir, "verifyTempDir")
     File(tempDir).mkdirs()
+    verifyTempDir.mkdirs()
+
     val puller = SimplePuller.create(project)
     // Pull metadata from device if we're performing a pull
     val deviceDir =
@@ -114,6 +117,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
                 if (verify || record) {
                   add(extension.recordDir)
+                }
+
+                if (verify) {
+                    add("--verify-tmp-dir")
+                    add(verifyTempDir.toString())
                 }
 
                 if (verify && extension.failureDir != null) {
