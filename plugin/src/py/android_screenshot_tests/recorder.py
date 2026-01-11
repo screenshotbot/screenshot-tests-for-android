@@ -99,7 +99,6 @@ class Recorder:
     def __init__(self, input, output, failure_output):
         self._input = input
         self._output = output
-        self._realoutput = output
         self._failure_output = failure_output
 
     def _get_metadata_json(self):
@@ -115,14 +114,7 @@ class Recorder:
         self._clean()
         _record(self._get_metadata_json(), self._input, self._output)
 
-    def verify(self):
-        output = tempfile.mkdtemp()
-        _record(self._get_metadata_json(), self._input, output)
-        verify_helper(
-            screenshots=self._get_metadata_json(),
-            output=output,
-            expected_output=self._realoutput,
-            failure_output=self._failure_output)
+
 
 
 def verify_helper(screenshots, output, expected_output, failure_output):
