@@ -99,7 +99,6 @@ class Recorder:
     def __init__(self, input, output, failure_output):
         self._input = input
         self._output = output
-        self._realoutput = output
         self._failure_output = failure_output
 
     def _get_metadata_json(self):
@@ -121,7 +120,7 @@ class Recorder:
         verify_helper(
             screenshots=self._get_metadata_json(),
             output=output,
-            expected_output=self._realoutput,
+            expected_output=self._output,
             failure_output=self._failure_output)
 
 
