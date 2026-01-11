@@ -201,7 +201,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
-        self.recorder.verify()
+        self.recorder.verify(tempfile.mkdtemp())
 
     def test_verify_failure(self):
         self.create_temp_image("foobar.png", (10, 10), "blue")
@@ -220,9 +220,9 @@ class TestRecorder(unittest.TestCase):
         self.recorder.record()
         os.unlink(join(self.inputdir, "foobar.png"))
         self.create_temp_image("foobar.png", (11, 11), "green")
-
+        
         try:
-            self.recorder.verify()
+            self.recorder.verify(tempfile.mkdtemp())
             self.fail("expected exception")
         except VerifyError:
             pass  # expected

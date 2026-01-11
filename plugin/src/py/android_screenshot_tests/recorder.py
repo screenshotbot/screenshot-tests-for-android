@@ -114,8 +114,7 @@ class Recorder:
         self._clean()
         _record(self._get_metadata_json(), self._input, self._output)
 
-    def verify(self):
-        output = tempfile.mkdtemp()
+    def verify(self, output):
         _record(self._get_metadata_json(), self._input, output)
         verify_helper(
             screenshots=self._get_metadata_json(),

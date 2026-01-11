@@ -345,7 +345,7 @@ def pull_screenshots(
 
         recorder = Recorder(temp_dir, record_dir or verify_dir, failure_dir)
         if verify:
-            recorder.verify()
+            recorder.verify(verify_tmp_dir)
         else:
             recorder.record()
 
