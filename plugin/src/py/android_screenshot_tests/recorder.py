@@ -114,8 +114,7 @@ class Recorder:
         self._clean()
         _record(self._get_metadata_json(), self._input, self._output)
 
-    def verify(self, output):
-        Recorder(self._input, output, self._failure_output).record()
+
 
 
 def verify_helper(screenshots, output, expected_output, failure_output):

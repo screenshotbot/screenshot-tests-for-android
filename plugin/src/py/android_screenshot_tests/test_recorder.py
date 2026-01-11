@@ -201,7 +201,13 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
-        self.recorder.verify(tempfile.mkdtemp())
+        verify_tmp_dir = tempfile.mkdtemp()
+        Recorder(self.inputdir, verify_tmp_dir, self.failureDir).record()
+        verify_helper(
+            screenshots=self.recorder._get_metadata_json(),
+                output=verify_tmp_dir,
+                expected_output=self.recorder._output,
+                failure_output=self.recorder._failure_output)
 
     def test_verify_failure(self):
         self.create_temp_image("foobar.png", (10, 10), "blue")
@@ -223,7 +229,7 @@ class TestRecorder(unittest.TestCase):
 
         verify_tmp_dir = tempfile.mkdtemp()
         try:
-            self.recorder.verify(verify_tmp_dir)
+            Recorder(self.inputdir, verify_tmp_dir, self.failureDir).record()
             verify_helper(
                 screenshots=self.recorder._get_metadata_json(),
                 output=verify_tmp_dir,
