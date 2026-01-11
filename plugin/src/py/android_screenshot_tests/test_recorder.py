@@ -21,7 +21,7 @@ from os.path import exists, join
 
 from PIL import Image
 
-from .recorder import Recorder, VerifyError
+from .recorder import Recorder, VerifyError, verify_helper
 
 
 class TestRecorder(unittest.TestCase):
@@ -220,9 +220,16 @@ class TestRecorder(unittest.TestCase):
         self.recorder.record()
         os.unlink(join(self.inputdir, "foobar.png"))
         self.create_temp_image("foobar.png", (11, 11), "green")
-        
+
+        verify_tmp_dir = tempfile.mkdtemp()
         try:
-            self.recorder.verify(tempfile.mkdtemp())
+            self.recorder.verify(verify_tmp_dir)
+            verify_helper(
+                screenshots=self.recorder._get_metadata_json(),
+                output=verify_tmp_dir,
+                expected_output=self.recorder._output,
+                failure_output=self.recorder._failure_output)
+            
             self.fail("expected exception")
         except VerifyError:
             pass  # expected

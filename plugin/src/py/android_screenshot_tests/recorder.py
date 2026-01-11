@@ -116,11 +116,6 @@ class Recorder:
 
     def verify(self, output):
         Recorder(self._input, output, self._failure_output).record()
-        verify_helper(
-            screenshots=self._get_metadata_json(),
-            output=output,
-            expected_output=self._output,
-            failure_output=self._failure_output)
 
 
 def verify_helper(screenshots, output, expected_output, failure_output):
