@@ -18,6 +18,7 @@ package com.facebook.testing.screenshot.build
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
@@ -177,4 +178,17 @@ fun verifyHelper(
   }
 
   output.deleteRecursively()
+}
+
+/**
+ * Reads and parses the metadata.json file from the input directory.
+ *
+ * @param input The directory containing metadata.json
+ * @return The parsed JSON array from metadata.json
+ */
+fun getMetadataJson(input: File): JsonArray {
+  val metadataFile = File(input, "metadata.json")
+  return metadataFile.bufferedReader().use { reader ->
+    JsonParser.parseReader(reader).asJsonArray
+  }
 }

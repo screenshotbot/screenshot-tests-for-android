@@ -266,6 +266,61 @@ class RecorderTest {
     return image
   }
 
+  @Test
+  fun testGetMetadataJson_validFile_returnsJsonArray() {
+    val metadataFile = File(outputDir, "metadata.json")
+    metadataFile.writeText("""[{"name": "test1"}, {"name": "test2"}]""")
+
+    val result = getMetadataJson(outputDir)
+
+    assertEquals(2, result.size())
+    assertEquals("test1", result.get(0).asJsonObject.get("name").asString)
+    assertEquals("test2", result.get(1).asJsonObject.get("name").asString)
+  }
+
+  @Test
+  fun testGetMetadataJson_emptyArray_returnsEmptyJsonArray() {
+    val metadataFile = File(outputDir, "metadata.json")
+    metadataFile.writeText("[]")
+
+    val result = getMetadataJson(outputDir)
+
+    assertEquals(0, result.size())
+  }
+
+  @Test
+  fun testGetMetadataJson_complexMetadata_parsesCorrectly() {
+    val metadataFile = File(outputDir, "metadata.json")
+    metadataFile.writeText("""
+      [
+        {
+          "name": "screenshot1",
+          "tileWidth": 1,
+          "tileHeight": 1,
+          "group": "group1"
+        },
+        {
+          "name": "screenshot2",
+          "tileWidth": 2,
+          "tileHeight": 2
+        }
+      ]
+    """.trimIndent())
+
+    val result = getMetadataJson(outputDir)
+
+    assertEquals(2, result.size())
+
+    val first = result.get(0).asJsonObject
+    assertEquals("screenshot1", first.get("name").asString)
+    assertEquals(1, first.get("tileWidth").asInt)
+    assertEquals("group1", first.get("group").asString)
+
+    val second = result.get(1).asJsonObject
+    assertEquals("screenshot2", second.get("name").asString)
+    assertEquals(2, second.get("tileHeight").asInt)
+  }
+
   private fun createMetadata(names: List<String>): JsonArray {
     val array = JsonArray()
     for (name in names) {
