@@ -84,7 +84,16 @@ def _copy(name, w, h, input, output):
     im.save(join(output, name + ".png"))
     im.close()
 
-    
+
+def _record(metadata, input, output):
+    for screenshot in metadata:
+        _copy(
+            screenshot["name"],
+            int(screenshot["tileWidth"]),
+            int(screenshot["tileHeight"]),
+            input,
+            output
+        )
 
 class Recorder:
     def __init__(self, input, output, failure_output):
@@ -97,17 +106,6 @@ class Recorder:
         with open(join(self._input, "metadata.json"), "r") as f:
             return json.load(f)
 
-    def _record(self):
-        metadata = self._get_metadata_json()
-        for screenshot in metadata:
-            _copy(
-                screenshot["name"],
-                int(screenshot["tileWidth"]),
-                int(screenshot["tileHeight"]),
-                self._input,
-                self._output
-            )
-
     def _clean(self):
         if os.path.exists(self._output):
             shutil.rmtree(self._output)
@@ -115,11 +113,11 @@ class Recorder:
 
     def record(self):
         self._clean()
-        self._record()
+        _record(self._get_metadata_json(), self._input, self._output)
 
     def verify(self):
         self._output = tempfile.mkdtemp()
-        self._record()
+        _record(self._get_metadata_json(), self._input, self._output)
         verify_helper(
             screenshots=self._get_metadata_json(),
             output=self._output,
