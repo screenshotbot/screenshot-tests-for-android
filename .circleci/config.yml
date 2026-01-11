@@ -20,7 +20,7 @@ jobs:
 
       - run:
           name: install deps
-          command: sudo apt-get install python3 python3-pillow
+          command: sudo apt-get update && sudo apt-get install -y python3 python3-pillow
 
       - run:
           name: Run CI
