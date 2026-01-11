@@ -23,8 +23,6 @@ import tempfile
 import zipfile
 from os.path import abspath, join
 
-from .recorder import verify_helper
-
 from . import common 
 
 try:
@@ -348,13 +346,6 @@ def pull_screenshots(
         recorder = Recorder(temp_dir, record_dir or verify_tmp_dir, failure_dir)
 
         recorder.record()
-
-        if verify:
-            verify_helper(
-                screenshots=recorder._get_metadata_json(),
-                output=verify_tmp_dir,
-                expected_output=verify_dir,
-                failure_output=failure_dir)
 
 
 def setup_paths():
