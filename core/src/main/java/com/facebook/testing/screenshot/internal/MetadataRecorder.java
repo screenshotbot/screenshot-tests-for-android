@@ -161,6 +161,7 @@ class MetadataRecorder {
         JsonReader jsonReader = new JsonReader(new FileReader(getMetadataFile()));
         mMetadata =
             gson.fromJson(jsonReader, new TypeToken<List<ScreenshotMetadata>>() {}.getType());
+        mFieldsWritten = mMetadata.size();
         if (mMetadata == null) {
           mMetadata = new ArrayList<>();
         }
