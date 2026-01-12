@@ -25,8 +25,6 @@ from os.path import abspath, join
 
 from . import common
 
-from .recorder import _record
-
 try:
     from Queue import Queue
 except ImportError:
