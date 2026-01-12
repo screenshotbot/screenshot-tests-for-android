@@ -124,11 +124,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
                     add(verifyTempDir.toString())
                 }
 
-                if (verify && extension.failureDir != null) {
-                  add("--failure-dir")
-                  add("${extension.failureDir}")
-                }
-
                 if (extension.multipleDevices) {
                   add("--calculated-device-name")
                   val executor = GradleAdbExecutor(project)

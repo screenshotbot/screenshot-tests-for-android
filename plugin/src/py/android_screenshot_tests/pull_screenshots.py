@@ -315,7 +315,6 @@ def pull_screenshots(
     temp_dir=None,
     record=None,
     verify=None,
-    failure_dir=None,
     verify_tmp_dir=None,
 ):
     if not temp_dir:
@@ -334,12 +333,6 @@ def pull_screenshots(
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
 
-    if failure_dir:
-        failure_dir = join(failure_dir, device_name) if device_name else failure_dir
-        if not os.path.exists(failure_dir):
-            os.makedirs(failure_dir)
-
-
 def setup_paths():
     android_home = common.get_android_sdk()
     os.environ["PATH"] = os.environ["PATH"] + ":" + android_home + "/platform-tools/"
@@ -354,7 +347,6 @@ def main(argv):
             [
                 "record=",
                 "verify=",
-                "failure-dir=",
                 "temp-dir=",
                 # The directory where screenshots will be saved if
                 # we're working with multiple devices. Set to "" if
@@ -406,7 +398,6 @@ def main(argv):
             record=opts.get("--record"),
             verify=opts.get("--verify"),
             calculated_device_name=calculated_device_name,
-            failure_dir=opts.get("--failure-dir"),
             verify_tmp_dir=opts.get("--verify-tmp-dir"),
         )
 
