@@ -30,9 +30,6 @@ public interface Album {
    */
   String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException;
 
-  /** Call after all the screenshots are done. */
-  void flush();
-
   /** Cleanup any disk state associated with this album. */
   void cleanup();
 

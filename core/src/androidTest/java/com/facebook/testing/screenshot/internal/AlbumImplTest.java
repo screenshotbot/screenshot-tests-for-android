@@ -72,10 +72,8 @@ public class AlbumImplTest {
   @Test
   public void testMultipleBitmapsAreAvailableAfterAlbumRecreation() throws Throwable {
     String firstScreenshotName = mAlbumImpl.writeBitmap("first", 0, 0, mSomeBitmap);
-    mAlbumImpl.flush();
     mAlbumImpl = createAlbumImplForTests();
     String secondScreenshotnName = mAlbumImpl.writeBitmap("second", 0, 0, mSomeBitmap);
-    mAlbumImpl.flush();
 
     AlbumImpl newInstance = createAlbumImplForTests();
     Bitmap firstOutput = newInstance.getScreenshot(firstScreenshotName);
@@ -123,8 +121,6 @@ public class AlbumImplTest {
     mAlbumImpl.addRecord(
         new RecordBuilderImpl(null).setTiling(Tiling.singleTile(mBarFile)).setName("bar"));
 
-    mAlbumImpl.flush();
-
     JSONArray metadataJson = parseMetadata();
 
     assertThat(metadataJson.getJSONObject(1).getString("name")).isEqualTo("bar");
@@ -134,11 +130,9 @@ public class AlbumImplTest {
   public void testMetadataSavingAfterInstanceRecreation() throws Throwable {
     mAlbumImpl.addRecord(
         new RecordBuilderImpl(null).setTiling(Tiling.singleTile(mFooFile)).setName("foo"));
-    mAlbumImpl.flush();
     mAlbumImpl = createAlbumImplForTests();
     mAlbumImpl.addRecord(
         new RecordBuilderImpl(null).setTiling(Tiling.singleTile(mBarFile)).setName("bar"));
-    mAlbumImpl.flush();
 
     JSONArray metadataJson = parseMetadata();
     assertThat(metadataJson.getJSONObject(1).getString("name")).isEqualTo("bar");
@@ -150,7 +144,6 @@ public class AlbumImplTest {
     mAlbumImpl.addRecord(
         new RecordBuilderImpl(null).setName("foo").setTiling(Tiling.singleTile(mFooFile)));
 
-    mAlbumImpl.flush();
     JSONArray metadataJson = parseMetadata();
     String actual = metadataJson.getJSONObject(0).getString("viewHierarchy");
     assertThat(actual).isEqualTo("foo_dump.json");
@@ -163,7 +156,6 @@ public class AlbumImplTest {
 
     mAlbumImpl.addRecord(rb);
 
-    mAlbumImpl.flush();
     JSONArray metadataJson = parseMetadata();
 
     assertThat(metadataJson.getJSONObject(0).getJSONObject("extras").getString("foo"))
@@ -180,7 +172,6 @@ public class AlbumImplTest {
 
     mAlbumImpl.addRecord(rb);
 
-    mAlbumImpl.flush();
     JSONArray metadataJson = parseMetadata();
 
     assertThat(metadataJson.getJSONObject(0).getJSONObject("extras").getString("foo"))
@@ -193,7 +184,6 @@ public class AlbumImplTest {
   @Test
   public void testErrorSaving() throws Throwable {
     mAlbumImpl.addRecord(new RecordBuilderImpl(null).setError("foobar"));
-    mAlbumImpl.flush();
     JSONArray metadataJson = parseMetadata();
     String errorFromFile = metadataJson.getJSONObject(0).getString("error");
     assertThat(errorFromFile).isEqualTo("foobar");
@@ -206,8 +196,6 @@ public class AlbumImplTest {
             .setName("xyz")
             .setTiling(Tiling.singleTile(mFooFile))
             .setGroup("foo_bar"));
-
-    mAlbumImpl.flush();
 
     JSONArray metadataFile = parseMetadata();
     String actualGroup = metadataFile.getJSONObject(0).getString("group");
@@ -264,7 +252,6 @@ public class AlbumImplTest {
     }
 
     mAlbumImpl.addRecord(builder);
-    mAlbumImpl.flush();
 
     JSONArray metadataJson = parseMetadata();
 
@@ -300,21 +287,18 @@ public class AlbumImplTest {
     String firstFile = firstInstance.writeBitmap("first", 0, 0, mSomeBitmap);
     firstInstance.addRecord(
         new RecordBuilderImpl(null).setName("first").setTiling(Tiling.singleTile(firstFile)));
-    firstInstance.flush();
 
     // Second instance (new object, simulating orchestrator creating new instance)
     AlbumImpl secondInstance = createAlbumImplForTests();
     String secondFile = secondInstance.writeBitmap("second", 0, 0, mSomeBitmap);
     secondInstance.addRecord(
         new RecordBuilderImpl(null).setName("second").setTiling(Tiling.singleTile(secondFile)));
-    secondInstance.flush();
 
     // Third instance for verification
     AlbumImpl thirdInstance = createAlbumImplForTests();
     String thirdFile = thirdInstance.writeBitmap("third", 0, 0, mSomeBitmap);
     thirdInstance.addRecord(
         new RecordBuilderImpl(null).setName("third").setTiling(Tiling.singleTile(thirdFile)));
-    thirdInstance.flush();
 
     // Verify we have exactly 3 records in order, with no duplicates
     JSONArray metadataJson = parseMetadata();

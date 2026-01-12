@@ -161,7 +161,6 @@ public class ScreenshotImpl {
 
   // VisibleForTesting
   public void flush() {
-    mAlbum.flush();
   }
 
   private void storeBitmap(final RecordBuilderImpl recordBuilder) {
