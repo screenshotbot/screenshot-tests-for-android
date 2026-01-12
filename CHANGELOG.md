@@ -1,3 +1,7 @@
+0.19.0-SNAPSHOT (unreleased)
+------
+- (Add changes here)
+
 0.18.0 (Jan 12 2026)
 ------
 - Removed bundleResult plugin parameter
