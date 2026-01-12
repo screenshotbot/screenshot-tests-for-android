@@ -349,8 +349,6 @@ def pull_screenshots(
         recorder = Recorder(temp_dir, output_dir, failure_dir)
 
         recorder.record()
-        _record(recorder._get_metadata_json(), temp_dir, output_dir)
-
 
 def setup_paths():
     android_home = common.get_android_sdk()
