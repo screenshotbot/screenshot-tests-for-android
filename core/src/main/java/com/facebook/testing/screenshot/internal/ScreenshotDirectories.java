@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 /** Provides a directory for an Album to store its screenshots in. */
 @Nullsafe(Nullsafe.Mode.LOCAL)
 class ScreenshotDirectories {
@@ -48,7 +50,8 @@ class ScreenshotDirectories {
 
   public ScreenshotDirectories(Context context) {
     mContext = context;
-    mArguments = Registry.getRegistry().getArguments();
+    Registry.getRegistry();
+    mArguments = InstrumentationRegistry.getArguments();
   }
 
   public File get(String type) {
@@ -65,7 +68,9 @@ class ScreenshotDirectories {
         throw new RuntimeException("We need " + permission + " permission for screenshot tests");
       }
       // NULLSAFE_FIXME[Not Vetted Third-Party]
-      Context targetContext = Registry.getRegistry().getInstrumentation().getTargetContext();
+      Registry.getRegistry();
+
+      Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
       grantPermission(targetContext, permission);
       grantPermission(mContext, permission);
     }
@@ -76,7 +81,9 @@ class ScreenshotDirectories {
       return;
     }
     // NULLSAFE_FIXME[Not Vetted Third-Party]
-    UiAutomation automation = Registry.getRegistry().getInstrumentation().getUiAutomation();
+    Registry.getRegistry();
+
+    UiAutomation automation = InstrumentationRegistry.getInstrumentation().getUiAutomation();
     String command =
         String.format(Locale.ENGLISH, "pm grant %s %s", context.getPackageName(), permission);
     // NULLSAFE_FIXME[Not Vetted Third-Party]

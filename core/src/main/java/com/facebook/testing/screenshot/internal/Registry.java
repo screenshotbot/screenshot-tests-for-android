@@ -26,27 +26,17 @@ import javax.annotation.Nullable;
 public class Registry {
   @Nullable private static Registry sRegistry;
 
-  public Instrumentation getInstrumentation() {
-    return instrumentation;
-  }
-
   public void setInstrumentation(Instrumentation instrumentation) {
     this.instrumentation = instrumentation;
   }
 
-  // NULLSAFE_FIXME[Field Not Initialized]
-  private Instrumentation instrumentation;
-
-  public Bundle getArguments() {
-    return arguments;
-  }
+  private Instrumentation instrumentation = null;
 
   public void setArguments(Bundle arguments) {
     this.arguments = arguments;
   }
 
-  // NULLSAFE_FIXME[Field Not Initialized]
-  private Bundle arguments;
+  private Bundle arguments = null;
 
   Registry() {}
 

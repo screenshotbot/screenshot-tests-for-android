@@ -40,6 +40,8 @@ import javax.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 /**
  * Implementation for Screenshot class.
  *
@@ -92,7 +94,9 @@ public class ScreenshotImpl {
         return sInstance;
       }
 
-      Instrumentation instrumentation = Registry.getRegistry().getInstrumentation();
+      Registry.getRegistry();
+
+      Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
 
       // NULLSAFE_FIXME[Not Vetted Third-Party]
       sInstance = create(instrumentation.getContext());
