@@ -89,23 +89,9 @@ open class PullScreenshotsTask : ScreenshotTask() {
         pullImages(File(tempDir), deviceDir, testRunId, puller)
     }
 
-    copyAssets(File(tempDir));
+    copyAssets(File(tempDir))
 
-    project.exec { execSpec ->
-      execSpec.executable = extension.pythonExecutable
-      execSpec.environment("PYTHONPATH", jarFile)
-
-
-      execSpec.args =
-          mutableListOf(
-                  "-m",
-                  "android_screenshot_tests.pull_screenshots",
-                  "--temp-dir",
-                  tempDir,
-              )
-
-      println(execSpec.args)
-    }
+    generateHtml(File(tempDir))
 
     val screenshots = getMetadataJson(File(tempDir))
     val recordDir = File(project.projectDir, extension.recordDir)
