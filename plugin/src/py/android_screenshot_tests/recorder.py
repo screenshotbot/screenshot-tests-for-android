@@ -92,6 +92,5 @@ class Recorder:
 
     def record(self):
         self._clean()
-        _record(self._get_metadata_json(), self._input, self._output)
 
 

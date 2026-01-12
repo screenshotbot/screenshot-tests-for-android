@@ -21,7 +21,7 @@ from os.path import exists, join
 
 from PIL import Image
 
-from .recorder import Recorder
+from .recorder import Recorder, _record
 
 
 class TestRecorder(unittest.TestCase):
@@ -76,6 +76,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
+        _record(self.recorder._get_metadata_json(), self.recorder._input, self.recorder._output)
         self.assertTrue(exists(join(self.outputdir, "foobar.png")))
 
     def test_two_files(self):
@@ -99,6 +100,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
+        _record(self.recorder._get_metadata_json(), self.recorder._input, self.recorder._output)
         self.assertTrue(exists(join(self.outputdir, "foo.png")))
         self.assertTrue(exists(join(self.outputdir, "bar.png")))
 
@@ -119,6 +121,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
+        _record(self.recorder._get_metadata_json(), self.recorder._input, self.recorder._output)
 
         with Image.open(join(self.outputdir, "foobar.png")) as im:
             (w, h) = im.size
@@ -146,6 +149,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
+        _record(self.recorder._get_metadata_json(), self.recorder._input, self.recorder._output)
 
         with Image.open(join(self.outputdir, "foobar.png")) as im:
             (w, h) = im.size
@@ -174,6 +178,7 @@ class TestRecorder(unittest.TestCase):
         )
 
         self.recorder.record()
+        _record(self.recorder._get_metadata_json(), self.recorder._input, self.recorder._output)
 
         with Image.open(join(self.outputdir, "foobar.png")) as im:
             (w, h) = im.size
