@@ -68,7 +68,6 @@ public class AlbumImpl implements Album {
 
   @Override
   public void flush() {
-    mMetadataRecorder.flush();
     writePreviousTestRunId();
   }
 

@@ -51,7 +51,7 @@ class MetadataRecorder {
     mDir = reportDirectory;
   }
 
-  void flush() {
+  private void flushImpl() {
     try {
       writeMetadata();
     } catch (IOException e) {
@@ -73,6 +73,7 @@ class MetadataRecorder {
         throw new IllegalStateException("metadata was already saved");
       }
       allScreenshotsMetadata.add(mCurrentScreenshotMetadata);
+      flushImpl();
     }
 
     public ScreenshotMetadataRecorder withDescription(String description) {
