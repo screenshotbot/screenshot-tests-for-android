@@ -32,6 +32,36 @@ This version of screenshot-tests-for-android does *not* depend on
 Python! (If you've worked with previous versions you might remember
 that was a requirement)
 
+## Adding to Your Project
+
+In your project's `build.gradle`:
+```groovy
+buildscript {
+    dependencies {
+        classpath 'io.screenshotbot.screenshot-tests-for-android:plugin:0.18.0'
+    }
+}
+```
+
+In your app module's `build.gradle`:
+```groovy
+apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
+
+dependencies {
+    androidTestImplementation 'io.screenshotbot.screenshot-tests-for-android:core:0.18.0'
+}
+```
+
+Record screenshots:
+```bash
+$ gradle :<project>:record<flavor>ScreenshotTest
+```
+
+Verify screenshots:
+```bash
+$ gradle :<project>:verify<flavor>ScreenshotTest
+```
+
 ## Building screenshot-tests-for-android
 
 You don't have to build screenshot-tests-for-android from scratch if
