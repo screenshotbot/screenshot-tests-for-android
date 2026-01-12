@@ -145,6 +145,8 @@ open class PullScreenshotsTask : ScreenshotTask() {
     val expectedOutputDir = directoryWithDeviceName(recordDir)
 
     val outputDirForRecording = (if (record) expectedOutputDir else verifyTempDir)
+    
+    _doClean(outputDirForRecording);
     _record(screenshots, File(tempDir), outputDirForRecording)
 
     

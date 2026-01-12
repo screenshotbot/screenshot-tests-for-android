@@ -287,3 +287,15 @@ fun _record(metadata: JsonArray, input: File, output: File) {
     )
   }
 }
+
+/**
+ * Cleans the output directory by removing it if it exists and then creating a new one.
+ *
+ * @param output The directory to clean
+ */
+fun _doClean(output: File) {
+  if (output.exists()) {
+    output.deleteRecursively()
+  }
+  output.mkdirs()
+}

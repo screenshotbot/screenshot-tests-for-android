@@ -339,14 +339,6 @@ def pull_screenshots(
         if not os.path.exists(failure_dir):
             os.makedirs(failure_dir)
 
-    if record or verify:
-        # don't import this early, since we need PIL to import this
-        from .recorder import Recorder
-
-        output_dir = record_dir or verify_tmp_dir
-        recorder = Recorder(temp_dir, output_dir, failure_dir)
-
-        recorder.record()
 
 def setup_paths():
     android_home = common.get_android_sdk()
