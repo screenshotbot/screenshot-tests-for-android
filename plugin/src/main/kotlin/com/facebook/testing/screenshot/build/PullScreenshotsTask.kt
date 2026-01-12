@@ -150,6 +150,10 @@ open class PullScreenshotsTask : ScreenshotTask() {
         recordDir
     }
 
+    val outputDirForRecording = (if (record) recordDir else verifyTempDir)
+    _record(screenshots, File(tempDir), expectedOutputDir)
+
+    
     val failureBaseDir = File(project.projectDir, extension.failureDir)
     val failureOutputDir = if (extension.failureDir != null) {
         if (extension.multipleDevices) {
@@ -163,12 +167,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
         null
       }
 
-    val outputDirForRecording = (if (record) recordDir else verifyTempDir)
-    _record(screenshots, File(tempDir), expectedOutputDir)
-
     if (verify) {
-
-
       verifyHelper(screenshots, verifyTempDir, expectedOutputDir, failureOutputDir)
     }
 

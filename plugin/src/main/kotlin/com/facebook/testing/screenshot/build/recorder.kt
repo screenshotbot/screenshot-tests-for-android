@@ -36,6 +36,8 @@ class VerifyError(message: String) : Exception(message)
  * @return true if images are the same, false otherwise
  */
 private fun isImageSame(file1: File, file2: File, failureFile: File?): Boolean {
+  checkFileExists(file1);
+  checkFileExists(file2);
   val im1 = ImageIO.read(file1)
   val im2 = ImageIO.read(file2)
 
@@ -60,6 +62,12 @@ private fun isImageSame(file1: File, file2: File, failureFile: File?): Boolean {
   } finally {
     im1.flush()
     im2.flush()
+  }
+}
+
+private fun checkFileExists(file1: File) {
+  if (!file1.exists()) {
+    throw RuntimeException(String.format("The file does not exist: %s", file1));
   }
 }
 
