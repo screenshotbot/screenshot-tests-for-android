@@ -92,7 +92,7 @@ public class ScreenshotImpl {
         return sInstance;
       }
 
-      Instrumentation instrumentation = Registry.getRegistry().instrumentation;
+      Instrumentation instrumentation = Registry.getRegistry().getInstrumentation();
 
       // NULLSAFE_FIXME[Not Vetted Third-Party]
       sInstance = create(instrumentation.getContext());

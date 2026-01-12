@@ -65,7 +65,7 @@ class ScreenshotDirectories {
         throw new RuntimeException("We need " + permission + " permission for screenshot tests");
       }
       // NULLSAFE_FIXME[Not Vetted Third-Party]
-      Context targetContext = Registry.getRegistry().instrumentation.getTargetContext();
+      Context targetContext = Registry.getRegistry().getInstrumentation().getTargetContext();
       grantPermission(targetContext, permission);
       grantPermission(mContext, permission);
     }
@@ -76,7 +76,7 @@ class ScreenshotDirectories {
       return;
     }
     // NULLSAFE_FIXME[Not Vetted Third-Party]
-    UiAutomation automation = Registry.getRegistry().instrumentation.getUiAutomation();
+    UiAutomation automation = Registry.getRegistry().getInstrumentation().getUiAutomation();
     String command =
         String.format(Locale.ENGLISH, "pm grant %s %s", context.getPackageName(), permission);
     // NULLSAFE_FIXME[Not Vetted Third-Party]
