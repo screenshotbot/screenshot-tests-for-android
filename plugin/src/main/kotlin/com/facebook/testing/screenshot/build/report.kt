@@ -35,6 +35,24 @@ const val KEY_CHILDREN = "children"
 const val DEFAULT_VIEW_CLASS = "android.view.View"
 
 /**
+ * Safely gets a string from a JSON element, handling JsonNull.
+ *
+ * @return The string value, or null if the element is null or JsonNull
+ */
+private fun JsonElement?.asStringOrNull(): String? {
+  return if (this == null || this.isJsonNull) null else this.asString
+}
+
+/**
+ * Safely gets a JSON object from a JSON element, handling JsonNull.
+ *
+ * @return The JSON object, or null if the element is null or JsonNull
+ */
+private fun JsonElement?.asJsonObjectOrNull(): JsonObject? {
+  return if (this == null || this.isJsonNull) null else this.asJsonObject
+}
+
+/**
  * Copies static assets required for rendering the HTML report.
  *
  * @param destination The directory where assets should be copied
@@ -86,7 +104,7 @@ private fun sortScreenshots(screenshots: JsonArray): List<JsonElement> {
   return screenshots.sortedWith(compareBy(
     { element ->
       val obj = element.asJsonObject
-      obj.get("group")?.asString ?: ""
+      obj.get("group").asStringOrNull() ?: ""
     },
     { element ->
       element.asJsonObject.get("name").asString
@@ -137,12 +155,12 @@ fun generateHtml(outputDir: File): File {
       append("<span class=\"demphasize\">$packageName</span>$name")
       append("</div>")
 
-      val group = screenshot.get("group")?.asString
+      val group = screenshot.get("group").asStringOrNull()
       if (group != null) {
         append("<div class=\"screenshot_group\">$group</div>")
       }
 
-      val extras = screenshot.get("extras")?.asJsonObject
+      val extras = screenshot.get("extras").asJsonObjectOrNull()
       if (extras != null) {
         var str = ""
         for (key in extras.keySet()) {
@@ -158,12 +176,12 @@ fun generateHtml(outputDir: File): File {
         }
       }
 
-      val description = screenshot.get("description")?.asString
+      val description = screenshot.get("description").asStringOrNull()
       if (description != null) {
         append("<div class=\"screenshot_description\">$description</div>")
       }
 
-      val error = screenshot.get("error")?.asString
+      val error = screenshot.get("error").asStringOrNull()
       if (error != null) {
         append("<div class=\"screenshot_error\">$error</div>")
       } else {
@@ -172,8 +190,8 @@ fun generateHtml(outputDir: File): File {
         val axHierarchy: JsonObject?
 
         if (hierarchyData != null && hierarchyData.has(KEY_VIEW_HIERARCHY)) {
-          hierarchy = hierarchyData.get(KEY_VIEW_HIERARCHY)?.asJsonObject
-          axHierarchy = hierarchyData.get(KEY_AX_HIERARCHY)?.asJsonObject
+          hierarchy = hierarchyData.get(KEY_VIEW_HIERARCHY).asJsonObjectOrNull()
+          axHierarchy = hierarchyData.get(KEY_AX_HIERARCHY).asJsonObjectOrNull()
         } else {
           hierarchy = hierarchyData
           axHierarchy = null
@@ -267,7 +285,7 @@ private fun writeViewHierarchyTreeNode(
     html.append("<details>")
   }
 
-  val className = node.get(KEY_CLASS)?.asString ?: DEFAULT_VIEW_CLASS
+  val className = node.get(KEY_CLASS).asStringOrNull() ?: DEFAULT_VIEW_CLASS
   html.append("<summary>$className</summary>")
   html.append("<ul>")
 
@@ -328,8 +346,9 @@ private fun writeViewHierarchyOverlayNodes(
         """
     html.append(nodeHtml)
 
-    val children = node.get(KEY_CHILDREN)?.asJsonArray
-    if (children != null) {
+    val childrenElement = node.get(KEY_CHILDREN)
+    if (childrenElement != null && !childrenElement.isJsonNull && childrenElement.isJsonArray) {
+      val children = childrenElement.asJsonArray
       for (child in children) {
         toOutput.add(child.asJsonObject)
       }
@@ -344,7 +363,7 @@ private fun writeViewHierarchyOverlayNodes(
  * @return A unique ID string
  */
 private fun getViewHierarchyOverlayNodeId(node: JsonObject): String {
-  val cls = node.get(KEY_CLASS)?.asString ?: DEFAULT_VIEW_CLASS
+  val cls = node.get(KEY_CLASS).asStringOrNull() ?: DEFAULT_VIEW_CLASS
   val x = node.get(KEY_LEFT).asInt
   val y = node.get(KEY_TOP).asInt
   val width = node.get(KEY_WIDTH).asInt

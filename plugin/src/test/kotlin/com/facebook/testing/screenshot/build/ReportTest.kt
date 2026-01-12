@@ -331,6 +331,296 @@ class ReportTest {
     )
   }
 
+  // Tests for handling JSON null values (JsonNull, not Java null)
+
+  @Test
+  fun testGenerateHtml_withNullGroup_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.add("group", com.google.gson.JsonNull.INSTANCE)
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullDescription_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.add("description", com.google.gson.JsonNull.INSTANCE)
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullError_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.add("error", com.google.gson.JsonNull.INSTANCE)
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullExtras_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.add("extras", com.google.gson.JsonNull.INSTANCE)
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withAllOptionalFieldsNull_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.add("group", com.google.gson.JsonNull.INSTANCE)
+    screenshot.add("description", com.google.gson.JsonNull.INSTANCE)
+    screenshot.add("error", com.google.gson.JsonNull.INSTANCE)
+    screenshot.add("extras", com.google.gson.JsonNull.INSTANCE)
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullChildrenInHierarchy_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a hierarchy dump with null children
+    val hierarchyDump = JsonObject()
+    hierarchyDump.addProperty("class", "android.view.View")
+    hierarchyDump.addProperty("left", 0)
+    hierarchyDump.addProperty("top", 0)
+    hierarchyDump.addProperty("width", 100)
+    hierarchyDump.addProperty("height", 100)
+    hierarchyDump.add("children", com.google.gson.JsonNull.INSTANCE)
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(hierarchyDump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withEmptyChildrenArray_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a hierarchy dump with empty children
+    val hierarchyDump = JsonObject()
+    hierarchyDump.addProperty("class", "android.view.View")
+    hierarchyDump.addProperty("left", 0)
+    hierarchyDump.addProperty("top", 0)
+    hierarchyDump.addProperty("width", 100)
+    hierarchyDump.addProperty("height", 100)
+    hierarchyDump.add("children", JsonArray())
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(hierarchyDump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullViewHierarchyFields_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a hierarchy dump with some null fields
+    val hierarchyDump = JsonObject()
+    hierarchyDump.add("class", com.google.gson.JsonNull.INSTANCE)
+    hierarchyDump.addProperty("left", 0)
+    hierarchyDump.addProperty("top", 0)
+    hierarchyDump.addProperty("width", 100)
+    hierarchyDump.addProperty("height", 100)
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(hierarchyDump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNestedHierarchyAndNulls_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a nested hierarchy with various null values
+    val child1 = JsonObject()
+    child1.addProperty("class", "android.widget.TextView")
+    child1.addProperty("left", 10)
+    child1.addProperty("top", 10)
+    child1.addProperty("width", 50)
+    child1.addProperty("height", 20)
+    child1.add("children", com.google.gson.JsonNull.INSTANCE)
+
+    val child2 = JsonObject()
+    child2.add("class", com.google.gson.JsonNull.INSTANCE)
+    child2.addProperty("left", 10)
+    child2.addProperty("top", 40)
+    child2.addProperty("width", 50)
+    child2.addProperty("height", 20)
+
+    val children = JsonArray()
+    children.add(child1)
+    children.add(child2)
+
+    val hierarchyDump = JsonObject()
+    hierarchyDump.addProperty("class", "android.view.ViewGroup")
+    hierarchyDump.addProperty("left", 0)
+    hierarchyDump.addProperty("top", 0)
+    hierarchyDump.addProperty("width", 100)
+    hierarchyDump.addProperty("height", 100)
+    hierarchyDump.add("children", children)
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(hierarchyDump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withViewHierarchyAndAxHierarchy_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a dump with both view and accessibility hierarchies
+    val viewHierarchy = JsonObject()
+    viewHierarchy.addProperty("class", "android.view.View")
+    viewHierarchy.addProperty("left", 0)
+    viewHierarchy.addProperty("top", 0)
+    viewHierarchy.addProperty("width", 100)
+    viewHierarchy.addProperty("height", 100)
+
+    val axHierarchy = JsonObject()
+    axHierarchy.addProperty("class", "android.view.View")
+    axHierarchy.addProperty("left", 0)
+    axHierarchy.addProperty("top", 0)
+    axHierarchy.addProperty("width", 100)
+    axHierarchy.addProperty("height", 100)
+    axHierarchy.add("children", com.google.gson.JsonNull.INSTANCE)
+
+    val dump = JsonObject()
+    dump.add("viewHierarchy", viewHierarchy)
+    dump.add("axHierarchy", axHierarchy)
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(dump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
+  @Test
+  fun testGenerateHtml_withNullAxHierarchy_doesNotCrash() {
+    val metadata = JsonArray()
+    val screenshot = JsonObject()
+    screenshot.addProperty("name", "test_screenshot")
+    screenshot.addProperty("tileWidth", 1)
+    screenshot.addProperty("tileHeight", 1)
+    metadata.add(screenshot)
+
+    createTestMetadata(metadata)
+    createTestImage("test_screenshot.png", 10, 10, Color.BLUE)
+
+    // Create a dump with view hierarchy but null ax hierarchy
+    val viewHierarchy = JsonObject()
+    viewHierarchy.addProperty("class", "android.view.View")
+    viewHierarchy.addProperty("left", 0)
+    viewHierarchy.addProperty("top", 0)
+    viewHierarchy.addProperty("width", 100)
+    viewHierarchy.addProperty("height", 100)
+
+    val dump = JsonObject()
+    dump.add("viewHierarchy", viewHierarchy)
+    dump.add("axHierarchy", com.google.gson.JsonNull.INSTANCE)
+
+    val dumpFile = File(outputDir, "test_screenshot_dump.json")
+    dumpFile.writeText(dump.toString())
+
+    // Should not crash
+    generateHtml(outputDir)
+  }
+
   private fun createTestMetadata(screenshots: List<Triple<String, Int, Int>>) {
     val metadata = JsonArray()
     for ((name, tileWidth, tileHeight) in screenshots) {
