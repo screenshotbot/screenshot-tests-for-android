@@ -26,6 +26,12 @@ currently maintained by Arnold Noronha at [Screenshotbot](https://screenshotbot.
 
 Take a look at the documentation at http://facebook.github.io/screenshot-tests-for-android/#getting-started
 
+## Requirements
+
+This version of screenshot-tests-for-android does *not* depend on
+Python! (If you've worked with previous versions you might remember
+that was a requirement)
+
 ## Building screenshot-tests-for-android
 
 You don't have to build screenshot-tests-for-android from scratch if
