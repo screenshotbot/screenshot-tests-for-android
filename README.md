@@ -28,14 +28,9 @@ Take a look at the documentation at http://facebook.github.io/screenshot-tests-f
 
 ## Requirements
 
-screenshot-tests-for-android is known to work with MacOS or Linux.
-
-The host tooling probably doesn't work on Windows, but can be made to
-work with a little effort. We'll happily accept pull requests!
-
-You need python2 or python3 for the gradle plugin to work, and we also
-recommending installing the python-pillow library which is required
-for recording and verifying screenshots.
+This version of screenshot-tests-for-android does *not* depend on
+Python! (If you've worked with previous versions you might remember
+that was a requirement)
 
 ## Building screenshot-tests-for-android
 
@@ -51,22 +46,15 @@ If you plan to contribute, this is the code is broken up into a few modules:
 * The `plugin` module adds Gradle tasks to make it easier to work
   with screenshot tests.
 
-
-In addition you'll find python code inside `plugin/src/py`. This code
-is packaged into the gradle plugin.
-
-We have tests for the python code and the core library. Run these
+We have tests for the plugin and the core library. Run these
 commands to run all the tests:
 
 ```bash
-  $ gradle :plugin:pyTests
+  $ gradle :plugin:tests
   $ gradle :core:connectedAndroidTest
 ```
 
 Both need a running emulator. 
-
-Python tests rely on the `mock` and `Pillow` libraries. Both can be installed via `pip install mock`
-and `pip install Pillow`.
 
 You can install all the artifacts to your local maven repository using
 
