@@ -142,27 +142,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     val screenshots = getMetadataJson(File(tempDir))
     val recordDir = File(project.projectDir, extension.recordDir)
-    val expectedOutputDir = if (extension.multipleDevices) {
-        val executor = GradleAdbExecutor(project)
-        val calculator = DeviceNameCalculator(executor)
-        File(recordDir, calculator.name())
-    } else {
-        recordDir
-    }
+    val expectedOutputDir = directoryWithDeviceName(recordDir)
 
-    val outputDirForRecording = (if (record) recordDir else verifyTempDir)
-    _record(screenshots, File(tempDir), expectedOutputDir)
+    val outputDirForRecording = (if (record) expectedOutputDir else verifyTempDir)
+    _record(screenshots, File(tempDir), outputDirForRecording)
 
     
     val failureBaseDir = File(project.projectDir, extension.failureDir)
     val failureOutputDir = if (extension.failureDir != null) {
-        if (extension.multipleDevices) {
-            val executor = GradleAdbExecutor(project)
-            val calculator = DeviceNameCalculator(executor)
-            File(failureBaseDir, calculator.name())
-        } else {
-            failureBaseDir
-        }
+      directoryWithDeviceName(failureBaseDir)
       } else {
         null
       }
@@ -172,6 +160,14 @@ open class PullScreenshotsTask : ScreenshotTask() {
     }
 
     printLinkToHtml(tempDir);
+  }
+
+  private fun directoryWithDeviceName(recordDir: File): File = if (extension.multipleDevices) {
+    val executor = GradleAdbExecutor(project)
+    val calculator = DeviceNameCalculator(executor)
+    File(recordDir, calculator.name())
+  } else {
+    recordDir
   }
 
   private fun printLinkToHtml(tempDir: String) {
