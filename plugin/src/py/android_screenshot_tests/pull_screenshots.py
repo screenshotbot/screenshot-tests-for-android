@@ -376,10 +376,6 @@ def main(argv):
 
         pull_screenshots(
             temp_dir=temp_dir,
-            record=opts.get("--record"),
-            verify=opts.get("--verify"),
-            calculated_device_name=calculated_device_name,
-            verify_tmp_dir=opts.get("--verify-tmp-dir"),
         )
 
 
