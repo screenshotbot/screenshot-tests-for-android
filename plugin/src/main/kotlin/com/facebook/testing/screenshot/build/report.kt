@@ -280,15 +280,18 @@ private fun writeViewHierarchyTreeNode(
 
   html.append("</ul>")
 
-  val children = node.get(KEY_CHILDREN)?.asJsonArray
-  if (children != null && children.size() > 0) {
-    for (child in children) {
-      writeViewHierarchyTreeNode(child.asJsonObject, html, parentId, withOverlayTarget)
+  val children = node.get(KEY_CHILDREN)
+  if (children != null && !children.isJsonNull && children.asJsonArray.size() > 0) {
+    for (child in children.asJsonArray) {
+      if (child != null) {
+        writeViewHierarchyTreeNode(child.asJsonObject, html, parentId, withOverlayTarget)
+      }
     }
   }
 
   html.append("</details>")
 }
+
 
 /**
  * Writes overlay nodes for the view hierarchy to the HTML.
