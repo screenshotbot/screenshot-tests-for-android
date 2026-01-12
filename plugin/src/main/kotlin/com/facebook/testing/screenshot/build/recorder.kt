@@ -36,7 +36,6 @@ class VerifyError(message: String) : Exception(message)
  * @return true if images are the same, false otherwise
  */
 private fun isImageSame(file1: File, file2: File, failureFile: File?): Boolean {
-    System.out.println(String.format("Comparing: %s to %s", file1, file2));
   val im1 = ImageIO.read(file1)
   val im2 = ImageIO.read(file2)
 
