@@ -139,7 +139,34 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
       println(execSpec.args)
     }
-    
+
+    if (verify) {
+      val recordDir = File(project.projectDir, extension.recordDir)
+      val screenshots = getMetadataJson(File(tempDir))
+      val expectedOutputDir = if (extension.multipleDevices) {
+        val executor = GradleAdbExecutor(project)
+        val calculator = DeviceNameCalculator(executor)
+        File(recordDir, calculator.name())
+      } else {
+        recordDir
+      }
+
+      val failureBaseDir = File(project.projectDir, extension.failureDir)
+      val failureOutputDir = if (extension.failureDir != null) {
+        if (extension.multipleDevices) {
+          val executor = GradleAdbExecutor(project)
+          val calculator = DeviceNameCalculator(executor)
+          File(failureBaseDir, calculator.name())
+        } else {
+          failureBaseDir
+        }
+      } else {
+        null
+      }
+
+      verifyHelper(screenshots, verifyTempDir, expectedOutputDir, failureOutputDir)
+    }
+
     printLinkToHtml(tempDir);
   }
 

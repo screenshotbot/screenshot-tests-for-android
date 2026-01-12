@@ -23,8 +23,6 @@ import tempfile
 import zipfile
 from os.path import abspath, join
 
-from .recorder import verify_helper
-
 from . import common 
 
 try:
@@ -346,17 +344,9 @@ def pull_screenshots(
         from .recorder import Recorder
 
         recorder = Recorder(temp_dir, record_dir or verify_tmp_dir, failure_dir)
-        
-        if verify:
-            recorder.record()
-            verify_helper(
-                screenshots=recorder._get_metadata_json(),
-                output=verify_tmp_dir,
-                expected_output=verify_dir,
-                failure_output=failure_dir)
 
-        else:
-            recorder.record()
+        recorder.record()
+
 
 def setup_paths():
     android_home = common.get_android_sdk()
