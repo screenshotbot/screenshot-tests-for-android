@@ -93,7 +93,7 @@ public class ScreenshotImpl {
       if (sInstance != null) {
         return sInstance;
       }
-      
+
       Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
 
       // NULLSAFE_FIXME[Not Vetted Third-Party]
