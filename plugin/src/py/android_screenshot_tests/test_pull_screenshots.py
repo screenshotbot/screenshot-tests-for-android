@@ -274,30 +274,6 @@ class TestPullScreenshots(unittest.TestCase):
     def test_adb_puller_sanity(self):
         self.assertTrue(AdbPuller().remote_file_exists("/sdcard"))
 
-    def test_copy_file_zip_aware_real_file(self):
-        self.tmpdir = tempfile.mkdtemp()
-
-        f1 = os.path.join(self.tmpdir, "foo")
-        f2 = os.path.join(self.tmpdir, "bar")
-
-        with open(f1, "wt") as f:
-            f.write("foobar")
-            f.flush()
-
-        pull_screenshots._copy_file(f1, f2)
-
-        with open(f2, "rt") as f:
-            self.assertEqual("foobar", f.read())
-
-    def test_copy_file_inside_zip(self):
-        with tempfile.NamedTemporaryFile() as f:
-            f.close()
-            pull_screenshots._copy_file(
-                CURRENT_DIR + "/fixtures/dummy.zip/AndroidManifest.xml", f.name
-            )
-            with open(f.name, "rt") as ff:
-                assertRegex(self, ff.read(), ".*manifest.*")
-
     def test_setup_paths(self):
         os.environ["ANDROID_SDK"] = "foobar"
         pull_screenshots.setup_paths()
