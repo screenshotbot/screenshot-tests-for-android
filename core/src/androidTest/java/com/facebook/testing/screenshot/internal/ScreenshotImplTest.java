@@ -101,7 +101,6 @@ public class ScreenshotImplTest {
   public void testRecordBuilderImplHasAHierarchyDumpFile() throws Throwable {
     RecordBuilderImpl rb = mScreenshot.snap(mTextView).setName("blahblah");
     rb.record();
-    mScreenshot.flush();
 
     String fileName =
         new File(mScreenshotDirectories.get("verify-in-test"), "blahblah_dump.json")
