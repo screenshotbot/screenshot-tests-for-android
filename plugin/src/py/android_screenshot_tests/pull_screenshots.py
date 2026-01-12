@@ -316,11 +316,6 @@ def pull_screenshots(
     if not temp_dir:
         raise RuntimeError("temp_dir must be provided")
 
-    if not os.path.exists(temp_dir):
-        os.makedirs(temp_dir)
-
-    copy_assets(temp_dir)
-
     generate_html(temp_dir)
 
 def setup_paths():
