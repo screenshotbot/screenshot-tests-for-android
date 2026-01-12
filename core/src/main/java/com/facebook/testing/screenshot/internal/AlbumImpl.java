@@ -92,7 +92,7 @@ public class AlbumImpl implements Album {
   }
 
   private String getCurrentTestRunId() {
-    return Registry.getRegistry().arguments.getString(SCREENSHOT_TESTS_RUN_ID, "");
+    return Registry.getRegistry().getArguments().getString(SCREENSHOT_TESTS_RUN_ID, "");
   }
 
   /** Returns the stored screenshot in the album, or null if no such test case exists. */

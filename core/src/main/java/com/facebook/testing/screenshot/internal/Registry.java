@@ -38,8 +38,17 @@ public class Registry {
 
   // NULLSAFE_FIXME[Field Not Initialized]
   private Instrumentation instrumentation;
+
+  public Bundle getArguments() {
+    return arguments;
+  }
+
+  public void setArguments(Bundle arguments) {
+    this.arguments = arguments;
+  }
+
   // NULLSAFE_FIXME[Field Not Initialized]
-  public Bundle arguments;
+  private Bundle arguments;
 
   Registry() {}
 
