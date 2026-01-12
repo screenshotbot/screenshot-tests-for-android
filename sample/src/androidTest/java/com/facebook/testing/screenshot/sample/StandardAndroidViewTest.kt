@@ -45,7 +45,7 @@ class StandardAndroidViewTest {
 
     val tv = view.findViewById<View>(R.id.search_box) as TextView
 
-    tv.text = "This is a really long text and should overflow"
+    tv.text = "This! is a really long text and should overflow"
     ViewHelpers.setupView(view).setExactWidthDp(300).layout()
 
     Screenshot.snap(view).record()

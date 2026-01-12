@@ -124,6 +124,7 @@ private fun saveDiffImage(image: BufferedImage, diff: DiffBounds?, failureFile: 
     g.dispose()
   }
 
+  failureFile.parentFile.mkdirs()
   ImageIO.write(copy, "PNG", failureFile)
 }
 

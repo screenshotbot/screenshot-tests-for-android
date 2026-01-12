@@ -150,13 +150,15 @@ open class PullScreenshotsTask : ScreenshotTask() {
       } else {
         recordDir
       }
+
+      val failureBaseDir = File(project.projectDir, extension.failureDir)
       val failureOutputDir = if (extension.failureDir != null) {
         if (extension.multipleDevices) {
           val executor = GradleAdbExecutor(project)
           val calculator = DeviceNameCalculator(executor)
-          File(extension.failureDir, calculator.name())
+          File(failureBaseDir, calculator.name())
         } else {
-          File(extension.failureDir)
+          failureBaseDir
         }
       } else {
         null

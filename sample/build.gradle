@@ -88,6 +88,7 @@ dependencies {
 }
 
 screenshots {
-  multipleDevices true
-  pythonExecutable 'python3'
+    multipleDevices true
+    failureDir "failureScreenshots"
+    pythonExecutable 'python3'
 }
