@@ -21,8 +21,6 @@ import android.os.Bundle;
 import com.facebook.infer.annotation.Nullsafe;
 import javax.annotation.Nullable;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 /** Stores some of the static state. We bundle this into a class for easy cleanup. */
 @Nullsafe(Nullsafe.Mode.LOCAL)
 public class Registry {
