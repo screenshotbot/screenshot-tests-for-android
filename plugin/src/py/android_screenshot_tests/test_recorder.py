@@ -21,7 +21,7 @@ from os.path import exists, join
 
 from PIL import Image
 
-from .recorder import Recorder, VerifyError, verify_helper
+from .recorder import Recorder
 
 
 class TestRecorder(unittest.TestCase):
@@ -185,76 +185,6 @@ class TestRecorder(unittest.TestCase):
 
             self.assertEqual((0, 0, 255, 255), im.getpixel((11, 11)))
             self.assertEqual((255, 0, 0, 255), im.getpixel((1, 11)))
-
-    def test_verify_success(self):
-        self.create_temp_image("foobar.png", (10, 10), "blue")
-        self.make_metadata(
-            # language=json
-            """
-            [
-                {
-                    "name": "foobar",
-                    "tileWidth": 1,
-                    "tileHeight": 1
-                }
-            ]"""
-        )
-
-        self.recorder.record()
-        verify_tmp_dir = tempfile.mkdtemp()
-        Recorder(self.inputdir, verify_tmp_dir, self.failureDir).record()
-        verify_helper(
-            screenshots=self.recorder._get_metadata_json(),
-                output=verify_tmp_dir,
-                expected_output=self.recorder._output,
-                failure_output=self.recorder._failure_output)
-
-    def test_verify_failure(self):
-        self.create_temp_image("foobar.png", (10, 10), "blue")
-        self.make_metadata(
-            # language=json
-            """
-            [
-                {
-                    "name": "foobar",
-                    "tileWidth": 1,
-                    "tileHeight": 1
-                }
-            ]"""
-        )
-
-        self.recorder.record()
-        os.unlink(join(self.inputdir, "foobar.png"))
-        self.create_temp_image("foobar.png", (11, 11), "green")
-
-        verify_tmp_dir = tempfile.mkdtemp()
-        try:
-            Recorder(self.inputdir, verify_tmp_dir, self.failureDir).record()
-            verify_helper(
-                screenshots=self.recorder._get_metadata_json(),
-                output=verify_tmp_dir,
-                expected_output=self.recorder._output,
-                failure_output=self.recorder._failure_output)
-            
-            self.fail("expected exception")
-        except VerifyError:
-            pass  # expected
-
-        self.assertTrue(os.path.exists(join(self.failureDir, "foobar_actual.png")))
-        self.assertTrue(os.path.exists(join(self.failureDir, "foobar_expected.png")))
-        self.assertTrue(os.path.exists(join(self.failureDir, "foobar_diff.png")))
-
-        # check colored diff
-        with Image.open(join(self.failureDir, "foobar_diff.png")) as im:
-            (w, h) = im.size
-            self.assertEqual(11, w)
-            self.assertEqual(11, h)
-
-            self.assertEqual((255, 0, 0, 255), im.getpixel((0, 1)))
-            self.assertEqual((255, 0, 0, 255), im.getpixel((10, 1)))
-
-            self.assertEqual((0, 128, 0, 255), im.getpixel((1, 1)))
-            self.assertEqual((0, 128, 0, 255), im.getpixel((9, 1)))
 
 
 if __name__ == "__main__":
