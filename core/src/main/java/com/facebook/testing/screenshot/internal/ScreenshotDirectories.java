@@ -50,7 +50,6 @@ class ScreenshotDirectories {
 
   public ScreenshotDirectories(Context context) {
     mContext = context;
-    Registry.getRegistry();
     mArguments = InstrumentationRegistry.getArguments();
   }
 
@@ -67,8 +66,6 @@ class ScreenshotDirectories {
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
         throw new RuntimeException("We need " + permission + " permission for screenshot tests");
       }
-      // NULLSAFE_FIXME[Not Vetted Third-Party]
-      Registry.getRegistry();
 
       Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
       grantPermission(targetContext, permission);
@@ -80,8 +77,6 @@ class ScreenshotDirectories {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       return;
     }
-    // NULLSAFE_FIXME[Not Vetted Third-Party]
-    Registry.getRegistry();
 
     UiAutomation automation = InstrumentationRegistry.getInstrumentation().getUiAutomation();
     String command =

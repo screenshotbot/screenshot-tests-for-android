@@ -94,7 +94,6 @@ public class AlbumImpl implements Album {
   }
 
   private String getCurrentTestRunId() {
-    Registry.getRegistry();
     return InstrumentationRegistry.getArguments().getString(SCREENSHOT_TESTS_RUN_ID, "");
   }
 
