@@ -415,6 +415,71 @@ class RecorderTest {
     assertTrue("Output file should exist", File(newOutputDir, "test.png").exists())
   }
 
+  @Test
+  fun testDoClean_nonExistentDirectory_createsIt() {
+    val newDir = File(outputDir, "nonexistent")
+    assertFalse("Directory should not exist initially", newDir.exists())
+
+    _doClean(newDir)
+
+    assertTrue("Directory should be created", newDir.exists())
+    assertTrue("Directory should be a directory", newDir.isDirectory)
+  }
+
+  @Test
+  fun testDoClean_existingEmptyDirectory_recreatesIt() {
+    val existingDir = File(outputDir, "existing")
+    existingDir.mkdirs()
+    assertTrue("Directory should exist", existingDir.exists())
+
+    _doClean(existingDir)
+
+    assertTrue("Directory should still exist after clean", existingDir.exists())
+    assertTrue("Directory should be a directory", existingDir.isDirectory)
+  }
+
+  @Test
+  fun testDoClean_directoryWithFiles_removesAllContents() {
+    val dirWithFiles = File(outputDir, "withfiles")
+    dirWithFiles.mkdirs()
+
+    val file1 = File(dirWithFiles, "file1.txt")
+    val file2 = File(dirWithFiles, "file2.txt")
+    val subdir = File(dirWithFiles, "subdir")
+    subdir.mkdirs()
+    val file3 = File(subdir, "file3.txt")
+
+    file1.writeText("content1")
+    file2.writeText("content2")
+    file3.writeText("content3")
+
+    assertTrue("file1 should exist before clean", file1.exists())
+    assertTrue("file2 should exist before clean", file2.exists())
+    assertTrue("subdir should exist before clean", subdir.exists())
+    assertTrue("file3 should exist before clean", file3.exists())
+
+    _doClean(dirWithFiles)
+
+    assertTrue("Directory should exist after clean", dirWithFiles.exists())
+    assertFalse("file1 should not exist after clean", file1.exists())
+    assertFalse("file2 should not exist after clean", file2.exists())
+    assertFalse("subdir should not exist after clean", subdir.exists())
+    assertFalse("file3 should not exist after clean", file3.exists())
+    assertEquals("Directory should be empty", 0, dirWithFiles.listFiles()?.size ?: 0)
+  }
+
+  @Test
+  fun testDoClean_nestedDirectories_createsAllParents() {
+    val nestedDir = File(outputDir, "level1/level2/level3")
+    assertFalse("Nested directory should not exist initially", nestedDir.exists())
+
+    _doClean(nestedDir)
+
+    assertTrue("Nested directory should be created", nestedDir.exists())
+    assertTrue("Parent level2 should exist", nestedDir.parentFile.exists())
+    assertTrue("Parent level1 should exist", nestedDir.parentFile.parentFile.exists())
+  }
+
   private fun createTempImage(name: String, width: Int, height: Int, color: Color) {
     val image = createTestImage(width, height, color)
     val file = File(inputDir, name)
