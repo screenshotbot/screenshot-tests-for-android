@@ -300,18 +300,21 @@ public class AlbumImplTest {
     String firstFile = firstInstance.writeBitmap("first", 0, 0, mSomeBitmap);
     firstInstance.addRecord(
         new RecordBuilderImpl(null).setName("first").setTiling(Tiling.singleTile(firstFile)));
+    firstInstance.flush();
 
     // Second instance (new object, simulating orchestrator creating new instance)
     AlbumImpl secondInstance = createAlbumImplForTests();
     String secondFile = secondInstance.writeBitmap("second", 0, 0, mSomeBitmap);
     secondInstance.addRecord(
         new RecordBuilderImpl(null).setName("second").setTiling(Tiling.singleTile(secondFile)));
+    secondInstance.flush();
 
     // Third instance for verification
     AlbumImpl thirdInstance = createAlbumImplForTests();
     String thirdFile = thirdInstance.writeBitmap("third", 0, 0, mSomeBitmap);
     thirdInstance.addRecord(
         new RecordBuilderImpl(null).setName("third").setTiling(Tiling.singleTile(thirdFile)));
+    thirdInstance.flush();
 
     // Verify we have exactly 3 records in order, with no duplicates
     JSONArray metadataJson = parseMetadata();
