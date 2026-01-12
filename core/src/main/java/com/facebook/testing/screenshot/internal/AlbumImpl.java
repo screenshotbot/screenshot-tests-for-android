@@ -66,7 +66,6 @@ public class AlbumImpl implements Album {
     return new AlbumImpl(new ScreenshotDirectories(context), name);
   }
 
-  @Override
   public void flush() {
   }
 
