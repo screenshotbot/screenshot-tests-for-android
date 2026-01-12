@@ -40,9 +40,6 @@ public abstract class ScreenshotRunner {
    * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
    */
   public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
-    Registry registry = Registry.getRegistry();
-    registry.setInstrumentation(instrumentation);
-    registry.setArguments(arguments);
   }
 
   /**
@@ -54,7 +51,5 @@ public abstract class ScreenshotRunner {
     if (ScreenshotImpl.hasBeenCreated()) {
       ScreenshotImpl.getInstance().flush();
     }
-
-    Registry.clear();
   }
 }

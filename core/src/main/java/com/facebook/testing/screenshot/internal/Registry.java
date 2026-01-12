@@ -26,15 +26,7 @@ import javax.annotation.Nullable;
 public class Registry {
   @Nullable private static Registry sRegistry;
 
-  public void setInstrumentation(Instrumentation instrumentation) {
-    this.instrumentation = instrumentation;
-  }
-
   private Instrumentation instrumentation = null;
-
-  public void setArguments(Bundle arguments) {
-    this.arguments = arguments;
-  }
 
   private Bundle arguments = null;
 
