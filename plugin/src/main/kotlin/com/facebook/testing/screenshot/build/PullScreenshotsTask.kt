@@ -142,6 +142,13 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     val screenshots = getMetadataJson(File(tempDir))
     val recordDir = File(project.projectDir, extension.recordDir)
+    val expectedOutputDir = if (extension.multipleDevices) {
+        val executor = GradleAdbExecutor(project)
+        val calculator = DeviceNameCalculator(executor)
+        File(recordDir, calculator.name())
+    } else {
+        recordDir
+    }
 
     val failureBaseDir = File(project.projectDir, extension.failureDir)
     val failureOutputDir = if (extension.failureDir != null) {
@@ -157,16 +164,9 @@ open class PullScreenshotsTask : ScreenshotTask() {
       }
 
     val outputDirForRecording = (if (record) recordDir else verifyTempDir)
-    _record(screenshots, File(tempDir), outputDirForRecording)
+    _record(screenshots, File(tempDir), expectedOutputDir)
 
     if (verify) {
-      val expectedOutputDir = if (extension.multipleDevices) {
-        val executor = GradleAdbExecutor(project)
-        val calculator = DeviceNameCalculator(executor)
-        File(recordDir, calculator.name())
-      } else {
-        recordDir
-      }
 
 
       verifyHelper(screenshots, verifyTempDir, expectedOutputDir, failureOutputDir)
