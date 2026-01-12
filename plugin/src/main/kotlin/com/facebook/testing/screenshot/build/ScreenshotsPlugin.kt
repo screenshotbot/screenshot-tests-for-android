@@ -36,7 +36,10 @@ open class ScreenshotsPluginExtension {
   /** Whether to store screenshots in device specific folders */
   var multipleDevices = false
   /** The python executable to use */
+
+  @Deprecated
   var pythonExecutable = "python"
+  
   /** The directory to compare screenshots from in verify only mode */
   var referenceDir: String? = null
   /** The directory to save failed screenshots */
