@@ -1,4 +1,4 @@
-0.18.0 (---)
+0.18.0 (Jan 12 2026)
 ------
 - Removed bundleResult plugin parameter
 - We no longer depend on Python
