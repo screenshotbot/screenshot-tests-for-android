@@ -193,3 +193,89 @@ fun getMetadataJson(input: File): JsonArray {
     JsonParser.parseReader(reader).asJsonArray
   }
 }
+
+/**
+ * Gets the dimensions of an image file.
+ *
+ * @param fileName The path to the image file
+ * @return A Pair containing the width and height of the image
+ */
+private fun getImageSize(fileName: File): Pair<Int, Int> {
+  val image = ImageIO.read(fileName)
+  try {
+    return Pair(image.width, image.height)
+  } finally {
+    image.flush()
+  }
+}
+
+/**
+ * Copies and stitches tiled screenshots into a single image.
+ *
+ * @param name The base name of the screenshot
+ * @param w The number of tiles in the x-direction (width)
+ * @param h The number of tiles in the y-direction (height)
+ * @param input The directory containing the tiled images
+ * @param output The directory to save the stitched image
+ */
+private fun _copy(name: String, w: Int, h: Int, input: File, output: File) {
+  val (tileWidth, tileHeight) = getImageSize(
+    File(input, getImageFileName(name, 0, 0))
+  )
+
+  var canvasWidth = 0
+  for (i in 0 until w) {
+    val inputFile = getImageFileName(name, i, 0)
+    val (width, _) = getImageSize(File(input, inputFile))
+    canvasWidth += width
+  }
+
+  var canvasHeight = 0
+  for (j in 0 until h) {
+    val inputFile = getImageFileName(name, 0, j)
+    val (_, height) = getImageSize(File(input, inputFile))
+    canvasHeight += height
+  }
+
+  val canvas = BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_ARGB)
+  val g = canvas.createGraphics()
+
+  try {
+    for (i in 0 until w) {
+      for (j in 0 until h) {
+        val inputFile = getImageFileName(name, i, j)
+        val inputImage = ImageIO.read(File(input, inputFile))
+        try {
+          g.drawImage(inputImage, i * tileWidth, j * tileHeight, null)
+        } finally {
+          inputImage.flush()
+        }
+      }
+    }
+  } finally {
+    g.dispose()
+  }
+
+  output.mkdirs()
+  ImageIO.write(canvas, "PNG", File(output, "$name.png"))
+}
+
+/**
+ * Records screenshots by stitching together tiled images.
+ *
+ * @param metadata The parsed JSON array from metadata.json
+ * @param input The directory containing the tiled images
+ * @param output The directory to save the stitched images
+ */
+fun _record(metadata: JsonArray, input: File, output: File) {
+  for (element in metadata) {
+    val screenshot = element.asJsonObject
+    _copy(
+      screenshot.get("name").asString,
+      screenshot.get("tileWidth").asInt,
+      screenshot.get("tileHeight").asInt,
+      input,
+      output
+    )
+  }
+}
