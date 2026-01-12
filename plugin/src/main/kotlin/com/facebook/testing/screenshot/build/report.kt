@@ -142,13 +142,11 @@ fun generateHtml(outputDir: File): File {
         append("<div class=\"screenshot_group\">$group</div>")
       }
 
-      val extras = screenshot.get("extras")?.asJsonArray
+      val extras = screenshot.get("extras")?.asJsonObject
       if (extras != null) {
         var str = ""
-        for (item in extras) {
-          val pair = item.asJsonArray
-          val key = if (pair.size() > 0) pair.get(0)?.asString else null
-          val value = if (pair.size() > 1) pair.get(1)?.asString else null
+        for (key in extras.keySet()) {
+          val value = extras.get(key)
 
           if (key != null) {
             str = str + "*****" + key + "*****\n\n" + value + "\n\n\n"

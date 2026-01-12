@@ -11,7 +11,7 @@ import java.io.FileWriter
  */
 private fun createEmptyMetadataFile(file: File) {
   file.parentFile?.mkdirs()
-  FileWriter(file).use { writer -> writer.write("{}") }
+  FileWriter(file).use { writer -> writer.write("[]") }
 }
 
 /**
