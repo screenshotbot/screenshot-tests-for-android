@@ -68,7 +68,6 @@ public class AlbumImpl implements Album {
 
   @Override
   public void flush() {
-    writePreviousTestRunId();
   }
 
   @Nullable
@@ -220,6 +219,8 @@ public class AlbumImpl implements Album {
     mAllNames.add(recordBuilder.getName());
 
     screenshotNode.save();
+
+    writePreviousTestRunId();
   }
 
   @VisibleForTesting
