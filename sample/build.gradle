@@ -75,7 +75,7 @@ dependencies {
 
   implementation deps.soLoader
 
-  androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:0.17.0-SNAPSHOT"
+  androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:0.18.0"
 
   androidTestImplementation deps.junit
   androidTestImplementation deps.testRunner
