@@ -89,7 +89,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
         pullImages(File(tempDir), deviceDir, testRunId, puller)
     }
 
-    copyAssets(tempDir);
+    copyAssets(File(tempDir));
 
     project.exec { execSpec ->
       execSpec.executable = extension.pythonExecutable
