@@ -19,6 +19,10 @@ jobs:
             - v1-dependencies-
 
       - run:
+          name: install eaase
+          command: curl https://eaase.dev/installer.sh | sh
+
+      - run:
           name: install deps
           command: sudo apt-get update && sudo apt-get install -y python3 python3-pillow
 
