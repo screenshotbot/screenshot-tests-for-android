@@ -66,9 +66,6 @@ public class AlbumImpl implements Album {
     return new AlbumImpl(new ScreenshotDirectories(context), name);
   }
 
-  public void flush() {
-  }
-
   @Nullable
   private String readPreviousTestRunId() {
     try {
