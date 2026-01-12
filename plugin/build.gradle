@@ -88,7 +88,6 @@ compileKotlin {
 compileJava {
   sourceSets {
     main {
-      resources.srcDirs 'src/py'
       resources.srcDirs 'resources'            
       resources {
         exclude '**/*.pyc'
