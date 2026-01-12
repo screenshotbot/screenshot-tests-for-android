@@ -102,16 +102,6 @@ clean {
   delete GENERATED_BUILD_DIR
 }
 
-task pyTests(type: Exec) {
-  workingDir file('./src/py')
-  commandLine 'python3', '-m', 'unittest', 'discover'
-}
-
-task py3Tests(type: Exec) {
-  workingDir file('./src/py')
-  commandLine 'python3', '-m', 'unittest', 'discover'
-}
-
 // Gradle Plugin Portal configuration
 gradlePlugin {
   website = POM_URL
