@@ -26,6 +26,11 @@ from PIL import Image, ImageChops, ImageDraw
 from . import common
 
 
+def _do_clean(output):
+    if os.path.exists(output):
+        shutil.rmtree(output)
+    os.makedirs(output)
+
 class Recorder:
     def __init__(self, input, output, failure_output):
         self._input = input
@@ -37,9 +42,7 @@ class Recorder:
             return json.load(f)
 
     def _clean(self):
-        if os.path.exists(self._output):
-            shutil.rmtree(self._output)
-        os.makedirs(self._output)
+        _do_clean(self._output)
 
     def record(self):
         self._clean()
