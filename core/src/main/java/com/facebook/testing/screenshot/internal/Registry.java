@@ -25,10 +25,28 @@ import javax.annotation.Nullable;
 @Nullsafe(Nullsafe.Mode.LOCAL)
 public class Registry {
   @Nullable private static Registry sRegistry;
+
+  public Instrumentation getInstrumentation() {
+    return instrumentation;
+  }
+
+  public void setInstrumentation(Instrumentation instrumentation) {
+    this.instrumentation = instrumentation;
+  }
+
   // NULLSAFE_FIXME[Field Not Initialized]
-  public Instrumentation instrumentation;
+  private Instrumentation instrumentation;
+
+  public Bundle getArguments() {
+    return arguments;
+  }
+
+  public void setArguments(Bundle arguments) {
+    this.arguments = arguments;
+  }
+
   // NULLSAFE_FIXME[Field Not Initialized]
-  public Bundle arguments;
+  private Bundle arguments;
 
   Registry() {}
 
