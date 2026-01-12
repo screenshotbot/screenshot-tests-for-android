@@ -291,4 +291,33 @@ public class AlbumImplTest {
     String relativeFourthFile = relativeFileNames.getString(4);
     assertThat(relativeFourthFile).isEqualTo("baz_1_0");
   }
+
+  @Test
+  public void testMetadataAccumulationAcrossInstanceRecreation() throws Throwable {
+    // Simulate test orchestrator: multiple AlbumImpl instances in the same test run
+    // First instance adds a record
+    AlbumImpl firstInstance = createAlbumImplForTests();
+    String firstFile = firstInstance.writeBitmap("first", 0, 0, mSomeBitmap);
+    firstInstance.addRecord(
+        new RecordBuilderImpl(null).setName("first").setTiling(Tiling.singleTile(firstFile)));
+
+    // Second instance (new object, simulating orchestrator creating new instance)
+    AlbumImpl secondInstance = createAlbumImplForTests();
+    String secondFile = secondInstance.writeBitmap("second", 0, 0, mSomeBitmap);
+    secondInstance.addRecord(
+        new RecordBuilderImpl(null).setName("second").setTiling(Tiling.singleTile(secondFile)));
+
+    // Third instance for verification
+    AlbumImpl thirdInstance = createAlbumImplForTests();
+    String thirdFile = thirdInstance.writeBitmap("third", 0, 0, mSomeBitmap);
+    thirdInstance.addRecord(
+        new RecordBuilderImpl(null).setName("third").setTiling(Tiling.singleTile(thirdFile)));
+
+    // Verify we have exactly 3 records in order, with no duplicates
+    JSONArray metadataJson = parseMetadata();
+    assertThat(metadataJson.length()).isEqualTo(3);
+    assertThat(metadataJson.getJSONObject(0).getString("name")).isEqualTo("first");
+    assertThat(metadataJson.getJSONObject(1).getString("name")).isEqualTo("second");
+    assertThat(metadataJson.getJSONObject(2).getString("name")).isEqualTo("third");
+  }
 }
