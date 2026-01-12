@@ -35,12 +35,14 @@ class RecorderTest {
   private lateinit var outputDir: File
   private lateinit var expectedOutputDir: File
   private lateinit var failureOutputDir: File
+  private lateinit var inputDir: File
 
   @Before
   fun setUp() {
     outputDir = createTempDir(prefix = "output")
     expectedOutputDir = createTempDir(prefix = "expected")
     failureOutputDir = createTempDir(prefix = "failure")
+    inputDir = createTempDir(prefix = "input")
   }
 
   @After
@@ -50,6 +52,7 @@ class RecorderTest {
     }
     expectedOutputDir.deleteRecursively()
     failureOutputDir.deleteRecursively()
+    inputDir.deleteRecursively()
   }
 
   @Test
@@ -319,6 +322,115 @@ class RecorderTest {
     val second = result.get(1).asJsonObject
     assertEquals("screenshot2", second.get("name").asString)
     assertEquals(2, second.get("tileHeight").asInt)
+  }
+
+  @Test
+  fun testRecord_singleInput_copiesImage() {
+    createTempImage("foobar.png", 10, 10, Color.BLUE)
+    val metadata = createRecordMetadata(listOf(Triple("foobar", 1, 1)))
+
+    _record(metadata, inputDir, outputDir)
+
+    assertTrue("Output file should exist", File(outputDir, "foobar.png").exists())
+    val outputImage = ImageIO.read(File(outputDir, "foobar.png"))
+    assertEquals(10, outputImage.width)
+    assertEquals(10, outputImage.height)
+  }
+
+  @Test
+  fun testRecord_twoFiles_copiesBothImages() {
+    createTempImage("foo.png", 10, 10, Color.BLUE)
+    createTempImage("bar.png", 10, 10, Color.RED)
+    val metadata = createRecordMetadata(listOf(Triple("foo", 1, 1), Triple("bar", 1, 1)))
+
+    _record(metadata, inputDir, outputDir)
+
+    assertTrue("foo.png should exist", File(outputDir, "foo.png").exists())
+    assertTrue("bar.png should exist", File(outputDir, "bar.png").exists())
+  }
+
+  @Test
+  fun testRecord_oneColumnTiles_stitchesVertically() {
+    createTempImage("foobar.png", 10, 10, Color.BLUE)
+    createTempImage("foobar_0_1.png", 10, 10, Color.RED)
+    val metadata = createRecordMetadata(listOf(Triple("foobar", 1, 2)))
+
+    _record(metadata, inputDir, outputDir)
+
+    val outputImage = ImageIO.read(File(outputDir, "foobar.png"))
+    assertEquals(10, outputImage.width)
+    assertEquals(20, outputImage.height)
+
+    assertEquals(Color.BLUE.rgb, outputImage.getRGB(1, 1))
+    assertEquals(Color.RED.rgb, outputImage.getRGB(1, 11))
+  }
+
+  @Test
+  fun testRecord_oneRowTiles_stitchesHorizontally() {
+    createTempImage("foobar.png", 10, 10, Color.BLUE)
+    createTempImage("foobar_1_0.png", 10, 10, Color.RED)
+    val metadata = createRecordMetadata(listOf(Triple("foobar", 2, 1)))
+
+    _record(metadata, inputDir, outputDir)
+
+    val outputImage = ImageIO.read(File(outputDir, "foobar.png"))
+    assertEquals(20, outputImage.width)
+    assertEquals(10, outputImage.height)
+
+    assertEquals(Color.BLUE.rgb, outputImage.getRGB(1, 1))
+    assertEquals(Color.RED.rgb, outputImage.getRGB(11, 1))
+  }
+
+  @Test
+  fun testRecord_fractionalTiles_stitchesCorrectly() {
+    createTempImage("foobar.png", 10, 10, Color.BLUE)
+    createTempImage("foobar_1_0.png", 9, 10, Color.RED)
+    createTempImage("foobar_0_1.png", 10, 8, Color.RED)
+    createTempImage("foobar_1_1.png", 9, 8, Color.BLUE)
+    val metadata = createRecordMetadata(listOf(Triple("foobar", 2, 2)))
+
+    _record(metadata, inputDir, outputDir)
+
+    val outputImage = ImageIO.read(File(outputDir, "foobar.png"))
+    assertEquals(19, outputImage.width)
+    assertEquals(18, outputImage.height)
+
+    assertEquals(Color.BLUE.rgb, outputImage.getRGB(1, 1))
+    assertEquals(Color.RED.rgb, outputImage.getRGB(11, 1))
+    assertEquals(Color.BLUE.rgb, outputImage.getRGB(11, 11))
+    assertEquals(Color.RED.rgb, outputImage.getRGB(1, 11))
+  }
+
+  @Test
+  fun testRecord_createsOutputDirectory() {
+    val newOutputDir = File(outputDir, "subdir")
+    assertFalse("Output dir should not exist initially", newOutputDir.exists())
+
+    createTempImage("test.png", 10, 10, Color.BLUE)
+    val metadata = createRecordMetadata(listOf(Triple("test", 1, 1)))
+
+    _record(metadata, inputDir, newOutputDir)
+
+    assertTrue("Output directory should be created", newOutputDir.exists())
+    assertTrue("Output file should exist", File(newOutputDir, "test.png").exists())
+  }
+
+  private fun createTempImage(name: String, width: Int, height: Int, color: Color) {
+    val image = createTestImage(width, height, color)
+    val file = File(inputDir, name)
+    ImageIO.write(image, "PNG", file)
+  }
+
+  private fun createRecordMetadata(screenshots: List<Triple<String, Int, Int>>): JsonArray {
+    val array = JsonArray()
+    for ((name, tileWidth, tileHeight) in screenshots) {
+      val obj = JsonObject()
+      obj.addProperty("name", name)
+      obj.addProperty("tileWidth", tileWidth)
+      obj.addProperty("tileHeight", tileHeight)
+      array.add(obj)
+    }
+    return array
   }
 
   private fun createMetadata(names: List<String>): JsonArray {
