@@ -303,31 +303,6 @@ class TestPullScreenshots(unittest.TestCase):
         pull_screenshots.setup_paths()
         assertRegex(self, os.environ["PATH"], ".*:foobar/platform-tools.*")
 
-    def test_no_pull_argument_does_not_use_adb_on_verify(self):
-        source = tempfile.mkdtemp()
-        dest = tempfile.mkdtemp()
-
-        LocalFileHelper().setup(source, "unittest")
-        LocalFileHelper().setup(dest, "unittest")
-
-        pull_screenshots.pull_screenshots(
-            temp_dir=source,
-            verify=dest,
-            verify_tmp_dir=tempfile.mkdtemp()
-        )
-
-    def test_no_pull_argument_does_not_use_adb_on_record(self):
-        source = tempfile.mkdtemp()
-        dest = tempfile.mkdtemp()
-
-        LocalFileHelper().setup(source, "unittest")
-        LocalFileHelper().setup(dest, "unittest")
-
-        pull_screenshots.pull_screenshots(
-            temp_dir=source,
-            record=dest,
-        )
-
     def test_screenshots_with_same_group_ordered_together(self):
         loaded_json = json.loads(
             # language=json

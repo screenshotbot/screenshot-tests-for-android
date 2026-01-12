@@ -99,43 +99,9 @@ open class PullScreenshotsTask : ScreenshotTask() {
           mutableListOf(
                   "-m",
                   "android_screenshot_tests.pull_screenshots",
-                  "--test-run-id",
-                  testRunId,
                   "--temp-dir",
                   tempDir,
               )
-              .apply {
-                // Add device-dir parameter
-                add("--device-dir")
-                add(deviceDir)
-
-                if (verify) {
-                  add("--verify")
-                } else if (record) {
-                  add("--record")
-                }
-
-                if (verify || record) {
-                  add(extension.recordDir)
-                }
-
-                if (verify) {
-                    add("--verify-tmp-dir")
-                    add(verifyTempDir.toString())
-                }
-
-                if (verify && extension.failureDir != null) {
-                  add("--failure-dir")
-                  add("${extension.failureDir}")
-                }
-
-                if (extension.multipleDevices) {
-                  add("--calculated-device-name")
-                  val executor = GradleAdbExecutor(project)
-                  val calculator = DeviceNameCalculator(executor)
-                  add(calculator.name())
-                }
-              }
 
       println(execSpec.args)
     }

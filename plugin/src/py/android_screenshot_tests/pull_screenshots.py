@@ -311,12 +311,7 @@ def _copy_via_zip(src_zip, zip_path, dest):
 
 
 def pull_screenshots(
-    calculated_device_name="",
     temp_dir=None,
-    record=None,
-    verify=None,
-    failure_dir=None,
-    verify_tmp_dir=None,
 ):
     if not temp_dir:
         raise RuntimeError("temp_dir must be provided")
@@ -324,21 +319,9 @@ def pull_screenshots(
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
-    if verify and not verify_tmp_dir:
-        raise RuntimeError("We need a verify_tmp_dir when when verify is provided")
-
     copy_assets(temp_dir)
 
-    path_to_html = generate_html(temp_dir)
-    device_name = calculated_device_name
-    record_dir = join(record, device_name) if record and device_name else record
-    verify_dir = join(verify, device_name) if verify and device_name else verify
-
-    if failure_dir:
-        failure_dir = join(failure_dir, device_name) if device_name else failure_dir
-        if not os.path.exists(failure_dir):
-            os.makedirs(failure_dir)
-
+    generate_html(temp_dir)
 
 def setup_paths():
     android_home = common.get_android_sdk()
@@ -352,17 +335,7 @@ def main(argv):
             argv[1:],
             "eds:",
             [
-                "record=",
-                "verify=",
-                "failure-dir=",
                 "temp-dir=",
-                # The directory where screenshots will be saved if
-                # we're working with multiple devices. Set to "" if
-                # not in multiple-devices mode.
-                "calculated-device-name=",
-                "test-run-id=",
-                "device-dir=",
-                "verify-tmp-dir=",
             ],
         )
     except getopt.GetoptError:
@@ -403,11 +376,6 @@ def main(argv):
 
         pull_screenshots(
             temp_dir=temp_dir,
-            record=opts.get("--record"),
-            verify=opts.get("--verify"),
-            calculated_device_name=calculated_device_name,
-            failure_dir=opts.get("--failure-dir"),
-            verify_tmp_dir=opts.get("--verify-tmp-dir"),
         )
 
 
