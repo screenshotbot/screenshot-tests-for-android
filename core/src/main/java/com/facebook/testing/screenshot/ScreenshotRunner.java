@@ -47,8 +47,5 @@ public abstract class ScreenshotRunner {
    * <p>Typically this can be in {@code AndroidJUnitRunner#finish()}
    */
   public static void onDestroy() {
-    if (ScreenshotImpl.hasBeenCreated()) {
-      ScreenshotImpl.getInstance().flush();
-    }
   }
 }

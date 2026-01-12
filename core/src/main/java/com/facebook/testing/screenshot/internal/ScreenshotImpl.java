@@ -159,9 +159,7 @@ public class ScreenshotImpl {
     return recordBuilder;
   }
 
-  // VisibleForTesting
-  public void flush() {
-  }
+
 
   private void storeBitmap(final RecordBuilderImpl recordBuilder) {
     if (recordBuilder.getTiling().getAt(0, 0) != null || recordBuilder.getError() != null) {
