@@ -38,6 +38,7 @@ public abstract class ScreenshotRunner {
    *
    * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
    */
+  @Deprecated("This is no longer needed, and you no longer need to use a custom Instrumentation")
   public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
   }
 
@@ -46,6 +47,7 @@ public abstract class ScreenshotRunner {
    *
    * <p>Typically this can be in {@code AndroidJUnitRunner#finish()}
    */
+  @Deprecated("This is no longer needed, and you no longer need to use a custom Instrumentation")
   public static void onDestroy() {
   }
 }
