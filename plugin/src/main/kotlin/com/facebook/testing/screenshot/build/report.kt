@@ -50,7 +50,7 @@ private fun _copyAsset(filename: String, destination: File) {
  */
 private fun _copyFile(resourcePath: String, dest: File) {
   // Try to load from JAR resources
-  val fullResourcePath = "android_screenshot_tests/$resourcePath"
+  val fullResourcePath = "com/facebook/testing/screenshot/$resourcePath"
   val inputStream = object {}.javaClass.classLoader?.getResourceAsStream(fullResourcePath)
     ?: throw RuntimeException("Resource not found: $fullResourcePath")
 
