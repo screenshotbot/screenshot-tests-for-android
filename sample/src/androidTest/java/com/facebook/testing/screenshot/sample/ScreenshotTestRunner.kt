@@ -22,12 +22,6 @@ import com.facebook.testing.screenshot.ScreenshotRunner
 import com.facebook.testing.screenshot.layouthierarchy.LayoutHierarchyDumper
 
 class ScreenshotTestRunner : AndroidJUnitRunner() {
-  companion object {
-    init {
-      SoLoader.setInTestMode()
-    }
-  }
-
   override fun onCreate(arguments: Bundle) {
     ScreenshotRunner.onCreate(this, arguments)
     super.onCreate(arguments)
