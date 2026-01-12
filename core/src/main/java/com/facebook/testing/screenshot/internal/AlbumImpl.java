@@ -24,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import androidx.annotation.VisibleForTesting;
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.facebook.infer.annotation.Nullsafe;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -92,7 +94,7 @@ public class AlbumImpl implements Album {
   }
 
   private String getCurrentTestRunId() {
-    return Registry.getRegistry().getArguments().getString(SCREENSHOT_TESTS_RUN_ID, "");
+    return InstrumentationRegistry.getArguments().getString(SCREENSHOT_TESTS_RUN_ID, "");
   }
 
   /** Returns the stored screenshot in the album, or null if no such test case exists. */

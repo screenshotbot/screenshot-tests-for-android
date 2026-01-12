@@ -19,7 +19,6 @@ package com.facebook.testing.screenshot;
 import android.app.Instrumentation;
 import android.os.Bundle;
 import com.facebook.infer.annotation.Nullsafe;
-import com.facebook.testing.screenshot.internal.Registry;
 import com.facebook.testing.screenshot.internal.ScreenshotImpl;
 
 /**
@@ -40,9 +39,6 @@ public abstract class ScreenshotRunner {
    * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
    */
   public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
-    Registry registry = Registry.getRegistry();
-    registry.setInstrumentation(instrumentation);
-    registry.setArguments(arguments);
   }
 
   /**
@@ -54,7 +50,5 @@ public abstract class ScreenshotRunner {
     if (ScreenshotImpl.hasBeenCreated()) {
       ScreenshotImpl.getInstance().flush();
     }
-
-    Registry.clear();
   }
 }
