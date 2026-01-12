@@ -276,40 +276,6 @@ def write_image(hierarchy, dir, html, screenshot, parent_id):
     write_view_hierarchy_overlay_nodes(hierarchy, html, parent_id)
     html.write("</div></div></div>")
 
-
-def copy_assets(destination):
-    """Copy static assets required for rendering the HTML"""
-    _copy_asset("default.css", destination)
-    _copy_asset("default.js", destination)
-    _copy_asset("background.png", destination)
-    _copy_asset("background_dark.png", destination)
-
-
-def _copy_asset(filename, destination):
-    thisdir = os.path.dirname(__file__)
-    _copy_file(abspath(join(thisdir, filename)), join(destination, filename))
-
-
-def _copy_file(src, dest):
-    if os.path.exists(src):
-        shutil.copyfile(src, dest)
-    else:
-        _copy_via_zip(src, None, dest)
-
-
-def _copy_via_zip(src_zip, zip_path, dest):
-    if os.path.exists(src_zip):
-        zip = zipfile.ZipFile(src_zip)
-        input = zip.open(zip_path, "r")
-        with open(dest, "wb") as output:
-            output.write(input.read())
-    else:
-        # walk up the tree
-        head, tail = os.path.split(src_zip)
-
-        _copy_via_zip(head, tail if not zip_path else (tail + "/" + zip_path), dest)
-
-
 def pull_screenshots(
     temp_dir=None,
 ):
