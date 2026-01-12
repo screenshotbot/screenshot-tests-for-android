@@ -23,7 +23,9 @@ import tempfile
 import zipfile
 from os.path import abspath, join
 
-from . import common 
+from . import common
+
+from .recorder import _record
 
 try:
     from Queue import Queue
@@ -343,10 +345,10 @@ def pull_screenshots(
         # don't import this early, since we need PIL to import this
         from .recorder import Recorder
 
-        recorder = Recorder(temp_dir, record_dir or verify_tmp_dir, failure_dir)
+        output_dir = record_dir or verify_tmp_dir
+        recorder = Recorder(temp_dir, output_dir, failure_dir)
 
         recorder.record()
-
 
 def setup_paths():
     android_home = common.get_android_sdk()
