@@ -73,8 +73,6 @@ dependencies {
   implementation deps.supportAppCompat
   implementation deps.supportDesign
 
-  implementation deps.soLoader
-
   androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:0.18.0"
 
   androidTestImplementation deps.junit

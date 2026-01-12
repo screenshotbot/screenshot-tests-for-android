@@ -44,8 +44,6 @@ ext {
 
       gson                : "com.google.code.gson:gson:2.8.6",
 
-      soLoader            : "com.facebook.soloader:soloader:0.10.4",
-
       jsr305              : "com.google.code.findbugs:jsr305:3.0.2",
       guava               : "com.google.guava:guava:31.1-android",
       inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
