@@ -1,6 +1,8 @@
 0.18.0 (---)
 ------
 - Removed bundleResult plugin parameter
+- We no longer depend on Python
+- As a consequence of above, we should work seamlessly on Windows now
 
 0.16.0 (---)
 ------
