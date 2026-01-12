@@ -48,7 +48,7 @@ class ScreenshotDirectories {
 
   public ScreenshotDirectories(Context context) {
     mContext = context;
-    mArguments = Registry.getRegistry().arguments;
+    mArguments = Registry.getRegistry().getArguments();
   }
 
   public File get(String type) {

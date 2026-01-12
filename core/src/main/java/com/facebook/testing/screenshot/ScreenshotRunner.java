@@ -42,7 +42,7 @@ public abstract class ScreenshotRunner {
   public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
     Registry registry = Registry.getRegistry();
     registry.setInstrumentation(instrumentation);
-    registry.arguments = arguments;
+    registry.setArguments(arguments);
   }
 
   /**
