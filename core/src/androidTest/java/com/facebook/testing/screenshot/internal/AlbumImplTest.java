@@ -124,6 +124,7 @@ public class AlbumImplTest {
         new RecordBuilderImpl(null).setTiling(Tiling.singleTile(mBarFile)).setName("bar"));
 
     mAlbumImpl.flush();
+
     JSONArray metadataJson = parseMetadata();
 
     assertThat(metadataJson.getJSONObject(1).getString("name")).isEqualTo("bar");
