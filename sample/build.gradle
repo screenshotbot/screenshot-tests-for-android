@@ -23,7 +23,7 @@ buildscript {
   }
 
   dependencies {
-    classpath plugs.agp
+    classpath 'com.android.tools.build:gradle:8.4.2'
     classpath plugs.screenshot
     classpath plugs.kotlin
   }
