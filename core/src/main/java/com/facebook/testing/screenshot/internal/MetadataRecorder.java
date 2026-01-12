@@ -21,13 +21,22 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.RandomAccess;
+
 import javax.annotation.Nullable;
 
 @Nullsafe(Nullsafe.Mode.LOCAL)
@@ -35,6 +44,8 @@ class MetadataRecorder {
 
   private final File mDir;
   @Nullable private List<ScreenshotMetadata> mMetadata;
+
+  private int mFieldsWritten = 0;
 
   MetadataRecorder(File reportDirectory) {
     mDir = reportDirectory;
@@ -161,11 +172,42 @@ class MetadataRecorder {
 
   private void writeMetadata() throws IOException {
     if (mMetadata != null) {
-      Gson gson = new Gson();
-      FileWriter jsonWriter = new FileWriter(getMetadataFile());
-      gson.toJson(mMetadata, jsonWriter);
-      jsonWriter.close();
+      while (mFieldsWritten < mMetadata.size()) {
+        appendRecord(mMetadata.get(mFieldsWritten));
+        mFieldsWritten++;
+      }
+    } else {
+      FileWriter writer = new FileWriter(getMetadataFile());
+      writer.write("[]");
+      writer.flush();
     }
+  }
+
+  private void appendRecord(ScreenshotMetadata screenshotMetadata) throws IOException {
+    RandomAccessFile randomAccessFile = new RandomAccessFile(getMetadataFile(), "rw");
+
+    if (mFieldsWritten != 0) {
+      FileChannel channel = randomAccessFile.getChannel();
+      if (channel.size() < 2) {
+        throw new IllegalStateException("Should not have seen less than two bytes, got: " + channel.size());
+      }
+      channel.position(channel.size() - 1);
+    }
+
+    OutputStream os = Channels.newOutputStream(randomAccessFile.getChannel());
+    OutputStreamWriter writer = new OutputStreamWriter(os);
+
+    if (mFieldsWritten == 0) {
+      writer.write("[");
+    } else {
+      writer.write(",");
+    }
+
+    Gson gson = new Gson();
+    gson.toJson(mMetadata.get(mFieldsWritten), writer);
+    writer.write("]");
+    writer.flush();
+    writer.close();
   }
 
   private static class ScreenshotMetadata {
