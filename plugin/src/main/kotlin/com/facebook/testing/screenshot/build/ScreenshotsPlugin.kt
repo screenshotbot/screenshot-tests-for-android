@@ -37,9 +37,9 @@ open class ScreenshotsPluginExtension {
   var multipleDevices = false
   /** The python executable to use */
 
-  @Deprecated
+  @Deprecated("screenshot-tests-for-android no longer requires python")
   var pythonExecutable = "python"
-  
+
   /** The directory to compare screenshots from in verify only mode */
   var referenceDir: String? = null
   /** The directory to save failed screenshots */
