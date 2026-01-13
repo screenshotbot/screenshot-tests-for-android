@@ -1,5 +1,7 @@
 # Screenshot Tests for Android
 
+> **Note:** This repository was forked from [facebook/screenshot-tests-for-android](https://github.com/facebook/screenshot-tests-for-android) and is now the officially maintained version. See [this blog post](https://screenshotbot.io/blog/screenshot-tests-for-android-is-now-maintained-by-screenshotbot) for more details.
+
 <img src="/.github/logo.png" width="150" align="right"/>
 
 screenshot-tests-for-android is a library that can generate fast
