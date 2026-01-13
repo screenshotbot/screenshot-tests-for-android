@@ -34,20 +34,18 @@ public abstract class ScreenshotRunner {
   public static final String SCREENSHOT_TESTS_RUN_ID = "SCREENSHOT_TESTS_RUN_ID";
 
   /**
-   * Call this exactly once in your process before any screenshots are generated.
-   *
-   * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
+   * @deprecated
+   * This is no longer needed, and you no longer need to use a custom Instrumentation
    */
-  @Deprecated("This is no longer needed, and you no longer need to use a custom Instrumentation")
+  @Deprecated
   public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
   }
 
   /**
-   * Call this exactly once after all your tests have run.
-   *
-   * <p>Typically this can be in {@code AndroidJUnitRunner#finish()}
+   * @deprecated
+   * This is no longer needed, and you no longer need to use a custom Instrumentation
    */
-  @Deprecated("This is no longer needed, and you no longer need to use a custom Instrumentation")
+  @Deprecated
   public static void onDestroy() {
   }
 }
