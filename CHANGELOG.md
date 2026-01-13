@@ -2,6 +2,7 @@
 ------
 - You no longer need a custom Instrumentation to use this library, the
   default AndroidJUnitRunner from androidx is now sufficient.
+- Fixed POM details in artifacts
 
 0.18.0 (Jan 12 2026)
 ------
