@@ -1,6 +1,7 @@
 0.19.0-SNAPSHOT (unreleased)
 ------
-- (Add changes here)
+- You no longer need a custom Instrumentation to use this library, the
+  default AndroidJUnitRunner from androidx is now sufficient.
 
 0.18.0 (Jan 12 2026)
 ------
