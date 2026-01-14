@@ -78,8 +78,12 @@ public class ScreenshotImplTest {
 
   @After
   public void tearDown() throws Exception {
-    mAlbumImpl.cleanup();
-    mSecondAlbumImpl.cleanup();
+    if (mAlbumImpl != null) {
+      mAlbumImpl.cleanup();
+    }
+    if (mSecondAlbumImpl != null) {
+      mSecondAlbumImpl.cleanup();
+    }
   }
 
   @Test
