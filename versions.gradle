@@ -16,7 +16,7 @@
 
 ext {
   final screenshotTestVersion = VERSION_NAME
-  final dexmakerVersion = "1.4"
+  final dexmakerVersion = "2.28.3"
   final lithoVersion = "0.44.0"
 
   versions = [
@@ -48,9 +48,8 @@ ext {
       guava               : "com.google.guava:guava:33.2.1-android",
       inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
 
-      dexmaker            : "com.crittercism.dexmaker:dexmaker:$dexmakerVersion",
-      dexmakerDx          : "com.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion",
-      dexmakerMockito     : "com.crittercism.dexmaker:dexmaker-mockito:$dexmakerVersion",
+      dexmaker            : "com.linkedin.dexmaker:dexmaker:$dexmakerVersion",
+      dexmakerMockito     : "com.linkedin.dexmaker:dexmaker-mockito:$dexmakerVersion",
 
       espresso            : "androidx.test.espresso:espresso-core:3.6.1",
       testRunner          : "androidx.test:runner:1.6.1",
