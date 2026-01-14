@@ -51,7 +51,7 @@ tasks.whenTaskAdded {
 }
 
 dependencies {
-  implementation 'androidx.test:monitor:1.8.0'
+  implementation 'androidx.test:monitor:1.7.2'
   compileOnly deps.jsr305
   compileOnly deps.inferAnnotations
 
