@@ -150,7 +150,7 @@ class DeviceNameCalculatorTest {
    */
   private fun createMockExecutor(responseProvider: (List<String>) -> String): AdbExecutor {
     val executor = mock(AdbExecutor::class.java)
-    `when`(executor.execute(org.mockito.Matchers.anyListOf(String::class.java)))
+    `when`(executor.execute(org.mockito.ArgumentMatchers.anyList()))
         .thenAnswer { invocation ->
           @Suppress("UNCHECKED_CAST")
           val command = invocation.arguments[0] as List<String>

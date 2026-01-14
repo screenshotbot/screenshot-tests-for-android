@@ -22,7 +22,7 @@ ext {
   versions = [
       kotlin    : '1.9.23',
       targetSdk : 28,
-      compileSdk: 33,
+      compileSdk: 34,
       minSdk    : 21,
   ]
 
@@ -30,36 +30,36 @@ ext {
       agp        : "com.android.tools.build:gradle:8.0.2",
       screenshot : "io.screenshotbot.screenshot-tests-for-android:plugin:$screenshotTestVersion",
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
-      versions   : 'com.github.ben-manes:gradle-versions-plugin:0.11.1',
+      versions   : 'com.github.ben-manes:gradle-versions-plugin:0.51.0',
       publish    : 'com.vanniktech:gradle-maven-publish-plugin:0.30.0',
       dokka      : 'org.jetbrains.dokka:dokka-gradle-plugin:1.9.20'
   ]
 
   deps = [
-      supportAppCompat    : "androidx.appcompat:appcompat:1.1.0",
-      supportDesign       : "com.google.android.material:material:1.1.0",
+      supportAppCompat    : "androidx.appcompat:appcompat:1.7.0",
+      supportDesign       : "com.google.android.material:material:1.12.0",
       supportMultidex     : "androidx.multidex:multidex:2.0.1",
 
       kotlinStdlib        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
 
-      gson                : "com.google.code.gson:gson:2.8.6",
+      gson                : "com.google.code.gson:gson:2.11.0",
 
       jsr305              : "com.google.code.findbugs:jsr305:3.0.2",
-      guava               : "com.google.guava:guava:31.1-android",
+      guava               : "com.google.guava:guava:33.2.1-android",
       inferAnnotations    : "com.facebook.infer.annotation:infer-annotation:0.18.0",
 
       dexmaker            : "com.crittercism.dexmaker:dexmaker:$dexmakerVersion",
       dexmakerDx          : "com.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion",
       dexmakerMockito     : "com.crittercism.dexmaker:dexmaker-mockito:$dexmakerVersion",
 
-      espresso            : "androidx.test.espresso:espresso-core:3.1.0",
-      testRunner          : "androidx.test:runner:1.2.0",
-      orchestrator        : "androidx.test:orchestrator:1.2.0",
-      androidTestRules    : "androidx.test:rules:1.1.0",
-      junit               : "junit:junit:4.12",
-      mockito             : "org.mockito:mockito-core:1.10.19",
+      espresso            : "androidx.test.espresso:espresso-core:3.6.1",
+      testRunner          : "androidx.test:runner:1.6.1",
+      orchestrator        : "androidx.test:orchestrator:1.5.0",
+      androidTestRules    : "androidx.test:rules:1.6.1",
+      junit               : "junit:junit:4.13.2",
+      mockito             : "org.mockito:mockito-core:5.12.0",
       hamcrest            : "org.hamcrest:hamcrest-core:1.3",
-      assertjCore         : "org.assertj:assertj-core:3.11.1",
-      commonsCompress     : "org.apache.commons:commons-compress:1.21",
+      assertjCore         : "org.assertj:assertj-core:3.26.0",
+      commonsCompress     : "org.apache.commons:commons-compress:1.26.2",
   ]
 }
