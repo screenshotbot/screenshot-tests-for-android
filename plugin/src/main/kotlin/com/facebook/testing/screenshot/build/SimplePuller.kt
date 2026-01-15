@@ -32,7 +32,7 @@ class SimplePuller(
     private val project: Project,
     private val adbExecutable: String,
     private val adbArgs: List<String> = emptyList()
-) {
+) : RemoteFilePuller {
 
   /**
    * Checks if a remote file exists on the device.
@@ -40,7 +40,7 @@ class SimplePuller(
    * @param src Absolute path on the device
    * @return true if the file exists, false otherwise
    */
-  fun remoteFileExists(src: String): Boolean {
+  override fun remoteFileExists(src: String): Boolean {
     val output = executeAdbShell("ls $src && echo EXISTS || echo DOES_NOT_EXIST")
     return "EXISTS" in output
   }
@@ -51,7 +51,7 @@ class SimplePuller(
    * @param src Absolute path on the device
    * @param dest Local destination path
    */
-  fun pull(src: String, dest: String) {
+  override fun pull(src: String, dest: String) {
     executeAdb(listOf("pull", src, dest))
   }
 
@@ -64,7 +64,7 @@ class SimplePuller(
    * @param src Absolute path to folder on the device
    * @param dest Local destination path
    */
-  fun pullFolder(src: String, dest: String) {
+  override fun pullFolder(src: String, dest: String) {
     val tarName = getTarName(src)
 
     // Create tar archive on device

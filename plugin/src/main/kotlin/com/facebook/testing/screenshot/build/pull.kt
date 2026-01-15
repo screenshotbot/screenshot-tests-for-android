@@ -1,6 +1,7 @@
 package com.facebook.testing.screenshot.build
 
 import com.google.gson.JsonParser
+import org.gradle.internal.impldep.org.eclipse.jgit.gitrepo.RepoCommand.RemoteFile
 import java.io.File
 import java.io.FileWriter
 
@@ -25,7 +26,7 @@ private fun createEmptyMetadataFile(file: File) {
  * @param puller The SimplePuller instance to use for pulling files
  * @return The device directory path where screenshots are located
  */
-fun pullMetadata(packageName: String, outputDir: File, puller: SimplePuller): String {
+fun pullMetadata(packageName: String, outputDir: File, puller: RemoteFilePuller): String {
   val oldRootScreenshotDir = "/data/data/"
   val externalDataDir = puller.getExternalDataDir()
 
@@ -86,7 +87,7 @@ fun validateMetadata(localMetadataFile: File) {
  * @param testRunId The test run ID subdirectory
  * @param puller The SimplePuller instance to use for pulling files
  */
-fun pullImages(dir: File, deviceDir: String, testRunId: String, puller: SimplePuller) {
+fun pullImages(dir: File, deviceDir: String, testRunId: String, puller: RemoteFilePuller) {
   val remotePath = androidPathJoin(deviceDir, testRunId)
   if (puller.remoteFileExists(remotePath)) {
     // Optimization to pull down all the screenshots in a single pull.
