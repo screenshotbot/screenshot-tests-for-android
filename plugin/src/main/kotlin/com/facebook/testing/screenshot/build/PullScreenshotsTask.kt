@@ -76,7 +76,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
     File(reportOutputDir).mkdirs()
     verifyTempDir.mkdirs()
 
-    val puller = AdditionalTestOutputPuller(project) as RemoteFilePuller
+    val puller = AdditionalTestOutputPuller(project, variant) as RemoteFilePuller
     // Pull metadata from device if we're performing a pull
     val deviceDir =
         if (!isVerifyOnly) {
