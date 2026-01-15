@@ -7,7 +7,7 @@ import java.io.File
 
 class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant) : RemoteFilePuller {
   override fun remoteFileExists(src: String): Boolean {
-    TODO("Not yet implemented")
+    return File(src).exists()
   }
 
   override fun pull(src: String, dest: String) {
