@@ -3,7 +3,9 @@ package com.facebook.testing.screenshot.build
 import com.android.build.gradle.api.TestVariant
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
+import org.gradle.internal.impldep.org.apache.commons.io.FileUtils
 import java.io.File
+import java.nio.file.Paths
 
 class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant) : RemoteFilePuller {
   override fun remoteFileExists(src: String): Boolean {
@@ -11,7 +13,7 @@ class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant)
   }
 
   override fun pull(src: String, dest: String) {
-    TODO("Not yet implemented")
+    FileUtils.copyFile(File(src), File(dest))
   }
 
   override fun pullFolder(src: String, dest: String) {
