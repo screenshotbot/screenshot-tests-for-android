@@ -71,36 +71,36 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
 
-    val tempDir = File(outputDir, "report").absolutePath
+    val reportOutputDir = File(outputDir, "report").absolutePath
     val verifyTempDir = File(outputDir, "verifyTempDir")
-    File(tempDir).mkdirs()
+    File(reportOutputDir).mkdirs()
     verifyTempDir.mkdirs()
 
     val puller = SimplePuller.create(project)
     // Pull metadata from device if we're performing a pull
     val deviceDir =
         if (!isVerifyOnly) {
-            pullMetadata(variant.applicationId, File(tempDir), puller)
+            pullMetadata(variant.applicationId, File(reportOutputDir), puller)
         } else {
             "" // Empty string when not pulling
         }
 
     if (!isVerifyOnly) {
-        pullImages(File(tempDir), deviceDir, testRunId, puller)
+        pullImages(File(reportOutputDir), deviceDir, testRunId, puller)
     }
 
-    copyAssets(File(tempDir))
+    copyHtmlAssets(File(reportOutputDir))
 
-    generateHtml(File(tempDir))
+    generateHtml(File(reportOutputDir))
 
-    val screenshots = getMetadataJson(File(tempDir))
+    val screenshots = getMetadataJson(File(reportOutputDir))
     val recordDir = File(project.projectDir, extension.recordDir)
     val expectedOutputDir = directoryWithDeviceName(recordDir)
 
     val outputDirForRecording = (if (record) expectedOutputDir else verifyTempDir)
     
     _doClean(outputDirForRecording);
-    _record(screenshots, File(tempDir), outputDirForRecording)
+    _record(screenshots, File(reportOutputDir), outputDirForRecording)
 
     
     val failureBaseDir = File(project.projectDir, extension.failureDir)
@@ -114,7 +114,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
       verifyHelper(screenshots, verifyTempDir, expectedOutputDir, failureOutputDir)
     }
 
-    printLinkToHtml(tempDir);
+    printLinkToHtml(reportOutputDir);
   }
 
   private fun directoryWithDeviceName(recordDir: File): File = if (extension.multipleDevices) {

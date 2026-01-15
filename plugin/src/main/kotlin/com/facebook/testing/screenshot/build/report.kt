@@ -57,7 +57,7 @@ private fun JsonElement?.asJsonObjectOrNull(): JsonObject? {
  *
  * @param destination The directory where assets should be copied
  */
-fun copyAssets(destination: File) {
+fun copyHtmlAssets(destination: File) {
   _copyAsset("default.css", destination)
   _copyAsset("default.js", destination)
   _copyAsset("background.png", destination)
