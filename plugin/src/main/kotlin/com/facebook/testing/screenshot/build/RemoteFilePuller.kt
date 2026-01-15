@@ -28,5 +28,5 @@ interface RemoteFilePuller {
    */
   fun pullFolder(src: String, dest: String)
 
-  fun getExternalDataDir()
+  fun getExternalDataDir(): String
 }

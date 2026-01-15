@@ -89,7 +89,7 @@ class SimplePuller(
    *
    * @return The path to external storage (e.g., "/sdcard")
    */
-  fun getExternalDataDir(): String {
+  override fun getExternalDataDir(): String {
     val output = executeAdbShell("echo \$EXTERNAL_STORAGE")
     return output.trim().split(Regex("\\s+")).last()
   }
