@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 /** Provides a directory for an Album to store its screenshots in. */
@@ -103,7 +104,7 @@ class ScreenshotDirectories {
   }
 
   private File getSdcardDir(String type) {
-    String externalStorage = System.getenv("EXTERNAL_STORAGE");
+    String externalStorage = getExternalStorageDir();
 
     if (externalStorage == null) {
       throw new RuntimeException(
@@ -134,6 +135,11 @@ class ScreenshotDirectories {
 
     setWorldWriteable(dir);
     return dir;
+  }
+
+  private static @Nullable String getExternalStorageDir() {
+    if InstrumentationRegistry.getArguments()
+    return System.getenv("EXTERNAL_STORAGE");
   }
 
   @SuppressLint("SetWorldWritable")
