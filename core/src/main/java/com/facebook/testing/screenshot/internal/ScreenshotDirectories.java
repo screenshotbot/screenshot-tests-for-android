@@ -25,13 +25,18 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
 import com.facebook.infer.annotation.Nullsafe;
+import com.google.common.base.Strings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 /** Provides a directory for an Album to store its screenshots in. */
@@ -103,12 +108,7 @@ class ScreenshotDirectories {
   }
 
   private File getSdcardDir(String type) {
-    String externalStorage = System.getenv("EXTERNAL_STORAGE");
-
-    if (externalStorage == null) {
-      throw new RuntimeException(
-          "No $EXTERNAL_STORAGE has been set on the device, please report this bug!");
-    }
+    String externalStorage = getExternalStorageDir();
 
     String sdcardDirectory =
         mArguments.containsKey(SDCARD_DIRECTORY)
@@ -134,6 +134,20 @@ class ScreenshotDirectories {
 
     setWorldWriteable(dir);
     return dir;
+  }
+
+  private static String getExternalStorageDir() {
+    String additionalTestOutputDir = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir");
+    if (Strings.isNullOrEmpty(additionalTestOutputDir)) {
+      Log.w("ScreenshotDirectories",
+          "You must provide `additionalTestOutputDir` instrumentation property, failing back to EXTERNAL_STORAGE ");
+      String env = System.getenv("EXTERNAL_STORAGE");
+      if (env != null) {
+        throw new RuntimeException("No external storage available");
+      }
+      return env;
+    }
+    return additionalTestOutputDir;
   }
 
   @SuppressLint("SetWorldWritable")

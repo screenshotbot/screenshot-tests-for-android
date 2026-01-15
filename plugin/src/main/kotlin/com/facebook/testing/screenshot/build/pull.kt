@@ -89,9 +89,10 @@ fun validateMetadata(localMetadataFile: File) {
  */
 fun pullImages(dir: File, deviceDir: String, testRunId: String, puller: RemoteFilePuller) {
   val remotePath = androidPathJoin(deviceDir, testRunId)
-  if (puller.remoteFileExists(remotePath)) {
-    // Optimization to pull down all the screenshots in a single pull.
-    // If this file exists, we assume all of the screenshots are inside it.
-    puller.pullFolder(remotePath, dir.absolutePath)
+  if (!puller.remoteFileExists(remotePath)) {
+    throw RuntimeException("Images directory doesn't exist: " + remotePath)
   }
+  // Optimization to pull down all the screenshots in a single pull.
+  // If this file exists, we assume all of the screenshots are inside it.
+  puller.pullFolder(remotePath, dir.absolutePath)
 }
