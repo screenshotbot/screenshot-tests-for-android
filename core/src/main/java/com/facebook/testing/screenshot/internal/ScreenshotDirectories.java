@@ -142,7 +142,7 @@ class ScreenshotDirectories {
       Log.w("ScreenshotDirectories",
           "You must provide `additionalTestOutputDir` instrumentation property, failing back to EXTERNAL_STORAGE ");
       String env = System.getenv("EXTERNAL_STORAGE");
-      if (env != null) {
+      if (env == null) {
         throw new RuntimeException("No external storage available");
       }
       return env;
