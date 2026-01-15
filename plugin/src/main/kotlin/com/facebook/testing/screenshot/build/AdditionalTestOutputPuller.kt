@@ -3,7 +3,6 @@ package com.facebook.testing.screenshot.build
 import com.android.build.gradle.api.TestVariant
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
-import org.gradle.internal.impldep.org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.file.Paths
 
@@ -13,7 +12,7 @@ class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant)
   }
 
   override fun pull(src: String, dest: String) {
-    FileUtils.copyFile(File(src), File(dest))
+    copyFile(File(src), File(dest))
   }
 
   override fun pullFolder(src: String, dest: String) {
@@ -49,6 +48,10 @@ I wonder if there's a better way to retrieve this than hardcoding these subdirec
     }
 
     return File(input, result)
+  }
+
+  private fun copyFile(src: File, dest: File) {
+    src.copyTo(dest, overwrite = true)
   }
 }
 
