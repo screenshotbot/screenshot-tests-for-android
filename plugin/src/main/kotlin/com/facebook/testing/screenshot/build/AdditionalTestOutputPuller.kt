@@ -16,7 +16,7 @@ class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant)
   }
 
   override fun pullFolder(src: String, dest: String) {
-    TODO("Not yet implemented")
+    File(src).copyRecursively(File(dest), overwrite = true)
   }
 
   override fun getExternalDataDir(): String {
