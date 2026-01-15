@@ -11,6 +11,7 @@ settings: .PHONY
 	$(ADB) shell settings put global hidden_api_policy_p_apps 1
 	$(ADB) shell settings put global hidden_api_policy_pre_p_apps 1
 	$(ADB) shell settings put global hidden_api_policy  1
+	$(ADB) shell getprop
 
 android-impl: .PHONY
 	$(MAKE) settings
