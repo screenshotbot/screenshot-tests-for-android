@@ -44,7 +44,7 @@ class ReportTest {
 
   @Test
   fun testCopyAssets_copiesAllRequiredFiles() {
-    copyAssets(outputDir)
+    copyHtmlAssets(outputDir)
 
     assertTrue("default.css should exist", File(outputDir, "default.css").exists())
     assertTrue("default.js should exist", File(outputDir, "default.js").exists())
@@ -57,7 +57,7 @@ class ReportTest {
 
   @Test
   fun testCopyAssets_filesHaveContent() {
-    copyAssets(outputDir)
+    copyHtmlAssets(outputDir)
 
     val cssFile = File(outputDir, "default.css")
     val jsFile = File(outputDir, "default.js")
@@ -75,7 +75,7 @@ class ReportTest {
     val newDir = File(outputDir, "subdir")
     newDir.mkdirs()
 
-    copyAssets(newDir)
+    copyHtmlAssets(newDir)
 
     assertTrue("default.css should exist in subdir", File(newDir, "default.css").exists())
   }
@@ -87,7 +87,7 @@ class ReportTest {
     assertTrue("File should exist before copy", cssFile.exists())
     val originalLength = cssFile.length()
 
-    copyAssets(outputDir)
+    copyHtmlAssets(outputDir)
 
     assertTrue("File should still exist after copy", cssFile.exists())
     assertTrue(
