@@ -56,7 +56,9 @@ public class AlbumImplTest {
 
   @After
   public void tearDown() throws Exception {
-    mAlbumImpl.cleanup();
+    if (mAlbumImpl != null) {
+      mAlbumImpl.cleanup();
+    }
   }
 
   @Test
