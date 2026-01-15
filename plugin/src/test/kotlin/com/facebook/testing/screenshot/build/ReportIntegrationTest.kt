@@ -17,7 +17,6 @@
 package com.facebook.testing.screenshot.build
 
 import java.io.File
-import java.nio.file.Files
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -165,7 +164,7 @@ class ReportIntegrationTest {
     val assetsDir = File(workDir, "assets")
     assetsDir.mkdirs()
 
-    copyAssets(assetsDir)
+    copyHtmlAssets(assetsDir)
 
     assertTrue("default.css should be copied", File(assetsDir, "default.css").exists())
     assertTrue("default.js should be copied", File(assetsDir, "default.js").exists())
@@ -180,7 +179,7 @@ class ReportIntegrationTest {
     setupFixtures(targetDir)
 
     // Copy assets (CSS, JS, images)
-    copyAssets(targetDir)
+    copyHtmlAssets(targetDir)
 
     // Generate HTML
     val htmlFile = generateHtml(targetDir)
