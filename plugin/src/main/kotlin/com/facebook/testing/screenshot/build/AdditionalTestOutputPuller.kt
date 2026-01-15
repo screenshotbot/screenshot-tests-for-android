@@ -20,10 +20,9 @@ class AdditionalTestOutputPuller(val project: Project, val variant: TestVariant)
   }
 
   override fun getExternalDataDir(): String {
-    /*
-The files look like this: P162
-I wonder if there's a better way to retrieve this than hardcoding these subdirectories
- */
+    // The files look like this: P162
+    // I wonder if there's a better way to retrieve this than hardcoding these subdirectories
+
     val outputDir = project.layout.buildDirectory.get()
       .dir("outputs")
       .dir("connected_android_test_additional_output")
