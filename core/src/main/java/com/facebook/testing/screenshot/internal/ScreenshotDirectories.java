@@ -140,7 +140,7 @@ class ScreenshotDirectories {
     String additionalTestOutputDir = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir");
     if (Strings.isNullOrEmpty(additionalTestOutputDir)) {
       Log.w("ScreenshotDirectories",
-          "You must provide `additionalTestOutputDir` instrumentation property, failing back to EXTERNAL_STORAGE ")
+          "You must provide `additionalTestOutputDir` instrumentation property, failing back to EXTERNAL_STORAGE ");
       return System.getenv("EXTERNAL_STORAGE");
     }
   }
