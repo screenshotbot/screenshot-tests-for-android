@@ -1,6 +1,8 @@
 package com.facebook.testing.screenshot.build
 
-class AdditionalTestOutputPuller : RemoteFilePuller {
+import org.gradle.api.Project
+
+class AdditionalTestOutputPuller(project: Project) : RemoteFilePuller {
   override fun remoteFileExists(src: String): Boolean {
     TODO("Not yet implemented")
   }
@@ -17,3 +19,4 @@ class AdditionalTestOutputPuller : RemoteFilePuller {
     TODO("Not yet implemented")
   }
 }
+
