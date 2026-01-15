@@ -25,7 +25,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
 import com.facebook.infer.annotation.Nullsafe;
+import com.google.common.base.Strings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -106,11 +110,6 @@ class ScreenshotDirectories {
   private File getSdcardDir(String type) {
     String externalStorage = getExternalStorageDir();
 
-    if (externalStorage == null) {
-      throw new RuntimeException(
-          "No $EXTERNAL_STORAGE has been set on the device, please report this bug!");
-    }
-
     String sdcardDirectory =
         mArguments.containsKey(SDCARD_DIRECTORY)
             ? mArguments.getString(SDCARD_DIRECTORY)
@@ -137,9 +136,13 @@ class ScreenshotDirectories {
     return dir;
   }
 
-  private static @Nullable String getExternalStorageDir() {
-    if InstrumentationRegistry.getArguments()
-    return System.getenv("EXTERNAL_STORAGE");
+  private static String getExternalStorageDir() {
+    String additionalTestOutputDir = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir");
+    if (Strings.isNullOrEmpty(additionalTestOutputDir)) {
+      Log.w("ScreenshotDirectories",
+          "You must provide `additionalTestOutputDir` instrumentation property, failing back to EXTERNAL_STORAGE ")
+      return System.getenv("EXTERNAL_STORAGE");
+    }
   }
 
   @SuppressLint("SetWorldWritable")
