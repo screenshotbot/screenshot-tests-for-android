@@ -113,7 +113,7 @@ public abstract class WindowAttachment {
 
   private static void invokeUnchecked(View view, String methodName) {
     try {
-      Method method = View.class.getDeclaredMethod(methodName);
+      Method method = getViewDeclaredMethod(methodName);
       method.setAccessible(true);
       method.invoke(view);
     } catch (Exception e) {
