@@ -22,7 +22,7 @@ ext {
   versions = [
       kotlin    : '1.9.23',
       targetSdk : 33,
-      compileSdk: 34,
+      compileSdk: 35,
       minSdk    : 21,
   ]
 
