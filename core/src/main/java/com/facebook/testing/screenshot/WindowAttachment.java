@@ -35,6 +35,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.WeakHashMap;
 import javax.annotation.Nullable;
 
@@ -126,13 +127,22 @@ public abstract class WindowAttachment {
     }
 
     try {
+      Class<?>[] params = { Class.forName("android.view.View$AttachInfo"), int.class };
       Method dispatch =
-          View.class.getDeclaredMethod(
-              "dispatchAttachedToWindow", Class.forName("android.view.View$AttachInfo"), int.class);
+          getViewDeclaredMethod("dispatchAttachedToWindow", params);
       dispatch.setAccessible(true);
       dispatch.invoke(view, sAttachInfo, 0);
     } catch (Exception e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private static @NonNull Method getViewDeclaredMethod(String methodName, Class<?>... params) throws NoSuchMethodException {
+    if (Build.VERSION.SDK_INT >= 28) {
+      return HiddenApiBypass.getDeclaredMethod(View.class, methodName, params);
+    } else {
+      return View.class.getDeclaredMethod(
+          methodName, params);
     }
   }
 
@@ -263,9 +273,23 @@ public abstract class WindowAttachment {
 
   private static void setField(Object o, String fieldName, Object value) throws Exception {
     Class clazz = o.getClass();
-    Field field = clazz.getDeclaredField(fieldName);
+    Field field = getDeclaredField(fieldName, clazz);
     field.setAccessible(true);
     field.set(o, value);
+  }
+
+  private static @NonNull Field getDeclaredField(String fieldName, Class clazz) throws NoSuchFieldException {
+    if (Build.VERSION.SDK_INT >= 28) {
+      List<Field> fields = HiddenApiBypass.getInstanceFields(clazz);
+      for (Field field : fields) {
+        if (field.getName().equals(fieldName)) {
+          return field;
+        }
+      }
+      throw new RuntimeException("Could not find field: " + fieldName);
+    } else {
+      return clazz.getDeclaredField(fieldName);
+    }
   }
 
   public interface Detacher {
