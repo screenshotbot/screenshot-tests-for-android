@@ -49,7 +49,7 @@ android {
   compileSdkVersion versions.compileSdk
   defaultConfig {
     applicationId "com.facebook.testing.screenshot.example"
-    minSdkVersion 21
+    minSdkVersion 28
     targetSdkVersion versions.targetSdk
     versionCode 1
     versionName "1.0"
