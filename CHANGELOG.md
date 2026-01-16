@@ -1,6 +1,8 @@
 0.21.0-SNAPSHOT (unreleased)
 ------
-- Support for scoped storage, this makes us officially support API levels >28
+- Support for scoped storage, this makes us officially support API 
+  levels >28
+- No longer require hidden api permissions
 
 0.20.0 (Jan 13 2026)
 ------
