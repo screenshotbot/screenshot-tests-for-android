@@ -60,5 +60,7 @@ ext {
       hamcrest            : "org.hamcrest:hamcrest-core:1.3",
       assertjCore         : "org.assertj:assertj-core:3.26.0",
       commonsCompress     : "org.apache.commons:commons-compress:1.26.2",
+
+      hiddenApiBypass     : "org.lsposed.hiddenapibypass:hiddenapibypass:6.1"
   ]
 }
