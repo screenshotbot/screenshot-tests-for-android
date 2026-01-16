@@ -27,6 +27,9 @@ import android.view.View;
 import android.view.WindowManager;
 import com.facebook.infer.annotation.Nullsafe;
 import com.google.common.base.Preconditions;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -34,6 +37,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.WeakHashMap;
 import javax.annotation.Nullable;
+
+import androidx.annotation.NonNull;
 
 @Nullsafe(Nullsafe.Mode.LOCAL)
 @SuppressLint("PrivateApi")
@@ -156,9 +161,9 @@ public abstract class WindowAttachment {
       final Object[] viewRootCtorValues;
 
       if (Build.VERSION.SDK_INT >= 26) {
+
         viewRootImpl =
-            cViewRootImpl
-                .getConstructor(Context.class, Display.class)
+            getDeclaredConstructor(cViewRootImpl, Context.class, Display.class)
                 .newInstance(context, display);
 
         viewRootCtorParams =
@@ -212,9 +217,20 @@ public abstract class WindowAttachment {
     }
   }
 
+  private static @NonNull Constructor getDeclaredConstructor(Class cViewRootImpl, Class... params) throws NoSuchMethodException {
+    if (Build.VERSION.SDK_INT  >= 28) {
+      return HiddenApiBypass.getDeclaredConstructor(
+          cViewRootImpl,
+          params);
+    } else {
+      return cViewRootImpl
+          .getConstructor(params);
+    }
+  }
+
   private static Object invokeConstructor(Class clazz, Class[] params, Object[] values)
       throws Exception {
-    Constructor cons = clazz.getDeclaredConstructor(params);
+    Constructor cons = getDeclaredConstructor(clazz, params);
     cons.setAccessible(true);
     return cons.newInstance(values);
   }
