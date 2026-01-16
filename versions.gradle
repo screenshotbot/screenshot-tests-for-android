@@ -22,8 +22,8 @@ ext {
   versions = [
       kotlin    : '2.3.0',
       targetSdk : 33,
-      compileSdk: 34,
-      minSdk    : 26,
+      compileSdk: 35,
+      minSdk    : 21,
   ]
 
   plugs = [
