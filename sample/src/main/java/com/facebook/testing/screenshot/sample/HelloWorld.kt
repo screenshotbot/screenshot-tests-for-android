@@ -16,7 +16,6 @@
 
 package com.facebook.testing.screenshot.sample
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,12 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun HelloWorld(modifier: Modifier = Modifier) {
     Surface(modifier = modifier.fillMaxSize()) {
-        Box(contentAlignment = Alignment.Center) {
             Text(
                 text = "Hello World!",
                 style = MaterialTheme.typography.headlineMedium
             )
-        }
     }
 }
 
