@@ -8,9 +8,6 @@ EAASE=~/eaase/eaase run --verbose
 	true
 
 settings: .PHONY
-	$(ADB) shell settings put global hidden_api_policy_p_apps 1
-	$(ADB) shell settings put global hidden_api_policy_pre_p_apps 1
-	$(ADB) shell settings put global hidden_api_policy  1
 	$(ADB) shell getprop
 	sleep 3 # boooooooooooo! We'll try figuring this out in a sec
 
