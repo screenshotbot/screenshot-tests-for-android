@@ -58,6 +58,7 @@ dependencies {
   implementation deps.supportAppCompat
   implementation deps.gson
   implementation deps.guava
+  implementation deps.hiddenApiBypass
 
   androidTestImplementation deps.dexmaker
   androidTestImplementation deps.junit

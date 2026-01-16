@@ -27,13 +27,19 @@ import android.view.View;
 import android.view.WindowManager;
 import com.facebook.infer.annotation.Nullsafe;
 import com.google.common.base.Preconditions;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.WeakHashMap;
 import javax.annotation.Nullable;
+
+import androidx.annotation.NonNull;
 
 @Nullsafe(Nullsafe.Mode.LOCAL)
 @SuppressLint("PrivateApi")
@@ -107,7 +113,7 @@ public abstract class WindowAttachment {
 
   private static void invokeUnchecked(View view, String methodName) {
     try {
-      Method method = View.class.getDeclaredMethod(methodName);
+      Method method = getViewDeclaredMethod(methodName);
       method.setAccessible(true);
       method.invoke(view);
     } catch (Exception e) {
@@ -121,13 +127,22 @@ public abstract class WindowAttachment {
     }
 
     try {
+      Class<?>[] params = { Class.forName("android.view.View$AttachInfo"), int.class };
       Method dispatch =
-          View.class.getDeclaredMethod(
-              "dispatchAttachedToWindow", Class.forName("android.view.View$AttachInfo"), int.class);
+          getViewDeclaredMethod("dispatchAttachedToWindow", params);
       dispatch.setAccessible(true);
       dispatch.invoke(view, sAttachInfo, 0);
     } catch (Exception e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private static @NonNull Method getViewDeclaredMethod(String methodName, Class<?>... params) throws NoSuchMethodException {
+    if (Build.VERSION.SDK_INT >= 28) {
+      return HiddenApiBypass.getDeclaredMethod(View.class, methodName, params);
+    } else {
+      return View.class.getDeclaredMethod(
+          methodName, params);
     }
   }
 
@@ -156,9 +171,9 @@ public abstract class WindowAttachment {
       final Object[] viewRootCtorValues;
 
       if (Build.VERSION.SDK_INT >= 26) {
+
         viewRootImpl =
-            cViewRootImpl
-                .getConstructor(Context.class, Display.class)
+            getDeclaredConstructor(cViewRootImpl, Context.class, Display.class)
                 .newInstance(context, display);
 
         viewRootCtorParams =
@@ -212,9 +227,20 @@ public abstract class WindowAttachment {
     }
   }
 
+  private static @NonNull Constructor getDeclaredConstructor(Class cViewRootImpl, Class... params) throws NoSuchMethodException {
+    if (Build.VERSION.SDK_INT  >= 28) {
+      return HiddenApiBypass.getDeclaredConstructor(
+          cViewRootImpl,
+          params);
+    } else {
+      return cViewRootImpl
+          .getConstructor(params);
+    }
+  }
+
   private static Object invokeConstructor(Class clazz, Class[] params, Object[] values)
       throws Exception {
-    Constructor cons = clazz.getDeclaredConstructor(params);
+    Constructor cons = getDeclaredConstructor(clazz, params);
     cons.setAccessible(true);
     return cons.newInstance(values);
   }
@@ -247,9 +273,23 @@ public abstract class WindowAttachment {
 
   private static void setField(Object o, String fieldName, Object value) throws Exception {
     Class clazz = o.getClass();
-    Field field = clazz.getDeclaredField(fieldName);
+    Field field = getDeclaredField(fieldName, clazz);
     field.setAccessible(true);
     field.set(o, value);
+  }
+
+  private static @NonNull Field getDeclaredField(String fieldName, Class clazz) throws NoSuchFieldException {
+    if (Build.VERSION.SDK_INT >= 28) {
+      List<Field> fields = HiddenApiBypass.getInstanceFields(clazz);
+      for (Field field : fields) {
+        if (field.getName().equals(fieldName)) {
+          return field;
+        }
+      }
+      throw new RuntimeException("Could not find field: " + fieldName);
+    } else {
+      return clazz.getDeclaredField(fieldName);
+    }
   }
 
   public interface Detacher {
