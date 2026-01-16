@@ -20,10 +20,10 @@ ext {
   final lithoVersion = "0.44.0"
 
   versions = [
-      kotlin    : '1.9.23',
+      kotlin    : '2.3.0',
       targetSdk : 33,
       compileSdk: 34,
-      minSdk    : 21,
+      minSdk    : 26,
   ]
 
   plugs = [
