@@ -1,4 +1,4 @@
-0.21.0-SNAPSHOT (unreleased)
+1.0.0 (Jan 16 2026)
 ------
 - Support for scoped storage, this makes us officially support API 
   levels >28
