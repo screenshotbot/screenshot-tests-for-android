@@ -9,7 +9,6 @@ EAASE=~/eaase/eaase run --verbose
 
 settings: .PHONY
 	$(ADB) shell getprop
-	sleep 3 # boooooooooooo! We'll try figuring this out in a sec
 
 android-impl: .PHONY
 	$(MAKE) settings
