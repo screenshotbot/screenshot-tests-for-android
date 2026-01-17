@@ -55,7 +55,7 @@ integration-test-impl: install-eaase
 	cd ~/workspace && ./gradlew :core:publishToMavenLocal
 	echo Running the sample tests now
 	cd ~/workspace && $(EAASE) --api-level 30 -- bash -c "make settings && ./gradlew :sample:recordDebugAndroidTestScreenshotTest && ./gradlew :sample:verifyDebugAndroidTestScreenshotTest"
-	curl https://screenshotbot.io/recorder.sh | sh
+	cd ~/workspace && curl https://screenshotbot.io/recorder.sh | sh
 	~/screenshotbot/recorder --directory sample/screenshotbos/API_30* --channel screenshot-tests-for-android-sample-android-30
 
 integration-tests:
