@@ -31,6 +31,10 @@ buildscript {
   }
 }
 
+plugins {
+    id 'io.screenshotbot.plugin' version '1.29.11'
+}
+
 allprojects {
   repositories {
     mavenLocal()
@@ -44,6 +48,7 @@ apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
+apply plugin: 'io.screenshotbot.plugin'
 
 android {
   namespace 'com.facebook.testing.screenshot.sample'
