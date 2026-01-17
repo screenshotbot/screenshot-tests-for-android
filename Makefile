@@ -59,4 +59,9 @@ integration-test-impl: install-eaase
 	~/screenshotbot/recorder --directory sample/screenshotbos/API_30* --channel screenshot-tests-for-android-sample-android-30
 
 integration-tests:
-		docker run  --rm -e EAASE_API_TOKEN=$$EAASE_API_TOKEN -w /workspace-original  -v .:/workspace-original cimg/android:2026.01 make integration-test-impl 
+		docker run  --rm -e EAASE_API_TOKEN=$$EAASE_API_TOKEN  \
+	       -e SCREENSHOTBOT_API_KEY=$$SCREENSHOTBOT_API_KEY \
+	       -e SCREENSHOTBOT_API_SECRET=$$SCREENSHOTBOT_API_SECRET \
+           -w /workspace-original \
+           -v .:/workspace-original cimg/android:2026.01 \
+	       make integration-test-impl 
