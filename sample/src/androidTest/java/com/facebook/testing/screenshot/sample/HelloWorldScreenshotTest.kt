@@ -16,14 +16,29 @@
 
 package com.facebook.testing.screenshot.sample
 
+import android.widget.FrameLayout
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.test.annotation.UiThreadTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.WindowAttachment
 import org.junit.Test
+
+class FakeLifecycle(override val currentState: State) : Lifecycle() {
+  override fun addObserver(observer: LifecycleObserver) {
+  }
+
+  override fun removeObserver(observer: LifecycleObserver) {
+  }
+}
+class FakeLifecycleOwner(override val lifecycle: Lifecycle) : LifecycleOwner {
+
+}
 
 class HelloWorldScreenshotTest {
     @Test
@@ -38,6 +53,8 @@ class HelloWorldScreenshotTest {
             }
         }
 
+      val lifecycleOwner = FakeLifecycleOwner(FakeLifecycle(Lifecycle.State.CREATED))
+      composeView.setTag(androidx.lifecycle.runtime.R.id.view_tree_lifecycle_owner, lifecycleOwner)
       val detacher = WindowAttachment.dispatchAttach(composeView);
 
         ViewHelpers.setupView(composeView)
