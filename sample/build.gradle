@@ -27,6 +27,7 @@ buildscript {
     classpath 'com.android.tools.build:gradle:8.9.1'
     classpath plugs.screenshot
     classpath plugs.kotlin
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
   }
 }
 
@@ -39,6 +40,7 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
@@ -53,7 +55,7 @@ android {
     targetSdkVersion versions.targetSdk
     versionCode 1
     versionName "1.0"
-    testInstrumentationRunner "com.facebook.testing.screenshot.sample.ScreenshotTestRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments clearPackageData: 'true'
   }
   compileOptions {
@@ -105,6 +107,7 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
     // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui'
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
