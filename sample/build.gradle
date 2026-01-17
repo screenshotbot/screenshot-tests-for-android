@@ -27,6 +27,7 @@ buildscript {
     classpath 'com.android.tools.build:gradle:8.9.1'
     classpath plugs.screenshot
     classpath plugs.kotlin
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
   }
 }
 
@@ -39,6 +40,7 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
@@ -53,7 +55,7 @@ android {
     targetSdkVersion versions.targetSdk
     versionCode 1
     versionName "1.0"
-    testInstrumentationRunner "com.facebook.testing.screenshot.sample.ScreenshotTestRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments clearPackageData: 'true'
   }
   compileOptions {
@@ -65,18 +67,17 @@ android {
   }
   testOptions {
     // execution 'ANDROIDX_TEST_ORCHESTRATOR'
-    }
+  }
 
-    buildFeatures {
-        compose true
-    }
+  buildFeatures {
+    compose true
+  }
 }
 
 dependencies {
-  implementation deps.kotlinStdlib
-
   implementation deps.supportAppCompat
   implementation deps.supportDesign
+  implementation 'androidx.lifecycle:lifecycle-runtime-testing:2.10.0'
 
   androidTestImplementation "io.screenshotbot.screenshot-tests-for-android:core:1.0.0"
 
@@ -87,39 +88,45 @@ dependencies {
     exclude group: 'com.android.support', module: 'support-annotations'
     exclude group: 'com.google.code.findbugs', module: 'jsr305'
   }
-    androidTestImplementation deps.androidTestRules
+  androidTestImplementation deps.androidTestRules
 
-    def composeBom = platform('androidx.compose:compose-bom:2025.12.00')
-    implementation composeBom
-    androidTestImplementation composeBom
+  def composeBom = platform('androidx.compose:compose-bom:2026.01.00')
+  implementation composeBom
+  androidTestImplementation composeBom
 
-    // Choose one of the following:
-    // Material Design 3
-    implementation 'androidx.compose.material3:material3'
+  // Choose one of the following:
+  // Material Design 3
+  implementation 'androidx.compose.material3:material3'
+  implementation 'androidx.compose.ui:ui'
+  implementation 'androidx.compose.foundation:foundation'
 
-    // Android Studio Preview support
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
+  implementation "androidx.compose.foundation:foundation"
+  implementation "androidx.compose.foundation:foundation-layout"
 
-    // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+  // Android Studio Preview support
+  implementation 'androidx.compose.ui:ui-tooling-preview'
+  debugImplementation 'androidx.compose.ui:ui-tooling'
 
-    // Optional - Add window size utils
-    implementation 'androidx.compose.material3.adaptive:adaptive'
+  // UI Tests
+  androidTestImplementation 'androidx.compose.ui:ui'
+  androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+  debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    // Optional - Integration with activities
-    implementation 'androidx.activity:activity-compose:1.11.0'
-    // Optional - Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5'
-    // Optional - Integration with LiveData
-    implementation 'androidx.compose.runtime:runtime-livedata'
-    // Optional - Integration with RxJava
-    implementation 'androidx.compose.runtime:runtime-rxjava2'
+  // Optional - Add window size utils
+  implementation 'androidx.compose.material3.adaptive:adaptive'
+
+  // Optional - Integration with activities
+  implementation 'androidx.activity:activity-compose:1.11.0'
+  // Optional - Integration with ViewModels
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5'
+  // Optional - Integration with LiveData
+  implementation 'androidx.compose.runtime:runtime-livedata'
+  // Optional - Integration with RxJava
+  implementation 'androidx.compose.runtime:runtime-rxjava2'
 }
 
 screenshots {
-    multipleDevices true
-    failureDir "failureScreenshots"
-    pythonExecutable 'python3'
+  multipleDevices true
+  failureDir "failureScreenshots"
+  pythonExecutable 'python3'
 }
