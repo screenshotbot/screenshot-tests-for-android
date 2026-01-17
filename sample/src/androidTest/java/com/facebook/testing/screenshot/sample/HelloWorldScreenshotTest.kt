@@ -60,6 +60,7 @@ class HelloWorldScreenshotTest {
         }
 
       val lifecycleOwner = TestLifecycleOwner()
+      lifecycleOwner.lifecycle.currentState = Lifecycle.State.INITIALIZED;
       composeView.setTag(androidx.lifecycle.runtime.R.id.view_tree_lifecycle_owner, lifecycleOwner)
 
       val savedStateRegistryOwner = TestSavedStateRegistryOwner(lifecycleOwner);
