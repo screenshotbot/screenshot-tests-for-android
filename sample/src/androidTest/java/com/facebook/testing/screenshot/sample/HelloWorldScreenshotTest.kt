@@ -73,6 +73,8 @@ class HelloWorldScreenshotTest {
             .setExactHeightDp(200)
             .layout()
 
+      lifecycleOwner.lifecycle.currentState = Lifecycle.State.STARTED;
+
         Screenshot.snap(composeView).record()
       detacher.detach();
     }
