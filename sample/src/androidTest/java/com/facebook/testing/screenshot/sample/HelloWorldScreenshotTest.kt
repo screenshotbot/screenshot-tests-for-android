@@ -31,20 +31,20 @@ import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.WindowAttachment
 import org.junit.Test
 
-class FakeLifecycle(override val currentState: State) : Lifecycle() {
-  override fun addObserver(observer: LifecycleObserver) {
-  }
+import androidx.lifecycle.testing.TestLifecycleOwner
+import androidx.savedstate.SavedStateRegistryController
 
-  override fun removeObserver(observer: LifecycleObserver) {
-  }
+class TestSavedStateRegistryOwner(val testLifecycleOwner: LifecycleOwner) : SavedStateRegistryOwner {
+    private val controller = SavedStateRegistryController.create(this)
+
+    override val lifecycle = testLifecycleOwner.lifecycle
+    override val savedStateRegistry: SavedStateRegistry = controller.savedStateRegistry
+
+    init {
+        controller.performRestore(null)
+    }
+
 }
-class FakeLifecycleOwner(override val lifecycle: Lifecycle,
-                         override val savedStateRegistry: SavedStateRegistry
-) : LifecycleOwner, SavedStateRegistryOwner {
-
-}
-
-
 
 class HelloWorldScreenshotTest {
     @Test
@@ -59,17 +59,12 @@ class HelloWorldScreenshotTest {
             }
         }
 
-      val klassSavedStateRegistry = Class.forName("androidx.savedstate.SavedStateRegistry");
-      val cons = klassSavedStateRegistry.getDeclaredConstructor()
-      cons.isAccessible = true
-      val registry = cons.newInstance() as SavedStateRegistry
-
-
-      val lifecycleOwner = FakeLifecycleOwner(FakeLifecycle(Lifecycle.State.CREATED),
-        registry)
+      val lifecycleOwner = TestLifecycleOwner()
       composeView.setTag(androidx.lifecycle.runtime.R.id.view_tree_lifecycle_owner, lifecycleOwner)
 
-      composeView.setTag(androidx.savedstate.R.id.view_tree_saved_state_registry_owner, lifecycleOwner);
+      val savedStateRegistryOwner = TestSavedStateRegistryOwner(lifecycleOwner);
+
+      composeView.setTag(androidx.savedstate.R.id.view_tree_saved_state_registry_owner, savedStateRegistryOwner);
       val detacher = WindowAttachment.dispatchAttach(composeView);
 
         ViewHelpers.setupView(composeView)
