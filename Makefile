@@ -56,7 +56,9 @@ integration-test-impl: install-eaase
 	echo Running the sample tests now
 	cd ~/workspace && $(EAASE) --api-level 30 -- bash -c "make settings && ./gradlew :sample:recordDebugAndroidTestScreenshotTest && ./gradlew :sample:verifyDebugAndroidTestScreenshotTest"
 	cd ~/workspace && curl https://screenshotbot.io/recorder.sh | sh
-	cd ~/workspace && ~/screenshotbot/recorder --directory ~/workspace/sample/screenshots/API_30* --channel screenshot-tests-for-android-sample-android-30
+
+    # ~/workspace will have the incorrect git repo
+	~/screenshotbot/recorder --directory ~/workspace/sample/screenshots/API_30* --channel screenshot-tests-for-android-sample-android-30
 
 integration-tests:
 		docker run  --rm -e EAASE_API_TOKEN=$$EAASE_API_TOKEN  \
