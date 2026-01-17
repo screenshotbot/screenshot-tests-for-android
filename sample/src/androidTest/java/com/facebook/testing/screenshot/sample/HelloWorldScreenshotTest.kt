@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.annotation.UiThreadTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.facebook.testing.screenshot.Screenshot
@@ -36,9 +38,13 @@ class FakeLifecycle(override val currentState: State) : Lifecycle() {
   override fun removeObserver(observer: LifecycleObserver) {
   }
 }
-class FakeLifecycleOwner(override val lifecycle: Lifecycle) : LifecycleOwner {
+class FakeLifecycleOwner(override val lifecycle: Lifecycle,
+                         override val savedStateRegistry: SavedStateRegistry
+) : LifecycleOwner, SavedStateRegistryOwner {
 
 }
+
+
 
 class HelloWorldScreenshotTest {
     @Test
@@ -53,8 +59,17 @@ class HelloWorldScreenshotTest {
             }
         }
 
-      val lifecycleOwner = FakeLifecycleOwner(FakeLifecycle(Lifecycle.State.CREATED))
+      val klassSavedStateRegistry = Class.forName("androidx.savedstate.SavedStateRegistry");
+      val cons = klassSavedStateRegistry.getDeclaredConstructor()
+      cons.isAccessible = true
+      val registry = cons.newInstance() as SavedStateRegistry
+
+
+      val lifecycleOwner = FakeLifecycleOwner(FakeLifecycle(Lifecycle.State.CREATED),
+        registry)
       composeView.setTag(androidx.lifecycle.runtime.R.id.view_tree_lifecycle_owner, lifecycleOwner)
+
+      composeView.setTag(androidx.savedstate.R.id.view_tree_saved_state_registry_owner, lifecycleOwner);
       val detacher = WindowAttachment.dispatchAttach(composeView);
 
         ViewHelpers.setupView(composeView)
