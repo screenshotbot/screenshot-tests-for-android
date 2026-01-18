@@ -18,10 +18,12 @@ package com.facebook.testing.screenshot.sample
 
 import android.widget.FrameLayout
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.runtime.R
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.annotation.UiThreadTest
@@ -51,18 +53,22 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testHelloWorld() {
+    performScreenshot {
+      MaterialTheme {
+        HelloWorld()
+      }
+    }
+  }
+
+  private fun performScreenshot(composable: @Composable () -> Unit) {
     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     val composeView = ComposeView(targetContext).apply {
-      setContent {
-        MaterialTheme {
-          HelloWorld()
-        }
-      }
+      setContent(composable)
     }
 
     val lifecycleOwner = TestLifecycleOwner()
     lifecycleOwner.lifecycle.currentState = Lifecycle.State.INITIALIZED;
-    composeView.setTag(androidx.lifecycle.runtime.R.id.view_tree_lifecycle_owner, lifecycleOwner)
+    composeView.setTag(R.id.view_tree_lifecycle_owner, lifecycleOwner)
 
     val savedStateRegistryOwner = TestSavedStateRegistryOwner(lifecycleOwner);
 
