@@ -16,6 +16,9 @@ plugins {
 }
 
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'com.vanniktech.maven.publish'
+
+group = GROUP
 
 android {
   namespace 'com.facebook.testing.screenshot.compose'
@@ -68,4 +71,55 @@ dependencies {
 
   androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
   debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+
+// Maven Central publishing configuration
+mavenPublishing {
+  // Only configure Maven Central publishing and signing for release builds
+  // For local builds (CI, development), skip this to avoid signing requirements
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    publishToMavenCentral("CENTRAL_PORTAL")
+    signAllPublications()
+  }
+
+  coordinates(GROUP, POM_ARTIFACT_ID, VERSION_NAME)
+
+  // Configure to publish debug variant for test libraries
+  configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("debug", true, true))
+
+  pom {
+    name = POM_NAME
+    description = POM_DESCRIPTION
+    url = POM_URL
+
+    licenses {
+      license {
+        name = POM_LICENCE_NAME
+        url = POM_LICENCE_URL
+        distribution = POM_LICENCE_DIST
+      }
+    }
+
+    developers {
+      developer {
+        id = POM_DEVELOPER_ID
+        name = POM_DEVELOPER_NAME
+      }
+    }
+
+    scm {
+      connection = POM_SCM_CONNECTION
+      developerConnection = POM_SCM_DEV_CONNECTION
+      url = POM_SCM_URL
+    }
+  }
+}
+
+// Configure GPG signing
+afterEvaluate {
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    signing {
+      useGpgCmd()
+    }
+  }
 }
