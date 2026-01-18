@@ -17,26 +17,8 @@
 package com.facebook.testing.screenshot.sample
 
 import androidx.compose.material3.MaterialTheme
-import androidx.lifecycle.LifecycleOwner
-import androidx.savedstate.SavedStateRegistry
-import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.annotation.UiThreadTest
 import org.junit.Test
-
-import androidx.savedstate.SavedStateRegistryController
-
-class TestSavedStateRegistryOwner(val testLifecycleOwner: LifecycleOwner) :
-  SavedStateRegistryOwner {
-  private val controller = SavedStateRegistryController.create(this)
-
-  override val lifecycle = testLifecycleOwner.lifecycle
-  override val savedStateRegistry: SavedStateRegistry = controller.savedStateRegistry
-
-  init {
-    controller.performRestore(null)
-  }
-
-}
 
 class HelloWorldScreenshotTest {
   @Test

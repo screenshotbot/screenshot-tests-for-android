@@ -3,8 +3,12 @@ package com.facebook.testing.screenshot.sample
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.runtime.R
 import androidx.lifecycle.testing.TestLifecycleOwner
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryController
+import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
@@ -37,4 +41,17 @@ fun performScreenshot(widthDp: Int, heightDp: Int, composable: @Composable () ->
 
   Screenshot.snap(composeView).record()
   detacher.detach();
+}
+
+class TestSavedStateRegistryOwner(val testLifecycleOwner: LifecycleOwner) :
+  SavedStateRegistryOwner {
+  private val controller = SavedStateRegistryController.Companion.create(this)
+
+  override val lifecycle = testLifecycleOwner.lifecycle
+  override val savedStateRegistry: SavedStateRegistry = controller.savedStateRegistry
+
+  init {
+    controller.performRestore(null)
+  }
+
 }
