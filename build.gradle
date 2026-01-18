@@ -30,6 +30,7 @@ buildscript {
     classpath plugs.versions
     classpath plugs.publish
     classpath plugs.dokka
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.0'
   }
 }
 
