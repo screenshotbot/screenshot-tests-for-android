@@ -102,19 +102,24 @@ open class PullScreenshotsTask : ScreenshotTask() {
     _doClean(outputDirForRecording);
     _record(screenshots, File(reportOutputDir), outputDirForRecording)
 
-    
-    val failureBaseDir = File(project.projectDir, extension.failureDir)
-    val failureOutputDir = if (extension.failureDir != null) {
-      directoryWithDeviceName(failureBaseDir)
-      } else {
-        null
-      }
+
+    val failureOutputDir = computeFailureOutputDir()
 
     if (verify) {
       verifyHelper(screenshots, verifyTempDir, expectedOutputDir, failureOutputDir)
     }
 
     printLinkToHtml(reportOutputDir);
+  }
+
+  private fun computeFailureOutputDir(): File? {
+    val failureOutputDir = if (extension.failureDir != null) {
+      val failureBaseDir = File(project.projectDir, extension.failureDir)
+      directoryWithDeviceName(failureBaseDir)
+    } else {
+      null
+    }
+    return failureOutputDir
   }
 
   private fun directoryWithDeviceName(recordDir: File): File = if (extension.multipleDevices) {
