@@ -53,14 +53,14 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testHelloWorld() {
-    performScreenshot {
+    performScreenshot(300, 200) {
       MaterialTheme {
         HelloWorld()
       }
     }
   }
 
-  private fun performScreenshot(composable: @Composable () -> Unit) {
+  private fun performScreenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     val composeView = ComposeView(targetContext).apply {
       setContent(composable)
@@ -79,8 +79,8 @@ class HelloWorldScreenshotTest {
     val detacher = WindowAttachment.dispatchAttach(composeView);
 
     ViewHelpers.setupView(composeView)
-      .setExactWidthDp(300)
-      .setExactHeightDp(200)
+      .setExactWidthDp(widthDp)
+      .setExactHeightDp(heightDp)
       .layout()
 
     lifecycleOwner.lifecycle.currentState = Lifecycle.State.STARTED;
