@@ -31,7 +31,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -84,10 +83,8 @@ class HelloWorldScreenshotTest {
             TextButton(onClick = {}) {
               Text("Text Button")
             }
-            Button(onClick = {}) {
-              Icon(Icons.Filled.Favorite, contentDescription = null)
-              Spacer(Modifier.width(8.dp))
-              Text("With Icon")
+            Button(onClick = {}, enabled = false) {
+              Text("Disabled Button")
             }
           }
         }
@@ -122,10 +119,11 @@ class HelloWorldScreenshotTest {
               placeholder = { Text("Enter text here") }
             )
             OutlinedTextField(
-              value = "Search query",
+              value = "With error",
               onValueChange = {},
-              label = { Text("With Icon") },
-              leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) }
+              label = { Text("Error State") },
+              isError = true,
+              supportingText = { Text("This field has an error") }
             )
           }
         }
