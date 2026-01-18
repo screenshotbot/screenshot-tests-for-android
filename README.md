@@ -40,7 +40,7 @@ In your project's `build.gradle`:
 ```groovy
 buildscript {
     dependencies {
-        classpath 'io.screenshotbot.screenshot-tests-for-android:plugin:1.0.0'
+        classpath 'io.screenshotbot.screenshot-tests-for-android:plugin:1.0.1'
     }
 }
 ```
@@ -50,7 +50,7 @@ In your app module's `build.gradle`:
 apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
 
 dependencies {
-    androidTestImplementation 'io.screenshotbot.screenshot-tests-for-android:core:1.0.0'
+    androidTestImplementation 'io.screenshotbot.screenshot-tests-for-android:core:1.0.1'
 }
 ```
 
