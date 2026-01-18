@@ -1,3 +1,7 @@
+1.0.1 (Jan 17 2026)
+------
+- Fix crash when failureDir is not provided
+
 1.0.0 (Jan 16 2026)
 ------
 - Support for scoped storage, this makes us officially support API 
