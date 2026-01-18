@@ -1,8 +1,21 @@
+buildscript {
+  apply from: rootProject.file('versions.gradle')
+  repositories {
+    mavenCentral()
+    google()
+  }
+
+  dependencies {
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
+  }
+}
+
 plugins {
   id 'com.android.library'
   id 'org.jetbrains.kotlin.android'
-  id 'org.jetbrains.kotlin.plugin.compose'
 }
+
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
   namespace 'com.facebook.testing.screenshot.compose'
