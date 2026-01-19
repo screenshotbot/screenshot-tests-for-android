@@ -8,11 +8,12 @@ EAASE=~/eaase/eaase run --verbose
 	true
 
 settings: .PHONY
-	$(ADB) shell getprop
+	true
 
 android-impl: .PHONY
 	$(MAKE) settings
-	./gradlew :core:connectedDebugAndroidTest :compose:connectedDebugAndroidTest
+	./gradlew :core:connectedDebugAndroidTest
+	./gradlew :compose:connectedDebugAndroidTest
 
 android-28: .PHONY
 	$(EAASE) --api-level 28 -- $(MAKE) android-impl
