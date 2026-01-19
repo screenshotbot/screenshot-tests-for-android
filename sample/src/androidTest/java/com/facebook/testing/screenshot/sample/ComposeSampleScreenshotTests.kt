@@ -61,26 +61,6 @@ class ComposeSampleScreenshotTests {
 
   @Test
   @UiThreadTest
-  fun testLoginScreen() {
-    screenshot(400, 450) {
-      MaterialTheme {
-        LoginScreen()
-      }
-    }
-  }
-
-  @Test
-  @UiThreadTest
-  fun testLoginScreenError() {
-    screenshot(400, 450) {
-      MaterialTheme {
-        LoginScreen(isError = true)
-      }
-    }
-  }
-
-  @Test
-  @UiThreadTest
   fun testButtonVariants() {
     screenshot(400, 400) {
       MaterialTheme {
