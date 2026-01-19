@@ -1,0 +1,125 @@
+buildscript {
+  apply from: rootProject.file('versions.gradle')
+  repositories {
+    mavenCentral()
+    google()
+  }
+
+  dependencies {
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
+  }
+}
+
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+}
+
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'com.vanniktech.maven.publish'
+
+group = GROUP
+
+android {
+  namespace 'com.facebook.testing.screenshot.compose'
+  compileSdk 36
+
+  defaultConfig {
+    minSdk 28
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+  buildFeatures {
+    compose true
+  }
+}
+
+dependencies {
+  implementation project(':core')
+  implementation 'androidx.core:core-ktx:1.10.1'
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'com.google.android.material:material:1.10.0'
+  testImplementation 'junit:junit:4.13.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+  def composeBom = platform('androidx.compose:compose-bom:2026.01.00')
+  implementation composeBom
+  androidTestImplementation composeBom
+
+  implementation 'androidx.compose.ui:ui'
+  implementation 'androidx.compose.foundation:foundation'
+  implementation 'androidx.compose.foundation:foundation-layout'
+
+  implementation 'androidx.lifecycle:lifecycle-runtime-testing:2.10.0'
+  implementation 'androidx.test:core:1.6.1'
+
+  androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+  debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+
+// Maven Central publishing configuration
+mavenPublishing {
+  // Only configure Maven Central publishing and signing for release builds
+  // For local builds (CI, development), skip this to avoid signing requirements
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    publishToMavenCentral("CENTRAL_PORTAL")
+    signAllPublications()
+  }
+
+  coordinates(GROUP, POM_ARTIFACT_ID, VERSION_NAME)
+
+  // Configure to publish debug variant for test libraries
+  configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("debug", true, true))
+
+  pom {
+    name = POM_NAME
+    description = POM_DESCRIPTION
+    url = POM_URL
+
+    licenses {
+      license {
+        name = POM_LICENCE_NAME
+        url = POM_LICENCE_URL
+        distribution = POM_LICENCE_DIST
+      }
+    }
+
+    developers {
+      developer {
+        id = POM_DEVELOPER_ID
+        name = POM_DEVELOPER_NAME
+      }
+    }
+
+    scm {
+      connection = POM_SCM_CONNECTION
+      developerConnection = POM_SCM_DEV_CONNECTION
+      url = POM_SCM_URL
+    }
+  }
+}
+
+// Configure GPG signing
+afterEvaluate {
+  if (project.hasProperty('signing.gnupg.keyName')) {
+    signing {
+      useGpgCmd()
+    }
+  }
+}

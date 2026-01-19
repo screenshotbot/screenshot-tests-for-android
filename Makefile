@@ -12,7 +12,7 @@ settings: .PHONY
 
 android-impl: .PHONY
 	$(MAKE) settings
-	./gradlew :core:connectedDebugAndroidTest
+	./gradlew :core:connectedDebugAndroidTest :compose:connectedDebugAndroidTest
 
 android-28: .PHONY
 	$(EAASE) --api-level 28 -- $(MAKE) android-impl
@@ -53,6 +53,7 @@ integration-test-impl: install-eaase
 	cd ~/workspace && true
 	cd ~/workspace && ./gradlew :plugin:publishToMavenLocal 
 	cd ~/workspace && ./gradlew :core:publishToMavenLocal
+	cd ~/workspace && ./gradlew :compose:publishToMavenLocal
 	echo Running the sample tests now
 	cd ~/workspace && $(EAASE) --api-level 30 -- bash -c "make settings && ./gradlew :sample:recordDebugAndroidTestScreenshotTest && ./gradlew :sample:verifyDebugAndroidTestScreenshotTest"
 	cd ~/workspace && curl https://screenshotbot.io/recorder.sh | sh

@@ -46,12 +46,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.test.annotation.UiThreadTest
 import org.junit.Test
+import com.facebook.testing.screenshot.compose.screenshot
 
 class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testHelloWorld() {
-    performScreenshot(300, 200) {
+    screenshot(300, 200) {
       MaterialTheme {
         HelloWorld()
       }
@@ -61,7 +62,7 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testButtonVariants() {
-    performScreenshot(400, 400) {
+    screenshot(400, 400) {
       MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           Column(
@@ -95,7 +96,7 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testTextFieldVariants() {
-    performScreenshot(400, 350) {
+    screenshot(400, 350) {
       MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           Column(
@@ -134,7 +135,7 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testCardWithContent() {
-    performScreenshot(400, 450) {
+    screenshot(400, 450) {
       MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           Column(
@@ -174,7 +175,7 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testCheckboxAndSwitch() {
-    performScreenshot(350, 350) {
+    screenshot(350, 350) {
       MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           Column(
@@ -218,7 +219,7 @@ class HelloWorldScreenshotTest {
   @Test
   @UiThreadTest
   fun testProgressAndSlider() {
-    performScreenshot(400, 350) {
+    screenshot(400, 350) {
       MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           Column(
