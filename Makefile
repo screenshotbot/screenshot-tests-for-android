@@ -8,7 +8,7 @@ EAASE=~/eaase/eaase run --verbose
 	true
 
 settings: .PHONY
-	true
+	$(ADB) shell getprop
 
 android-impl: .PHONY
 	$(MAKE) settings
