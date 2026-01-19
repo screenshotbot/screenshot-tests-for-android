@@ -15,6 +15,14 @@ import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.WindowAttachment
 
 fun screenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
+  screenshotImpl({vh: ViewHelpers ->
+    vh.setExactWidthDp(widthDp)
+      .setExactHeightDp(heightDp)
+      .layout()
+  }, composable)
+}
+
+private fun screenshotImpl(setup: (vh: ViewHelpers) -> Unit, composable: @Composable () -> Unit) {
   val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
   val composeView = ComposeView(targetContext).apply {
     setContent(composable)
@@ -32,10 +40,9 @@ fun screenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) 
   );
   val detacher = WindowAttachment.dispatchAttach(composeView);
 
-  ViewHelpers.setupView(composeView)
-    .setExactWidthDp(widthDp)
-    .setExactHeightDp(heightDp)
-    .layout()
+  setup.invoke(ViewHelpers.setupView(composeView))
+
+
 
   lifecycleOwner.lifecycle.currentState = Lifecycle.State.STARTED;
 
