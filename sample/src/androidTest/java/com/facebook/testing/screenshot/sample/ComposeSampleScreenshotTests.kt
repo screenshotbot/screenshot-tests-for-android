@@ -48,7 +48,7 @@ import androidx.test.annotation.UiThreadTest
 import org.junit.Test
 import com.facebook.testing.screenshot.compose.screenshot
 
-class HelloWorldScreenshotTest {
+class ComposeSampleScreenshotTests {
   @Test
   @UiThreadTest
   fun testHelloWorld() {
