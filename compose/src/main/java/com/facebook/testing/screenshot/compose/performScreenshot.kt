@@ -1,4 +1,4 @@
-package com.facebook.testing.screenshot.sample
+package com.facebook.testing.screenshot.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
@@ -14,7 +14,7 @@ import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.WindowAttachment
 
-fun performScreenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
+fun screenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
   val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
   val composeView = ComposeView(targetContext).apply {
     setContent(composable)
