@@ -25,4 +25,19 @@ class HelloWorldScreenshotTest {
       }
     }
   }
+
+  @Test
+  @UiThreadTest
+  fun testHelloWorldWithDefaultDimensions() {
+    screenshot {
+      Box(
+        modifier = Modifier
+          .fillMaxSize()
+          .background(Color.White),
+        contentAlignment = Alignment.Center
+      ) {
+        BasicText("Hello, World!")
+      }
+    }
+  }
 }
