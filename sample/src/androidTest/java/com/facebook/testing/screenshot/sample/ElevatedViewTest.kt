@@ -16,6 +16,7 @@
 
 package com.facebook.testing.screenshot.sample
 
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import androidx.test.platform.app.InstrumentationRegistry
 import com.facebook.testing.screenshot.Screenshot
@@ -26,7 +27,11 @@ class ElevatedViewTest {
   @Test
   fun testElevatedComponents() {
     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-    val inflater = LayoutInflater.from(targetContext)
+    val themedContext = ContextThemeWrapper(
+      targetContext,
+      com.google.android.material.R.style.Theme_MaterialComponents_Light
+    )
+    val inflater = LayoutInflater.from(themedContext)
     val view = inflater.inflate(R.layout.elevated_components, null, false)
 
     ViewHelpers.setupView(view).setExactWidthDp(320).layout()
