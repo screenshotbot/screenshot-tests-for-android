@@ -1,7 +1,7 @@
 package com.facebook.testing.screenshot.compose
 
 import android.content.Context
-import android.graphics.Point
+import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.compose.runtime.Composable
@@ -23,8 +23,7 @@ fun screenshot(composable: @Composable () -> Unit) {
   val windowManager = InstrumentationRegistry.getInstrumentation()
     .targetContext
     .getSystemService(Context.WINDOW_SERVICE) as WindowManager
-  val width = windowManager.currentWindowMetrics.bounds.width()
-  val height = windowManager.currentWindowMetrics.bounds.height()
+  val (width, height) = getDisplayDimensions(windowManager)
 
   if (width <= 0) {
     throw RuntimeException("Could not figure out screen width")
@@ -34,6 +33,16 @@ fun screenshot(composable: @Composable () -> Unit) {
       .setExactHeightPx(height)
       .layout()
   }, composable);
+}
+
+private fun getDisplayDimensions(windowManager: WindowManager): Pair<Int, Int> {
+  if (Build.VERSION.SDK_INT >= 30) {
+    val width = windowManager.currentWindowMetrics.bounds.width()
+    val height = windowManager.currentWindowMetrics.bounds.height()
+    return Pair(width, height)
+  } else {
+    return Pair(1080, 1920)
+  }
 }
 
 fun screenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
