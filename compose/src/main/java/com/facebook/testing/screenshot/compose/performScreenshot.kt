@@ -1,5 +1,9 @@
 package com.facebook.testing.screenshot.compose
 
+import android.content.Context
+import android.graphics.Point
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
@@ -13,6 +17,19 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.WindowAttachment
+
+fun screenshot(composable: @Composable () -> Unit) {
+  val displayMetrics = DisplayMetrics()
+  val display = InstrumentationRegistry.getInstrumentation().targetContext.display
+  val size = Point()
+
+  // Technically deprecated, but I think it's appropriate for this use case
+  display.getSize(size)
+
+  screenshotImpl({ vh: ViewHelpers ->
+    vh.setExactWidthPx(size.x)
+  }, composable);
+}
 
 fun screenshot(widthDp: Int, heightDp: Int, composable: @Composable () -> Unit) {
   screenshotImpl({vh: ViewHelpers ->
