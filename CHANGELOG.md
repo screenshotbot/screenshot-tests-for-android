@@ -1,3 +1,7 @@
+1.1.0 (Jan 19 2026)
+------
+- Added a new Compose API
+
 1.0.1 (Jan 17 2026)
 ------
 - Fix crash when failureDir is not provided
