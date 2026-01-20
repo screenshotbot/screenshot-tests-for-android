@@ -25,7 +25,7 @@ class LoginScreenScreenshotTests {
   @Test
   @UiThreadTest
   fun testLoginScreen() {
-    screenshot(400, 450) {
+    screenshot {
       MaterialTheme {
         LoginScreen()
       }
@@ -35,7 +35,7 @@ class LoginScreenScreenshotTests {
   @Test
   @UiThreadTest
   fun testLoginScreenError() {
-    screenshot(400, 450) {
+    screenshot {
       MaterialTheme {
         LoginScreen(isError = true)
       }
