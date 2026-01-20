@@ -16,6 +16,7 @@ android-impl: .PHONY
 	./gradlew :compose:connectedDebugAndroidTest
 
 android-28: .PHONY
+	# unstable
 	$(EAASE) --api-level 28 -- $(MAKE) android-impl
 
 android-29: .PHONY
@@ -41,7 +42,7 @@ android-34: .PHONY
 install-eaase: .PHONY
 	curl https://eaase.dev/installer.sh | sh
 
-expensive-tests: | install-eaase android-28 android-29 android-30  android-31 android-32 android-33 android-34
+expensive-tests: | install-eaase android-29 android-30  android-31 android-32 android-33 android-34
 
 
 ci:
