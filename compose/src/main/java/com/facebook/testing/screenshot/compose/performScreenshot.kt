@@ -20,14 +20,19 @@ import com.facebook.testing.screenshot.WindowAttachment
 
 fun screenshot(composable: @Composable () -> Unit) {
   val displayMetrics = DisplayMetrics()
-  val display = InstrumentationRegistry.getInstrumentation().targetContext.display
-  val size = Point()
+  val windowManager = InstrumentationRegistry.getInstrumentation()
+    .targetContext
+    .getSystemService(Context.WINDOW_SERVICE) as WindowManager
+  val width = windowManager.currentWindowMetrics.bounds.width()
+  val height = windowManager.currentWindowMetrics.bounds.height()
 
-  // Technically deprecated, but I think it's appropriate for this use case
-  display.getSize(size)
-
+  if (width <= 0) {
+    throw RuntimeException("Could not figure out screen width")
+  }
   screenshotImpl({ vh: ViewHelpers ->
-    vh.setExactWidthPx(size.x)
+    vh.setExactWidthPx(width)
+      .setExactHeightPx(height)
+      .layout()
   }, composable);
 }
 
