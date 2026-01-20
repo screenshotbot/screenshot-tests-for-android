@@ -51,6 +51,8 @@ apply plugin: 'io.screenshotbot.screenshot-tests-for-android'
 
 dependencies {
     androidTestImplementation 'io.screenshotbot.screenshot-tests-for-android:core:1.1.0'
+    // For Compose support
+    androidTestImplementation 'io.screenshotbot.screenshot-tests-for-android:compose:1.1.0'
 }
 ```
 
