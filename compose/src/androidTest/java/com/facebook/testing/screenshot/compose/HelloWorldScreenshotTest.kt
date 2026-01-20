@@ -28,7 +28,7 @@ class HelloWorldScreenshotTest {
 
   @Test
   @UiThreadTest
-  fun testHelloWorld() {
+  fun testHelloWorldWithDefaultDimensions() {
     screenshot {
       Box(
         modifier = Modifier
