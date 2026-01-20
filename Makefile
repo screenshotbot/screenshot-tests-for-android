@@ -2,7 +2,7 @@
 ANDROID_SDK = $(or $(ANDROID_HOME),$(ANDROID_SDK_ROOT),$(ANDROID_SDK))
 ADB = $(ANDROID_SDK)/platform-tools/adb
 
-EAASE=~/eaase/eaase run --verbose
+EAASE=~/eaase/eaase run --verbose --logcat /tmp/logcat.txt
 
 .PHONY:
 	true
