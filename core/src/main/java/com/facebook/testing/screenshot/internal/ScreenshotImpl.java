@@ -16,15 +16,24 @@
 
 package com.facebook.testing.screenshot.internal;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.HardwareRenderer;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.RecordingCanvas;
+import android.graphics.RenderNode;
+import android.media.Image;
+import android.media.ImageReader;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Surface;
 import android.view.View;
 import com.facebook.infer.annotation.Nullsafe;
 import com.facebook.testing.screenshot.WindowAttachment;
@@ -36,6 +45,8 @@ import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+
 import javax.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -228,6 +239,50 @@ public class ScreenshotImpl {
 
     lazyInitBitmap();
 
+    if (Build.VERSION.SDK_INT < 29) {
+      drawTileViaSoftwareRendering(measuredView, left, top, right, bottom);
+    } else {
+      drawTileViaHardwareRendering(measuredView, left, top, right, bottom);
+    }
+    // NULLSAFE_FIXME[Parameter Not Nullable]
+    String tempName = mAlbum.writeBitmap(recordBuilder.getName(), i, j, mBitmap);
+    if (tempName == null) {
+      throw new NullPointerException();
+    }
+    recordBuilder.getTiling().setAt(left / mTileSize, top / mTileSize, tempName);
+  }
+
+  @TargetApi(29)
+  private void drawTileViaHardwareRendering(View measuredView, int left, int top, int right, int bottom) {
+    RenderNode renderNode = new RenderNode("capture");
+    renderNode.setPosition(left, top, right, bottom);
+    RecordingCanvas canvas = renderNode.beginRecording();
+    measuredView.draw(canvas);
+    renderNode.endRecording();
+
+    ImageReader imageReader = ImageReader.newInstance(
+        right - left,
+        bottom - top,
+        PixelFormat.RGBA_8888,
+        2
+    );
+
+    Surface surface = imageReader.getSurface();
+
+    HardwareRenderer render = new HardwareRenderer();
+    render.setSurface(surface);
+    render.setContentRoot(renderNode);
+
+    HardwareRenderer.FrameRenderRequest request = render.createRenderRequest();
+    request.setWaitForPresent(true);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    request.syncAndDraw();
+
+    Image image = imageReader.acquireNextImage();
+  }
+
+  private void drawTileViaSoftwareRendering(View measuredView, int left, int top, int right, int bottom) {
     if (mEnableBitmapReconfigure) {
       Preconditions.checkNotNull(mBitmap)
           .reconfigure(right - left, bottom - top, Bitmap.Config.ARGB_8888);
@@ -238,12 +293,6 @@ public class ScreenshotImpl {
 
     // NULLSAFE_FIXME[Parameter Not Nullable]
     drawClippedView(measuredView, left, top, mCanvas);
-    // NULLSAFE_FIXME[Parameter Not Nullable]
-    String tempName = mAlbum.writeBitmap(recordBuilder.getName(), i, j, mBitmap);
-    if (tempName == null) {
-      throw new NullPointerException();
-    }
-    recordBuilder.getTiling().setAt(left / mTileSize, top / mTileSize, tempName);
   }
 
   private void lazyInitBitmap() {
