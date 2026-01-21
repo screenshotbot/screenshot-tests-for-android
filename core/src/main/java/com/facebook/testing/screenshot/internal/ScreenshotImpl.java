@@ -297,7 +297,9 @@ public class ScreenshotImpl {
 
   @TargetApi(29)
   private void setupLightSource(HardwareRenderer renderer) {
-
+    // TODO: use correct parameters here. See the defaults suggested
+    // by HardwareRenderer
+    
     int deviceWidth = 720;
     // This defines where the "key light" (directional) comes from
     renderer.setLightSourceGeometry(
