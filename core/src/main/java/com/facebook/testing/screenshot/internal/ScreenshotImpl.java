@@ -275,11 +275,12 @@ public class ScreenshotImpl {
 
     Surface surface = imageReader.getSurface();
 
-    HardwareRenderer render = new HardwareRenderer();
-    render.setSurface(surface);
-    render.setContentRoot(renderNode);
+    renderer.setSurface(surface);
+    renderer.setContentRoot(renderNode);
 
-    HardwareRenderer.FrameRenderRequest request = render.createRenderRequest();
+    setupLightSource(renderer);
+
+    HardwareRenderer.FrameRenderRequest request = renderer.createRenderRequest();
     request.setWaitForPresent(true);
 
     CountDownLatch latch = new CountDownLatch(1);
@@ -288,11 +289,28 @@ public class ScreenshotImpl {
     Image image = imageReader.acquireNextImage();
     imageToBitmap(image, mBitmap);
     image.close();
-    render.destroy();
+    renderer.destroy();
     imageReader.close();
     surface.release();
   }
 
+  @TargetApi(29)
+  private void setupLightSource(HardwareRenderer renderer) {
+
+    int deviceWidth = 400;
+    // This defines where the "key light" (directional) comes from
+    renderer.setLightSourceGeometry(
+        deviceWidth / 2f,    // lightX - center of view
+        0,             // lightY - top of view (key light from above)
+        100f,          // lightZ - distance from surface
+        0.5f           // lightRadius - ambient light size
+    );
+
+    // Optional: Set ambient shadow color and spot shadow color
+    // These match Material Design defaults
+    renderer.setLightSourceAlpha(0.039f, 0.19f); // ambient alpha, spot alpha
+
+  }
   private void imageToBitmap(Image image, Bitmap bitmap) {
     Image.Plane[] planes = image.getPlanes();
     if (planes.length > 1) {
