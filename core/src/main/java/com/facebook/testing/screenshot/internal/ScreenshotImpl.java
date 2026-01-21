@@ -43,6 +43,7 @@ import com.facebook.testing.screenshot.layouthierarchy.AccessibilityUtil;
 import com.facebook.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
 import com.google.common.base.Preconditions;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -254,6 +255,9 @@ public class ScreenshotImpl {
 
   @TargetApi(29)
   private void drawTileViaHardwareRendering(View measuredView, int left, int top, int right, int bottom) {
+    mBitmap.setHeight(bottom -top);
+    mBitmap.setWidth(right - left);
+    
     RenderNode renderNode = new RenderNode("capture");
     renderNode.setPosition(left, top, right, bottom);
     RecordingCanvas canvas = renderNode.beginRecording();
@@ -280,6 +284,25 @@ public class ScreenshotImpl {
     request.syncAndDraw();
 
     Image image = imageReader.acquireNextImage();
+    imageToBitmap(image, mBitmap);
+    image.close();
+    render.destroy();
+    imageReader.close();
+    surface.release();
+  }
+
+  private void imageToBitmap(Image image, Bitmap bitmap) {
+    Image.Plane[] planes = image.getPlanes();
+    if (planes.length > 1) {
+      throw new RuntimeException("don't know how to handle multiple planes in Image");
+    }
+
+    ByteBuffer buffer = planes[0].getBuffer();
+    int pixelStride = planes[0].getPixelStride();
+    int rowStride = planes[0].getRowStride();
+    int rowPadding = rowStride - pixelStride * bitmap.getWidth();
+
+    bitmap.copyPixelsFromBuffer(buffer);
   }
 
   private void drawTileViaSoftwareRendering(View measuredView, int left, int top, int right, int bottom) {
