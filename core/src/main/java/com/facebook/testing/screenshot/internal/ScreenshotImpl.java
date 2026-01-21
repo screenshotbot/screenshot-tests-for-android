@@ -257,11 +257,13 @@ public class ScreenshotImpl {
   private void drawTileViaHardwareRendering(View measuredView, int left, int top, int right, int bottom) {
     mBitmap.setHeight(bottom -top);
     mBitmap.setWidth(right - left);
+
+    clearCanvas(mCanvas);
     
     RenderNode renderNode = new RenderNode("capture");
-    renderNode.setPosition(left, top, right, bottom);
+    renderNode.setPosition(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
     RecordingCanvas canvas = renderNode.beginRecording();
-    measuredView.draw(canvas);
+    drawClippedView(measuredView, left, top, canvas);
     renderNode.endRecording();
 
     ImageReader imageReader = ImageReader.newInstance(
