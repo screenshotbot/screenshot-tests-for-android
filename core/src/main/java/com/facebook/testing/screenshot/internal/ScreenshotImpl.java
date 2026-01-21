@@ -275,6 +275,7 @@ public class ScreenshotImpl {
 
     Surface surface = imageReader.getSurface();
 
+    HardwareRenderer renderer = new HardwareRenderer();
     renderer.setSurface(surface);
     renderer.setContentRoot(renderNode);
 
@@ -297,13 +298,13 @@ public class ScreenshotImpl {
   @TargetApi(29)
   private void setupLightSource(HardwareRenderer renderer) {
 
-    int deviceWidth = 400;
+    int deviceWidth = 720;
     // This defines where the "key light" (directional) comes from
     renderer.setLightSourceGeometry(
         deviceWidth / 2f,    // lightX - center of view
         0,             // lightY - top of view (key light from above)
-        100f,          // lightZ - distance from surface
-        0.5f           // lightRadius - ambient light size
+        1200f,          // lightZ - distance from surface
+        1600f           // lightRadius - ambient light size
     );
 
     // Optional: Set ambient shadow color and spot shadow color
