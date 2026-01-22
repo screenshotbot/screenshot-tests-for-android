@@ -149,6 +149,21 @@ public class ScreenshotImplTest {
     }
   }
 
+
+  @Test
+  public void testSimpleViewWithHardwareRendering() throws Throwable {
+    measureAndLayout(200, 200);
+
+    assertThat(mTextView.getMeasuredWidth()).isEqualTo(200);
+    assertThat(mTextView.getMeasuredHeight()).isEqualTo(200);
+
+    mScreenshot
+        .setIsHardwareRendering(true)
+        .snap(mTextView)
+        .setName("largeView")
+        .record();
+  }
+    
   @Test
   public void testLargeViewDoesntThrowWithCustomMax() throws Throwable {
     measureAndLayout(1440, 1000);
