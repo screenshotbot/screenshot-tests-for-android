@@ -81,6 +81,8 @@ public class ScreenshotImpl {
   @Nullable private Canvas mCanvas = null;
   private boolean mEnableBitmapReconfigure = true;
 
+  private boolean mIsHardwareRendering = false;
+
   ScreenshotImpl(Album album) {
     mAlbum = album;
   }
@@ -123,6 +125,11 @@ public class ScreenshotImpl {
    */
   public static boolean hasBeenCreated() {
     return sInstance != null;
+  }
+
+  public ScreenshotImpl setIsHardwareRendering(boolean enabled) {
+    mIsHardwareRendering = enabled;
+    return this;
   }
 
   // VisibleForTesting
@@ -240,7 +247,7 @@ public class ScreenshotImpl {
 
     lazyInitBitmap();
 
-    if (Build.VERSION.SDK_INT < 29) {
+    if (Build.VERSION.SDK_INT < 29 || !mIsHardwareRendering) {
       drawTileViaSoftwareRendering(measuredView, left, top, right, bottom);
     } else {
       drawTileViaHardwareRendering(measuredView, left, top, right, bottom);
