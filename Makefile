@@ -61,12 +61,13 @@ integration-test-impl: install-eaase
 	cd ~/workspace && curl https://screenshotbot.io/recorder.sh | sh
 
     # ~/workspace will have the incorrect git repo
-	~/screenshotbot/recorder --directory ~/workspace/sample/screenshots/API_30* --channel screenshot-tests-for-android-sample-android-30
+	~/screenshotbot/recorder --directory ~/workspace/sample/screenshots/API_30* --channel screenshot-tests-for-android-sample-android-30 --phabricator-diff-id $$DIFF_ID
 
 integration-tests:
 		docker run  --rm -e EAASE_API_TOKEN=$$EAASE_API_TOKEN  \
 	       -e SCREENSHOTBOT_API_KEY=$$SCREENSHOTBOT_API_KEY \
 	       -e SCREENSHOTBOT_API_SECRET=$$SCREENSHOTBOT_API_SECRET \
+		   -e DIFF_ID=$$DIFF_ID \
            -w /workspace-original \
            -v .:/workspace-original cimg/android:2026.01 \
 	       make integration-test-impl 
