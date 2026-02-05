@@ -116,7 +116,8 @@ public class AlbumImpl implements Album {
     String filename = getScreenshotFilenameInternal(tileName);
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, os);
-    mReportArtifactsManager.recordFile(filename, os.toByteArray());
+    byte[] pngBytes = PngMetadataStripper.strip(os.toByteArray());
+    mReportArtifactsManager.recordFile(filename, pngBytes);
     return tileName;
   }
 
