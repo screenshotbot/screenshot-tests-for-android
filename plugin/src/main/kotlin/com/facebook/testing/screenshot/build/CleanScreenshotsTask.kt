@@ -17,9 +17,13 @@
 package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.TestVariant
+import javax.inject.Inject
+import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.tasks.TaskAction
 
-open class CleanScreenshotsTask : ScreenshotTask() {
+open class CleanScreenshotsTask @Inject constructor(
+  private val fileSystemOperations: FileSystemOperations
+) : ScreenshotTask() {
   companion object {
     fun taskName(variant: TestVariant) = "clean${variant.name.capitalize()}Screenshots"
   }
@@ -31,7 +35,7 @@ open class CleanScreenshotsTask : ScreenshotTask() {
 
   @TaskAction
   fun cleanScreenshots() {
-    val outputDir = PullScreenshotsTask.getReportDir(project, variant)
-    project.delete(outputDir)
+    val outputDir = PullScreenshotsTask.getReportDir(buildDirectory, variantName)
+    fileSystemOperations.delete { it.delete(outputDir) }
   }
 }

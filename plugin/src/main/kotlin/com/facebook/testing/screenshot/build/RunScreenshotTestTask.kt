@@ -17,8 +17,12 @@
 package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.TestVariant
+import javax.inject.Inject
+import org.gradle.process.ExecOperations
 
-open class RunScreenshotTestTask : PullScreenshotsTask() {
+open class RunScreenshotTestTask @Inject constructor(
+  execOperations: ExecOperations
+) : PullScreenshotsTask(execOperations) {
   companion object {
     fun taskName(variant: TestVariant) = "run${variant.name.capitalize()}ScreenshotTest"
   }

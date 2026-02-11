@@ -18,6 +18,7 @@ package com.facebook.testing.screenshot.build
 
 import java.io.ByteArrayOutputStream
 import org.gradle.api.Project
+import org.gradle.process.ExecOperations
 
 /**
  * Executor for ADB commands.
@@ -35,11 +36,47 @@ interface AdbExecutor {
 }
 
 /**
+ * Configuration-cache compatible implementation of AdbExecutor using ExecOperations.
+ *
+ * @param execOperations The Gradle ExecOperations for executing commands
+ * @param deviceSerial Optional device serial to target specific device
+ */
+class ExecOperationsAdbExecutor(
+    private val execOperations: ExecOperations,
+    private val deviceSerial: String? = null
+) : AdbExecutor {
+
+  override fun execute(command: List<String>): String {
+    val output = ByteArrayOutputStream()
+    val error = ByteArrayOutputStream()
+
+    execOperations.exec { execSpec ->
+      execSpec.executable = "adb"
+      execSpec.args =
+          mutableListOf<String>().apply {
+            if (deviceSerial != null) {
+              add("-s")
+              add(deviceSerial)
+            }
+            addAll(command)
+          }
+      execSpec.standardOutput = output
+      execSpec.errorOutput = error
+      execSpec.isIgnoreExitValue = true
+    }
+
+    return output.toString().trim()
+  }
+}
+
+/**
  * Default implementation of AdbExecutor that executes commands via Gradle's exec.
  *
  * @param project The Gradle project for executing commands
  * @param deviceSerial Optional device serial to target specific device
+ * @deprecated Use ExecOperationsAdbExecutor for configuration cache compatibility
  */
+@Deprecated("Use ExecOperationsAdbExecutor for configuration cache compatibility")
 class GradleAdbExecutor(
     private val project: Project,
     private val deviceSerial: String? = null
