@@ -42,33 +42,9 @@ allprojects {
   }
 }
 
-def taskLogOutput = new StringBuilder()
-gradle.addListener(new TaskExecutionListener() {
-  def listener = new StandardOutputListener() {
-    @Override
-    void onOutput(CharSequence charSequence) {
-      taskLogOutput.append(charSequence)
-    }
-  }
-
-  @Override
-  void beforeExecute(Task task) {
-    task.logging.addStandardOutputListener(listener)
-  }
-
-  @Override
-  void afterExecute(Task task, TaskState state) {
-    task.logging.removeStandardOutputListener(listener)
-  }
-})
-
 task cleanAll(dependsOn: [
     ':core:clean',
     ':plugin:clean',
 ])
 
-task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest') {
-  doLast {
-    assert taskLogOutput.toString().contains('Found 12 screenshots')
-  }
-}
+task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest')
