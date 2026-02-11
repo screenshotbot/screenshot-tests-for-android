@@ -18,15 +18,29 @@ package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.TestVariant
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
+import java.io.File
 
 open class ScreenshotTask : DefaultTask() {
   @Input protected lateinit var extension: ScreenshotsPluginExtension
 
-  @Input protected lateinit var variant: TestVariant
+  @Input protected lateinit var variantName: String
+
+  @Internal protected lateinit var applicationIdProvider: Provider<String>
+
+  @Input protected fun getApplicationId(): String = applicationIdProvider.get()
+
+  @Internal protected lateinit var buildDirectory: File
+
+  @Internal protected lateinit var projectDirectory: File
 
   open fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
     this.extension = extension
-    this.variant = variant
+    this.variantName = variant.name
+    this.applicationIdProvider = project.provider { variant.testedVariant.applicationId }
+    this.buildDirectory = project.layout.buildDirectory.get().asFile
+    this.projectDirectory = project.projectDir
   }
 }

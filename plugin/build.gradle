@@ -42,6 +42,7 @@ final GENERATED_BUILD_DIR =
         "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
 
 task generateBuildConfig {
+  final version = project.version.toString()
   doLast {
     GENERATED_BUILD_DIR.deleteDir()
     GENERATED_BUILD_DIR.mkdirs()
@@ -51,7 +52,7 @@ task generateBuildConfig {
     BufferedWriter writer = configClass.newWriter()
     try {
       writer.writeLine("package $GENERATED_PACKAGE_NAME")
-      writer.writeLine("object $className { val VERSION = \"${project.version.toString()}\" }")
+      writer.writeLine("object $className { val VERSION = \"${version}\" }")
       writer.flush()
     } finally {
       writer.close()

@@ -20,16 +20,20 @@ import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
 import com.google.gson.JsonParser
 import java.io.File
+import javax.inject.Inject
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecOperations
 
-open class PullScreenshotsTask : ScreenshotTask() {
+open class PullScreenshotsTask @Inject constructor(
+  private val execOperations: ExecOperations
+) : ScreenshotTask() {
   companion object {
     fun taskName(variant: TestVariant) = "pull${variant.name.capitalize()}Screenshots"
 
-    fun getReportDir(project: Project, variant: TestVariant): File =
-        File(project.buildDir, "screenshots" + variant.name.capitalize())
+    fun getReportDir(buildDir: File, variantName: String): File =
+        File(buildDir, "screenshots" + variantName.capitalize())
 
   }
 
@@ -66,7 +70,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
         if (isVerifyOnly) {
           File(extension.referenceDir)
         } else {
-          getReportDir(project, variant)
+          getReportDir(buildDirectory, variantName)
         }
 
     assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
@@ -76,11 +80,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
     File(reportOutputDir).mkdirs()
     verifyTempDir.mkdirs()
 
-    val puller = AdditionalTestOutputPuller(project, variant) as RemoteFilePuller
+    val puller = AdditionalTestOutputPuller(buildDirectory, variantName) as RemoteFilePuller
     // Pull metadata from device if we're performing a pull
     val deviceDir =
         if (!isVerifyOnly) {
-            pullMetadata(variant.applicationId, File(reportOutputDir), puller)
+            pullMetadata(applicationIdProvider.get(), File(reportOutputDir), puller)
         } else {
             "" // Empty string when not pulling
         }
@@ -94,11 +98,11 @@ open class PullScreenshotsTask : ScreenshotTask() {
     generateHtml(File(reportOutputDir))
 
     val screenshots = getMetadataJson(File(reportOutputDir))
-    val recordDir = File(project.projectDir, extension.recordDir)
+    val recordDir = File(projectDirectory, extension.recordDir)
     val expectedOutputDir = directoryWithDeviceName(recordDir)
 
     val outputDirForRecording = (if (record) expectedOutputDir else verifyTempDir)
-    
+
     _doClean(outputDirForRecording);
     _record(screenshots, File(reportOutputDir), outputDirForRecording)
 
@@ -114,7 +118,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
   private fun computeFailureOutputDir(): File? {
     val failureOutputDir = if (extension.failureDir != null) {
-      val failureBaseDir = File(project.projectDir, extension.failureDir)
+      val failureBaseDir = File(projectDirectory, extension.failureDir)
       directoryWithDeviceName(failureBaseDir)
     } else {
       null
@@ -123,7 +127,7 @@ open class PullScreenshotsTask : ScreenshotTask() {
   }
 
   private fun directoryWithDeviceName(recordDir: File): File = if (extension.multipleDevices) {
-    val executor = GradleAdbExecutor(project)
+    val executor = ExecOperationsAdbExecutor(execOperations)
     val calculator = DeviceNameCalculator(executor)
     File(recordDir, calculator.name())
   } else {
